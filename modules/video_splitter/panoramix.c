@@ -641,8 +641,10 @@ static int Open( vlc_object_t *p_this )
     while( psz_tmp && *psz_tmp )
     {
         char *psz_next = strchr( psz_tmp, ',' );
-        if( psz_next )
-            *psz_next++ = '\0';
+		if (psz_next)
+		{
+			*psz_next++ = '\0';
+		}
 
         const int i_index = atoi( psz_tmp );
         if( i_index >= 0 && i_index < COL_MAX*ROW_MAX )
@@ -872,8 +874,10 @@ static int Configuration( panoramix_output_t pp_output[ROW_MAX][COL_MAX],
 
             /* Compute source width */
             int i_win_width  = (i_src_width  / i_col ) & ~1;
-            if( b_col_last )
-                i_win_width  = i_src_width  - x * i_win_width;
+			if (b_col_last)
+			{
+				i_win_width = i_src_width - x * i_win_width;
+			}
 
             /* Compute filter configuration */
             panoramix_filter_t cfg;

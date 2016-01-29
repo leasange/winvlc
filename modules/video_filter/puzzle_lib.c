@@ -104,8 +104,10 @@ void puzzle_preset_desk_background( picture_t *p_pic_out, uint8_t Y, uint8_t U, 
             i_c = Y;
         else if (i_plane == U_PLANE)
             i_c = U;
-        else if (i_plane == V_PLANE)
-            i_c = V;
+		else if (i_plane == V_PLANE)
+		{
+			i_c = V;
+		}
 
         const int32_t i_dst_pitch = p_pic_out->p[i_plane].i_pitch;
         const int32_t i_dst_lines = p_pic_out->p[i_plane].i_lines;
@@ -239,9 +241,10 @@ void puzzle_draw_rectangle(picture_t *p_pic_out, int32_t i_x, int32_t i_y, int32
             i_c = i_Y;
         else if (i_plane == U_PLANE)
             i_c = i_U;
-        else if (i_plane == V_PLANE)
-            i_c = i_V;
-
+		else if (i_plane == V_PLANE)
+		{
+			i_c = i_V;
+		}
         int32_t i_x_min = (      i_x    * p_oyp->i_visible_pitch / p_pic_out->p[0].i_visible_pitch ) * i_pixel_pitch;
         int32_t i_x_max = ( (i_x + i_w) * p_oyp->i_visible_pitch / p_pic_out->p[0].i_visible_pitch ) * i_pixel_pitch;
         int32_t i_y_min =        i_y    * p_oyp->i_visible_lines / p_pic_out->p[0].i_visible_lines;
@@ -276,9 +279,10 @@ void puzzle_fill_rectangle(picture_t *p_pic_out, int32_t i_x, int32_t i_y, int32
             i_c = i_Y;
         else if (i_plane == U_PLANE)
             i_c = i_U;
-        else if (i_plane == V_PLANE)
-            i_c = i_V;
-
+		else if (i_plane == V_PLANE)
+		{
+			i_c = i_V;
+		}
         int32_t i_x_min = (     i_x     * p_oyp->i_visible_pitch / p_pic_out->p[0].i_visible_pitch ) * i_pixel_pitch;
         int32_t i_x_max = ( (i_x + i_w) * p_oyp->i_visible_pitch / p_pic_out->p[0].i_visible_pitch ) * i_pixel_pitch;
         int32_t i_y_min =       i_y     * p_oyp->i_visible_lines / p_pic_out->p[0].i_visible_lines;

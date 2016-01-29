@@ -290,7 +290,7 @@ void puzzle_rotate_pce( filter_t *p_filter, int32_t i_piece, int8_t i_rotate_mir
     for ( uint8_t i=0; i < abs( i_rotate_mirror ); i++) {
         int32_t i_tempx, i_tempy;
 
-        /* piece has to be rotated by 90° */
+        /* piece has to be rotated by 90?*/
         if ( i_rotate_mirror > 0 ) {
             ps_piece->i_actual_angle++;
             ps_piece->i_actual_angle &= 0x03;
@@ -344,9 +344,10 @@ void puzzle_drw_basic_pce_in_plane( filter_t *p_filter, picture_t *p_pic_in, pic
     /* basic version rectangular & angle = 0 */
     filter_sys_t *p_sys = p_filter->p_sys;
 
-    if ((p_sys->ps_puzzle_array == NULL) || (p_sys->ps_pieces == NULL) || (ps_piece == NULL))
-        return;
-
+	if ((p_sys->ps_puzzle_array == NULL) || (p_sys->ps_pieces == NULL) || (ps_piece == NULL))
+	{
+		return;
+	}
     const int32_t i_src_pitch    = p_pic_in->p[i_plane].i_pitch;
     const int32_t i_dst_pitch    = p_pic_out->p[i_plane].i_pitch;
     const int32_t i_src_width    = p_pic_in->p[i_plane].i_pitch / p_pic_in->p[i_plane].i_pixel_pitch;
@@ -386,9 +387,10 @@ void puzzle_drw_adv_pce_in_plane( filter_t *p_filter, picture_t *p_pic_in, pictu
     /* here we still have rectangular shape but angle is not 0 */
     filter_sys_t *p_sys = p_filter->p_sys;
 
-    if ((p_sys->ps_puzzle_array == NULL) || (p_sys->ps_pieces == NULL) || (ps_piece == NULL))
-        return;
-
+	if ((p_sys->ps_puzzle_array == NULL) || (p_sys->ps_pieces == NULL) || (ps_piece == NULL))
+	{
+		return;
+	}
     const int32_t i_src_pitch    = p_pic_in->p[i_plane].i_pitch;
     const int32_t i_dst_pitch    = p_pic_out->p[i_plane].i_pitch;
     const int32_t i_src_width    = p_pic_in->p[i_plane].i_pitch / p_pic_in->p[i_plane].i_pixel_pitch;
@@ -438,9 +440,10 @@ void puzzle_drw_complex_pce_in_plane( filter_t *p_filter, picture_t *p_pic_in, p
     /* "puzzle" shape and maybe angle != 0 */
     filter_sys_t *p_sys = p_filter->p_sys;
 
-    if ((p_sys->ps_puzzle_array == NULL) || (p_sys->ps_pieces == NULL) || (ps_piece == NULL))
-        return;
-
+	if ((p_sys->ps_puzzle_array == NULL) || (p_sys->ps_pieces == NULL) || (ps_piece == NULL))
+	{
+		return;
+	}
     const int32_t i_src_pitch    = p_pic_in->p[i_plane].i_pitch;
     const int32_t i_dst_pitch    = p_pic_out->p[i_plane].i_pitch;
     const int32_t i_src_width    = p_pic_in->p[i_plane].i_pitch / p_pic_in->p[i_plane].i_pixel_pitch;
@@ -588,9 +591,10 @@ int32_t puzzle_diagonal_limit( filter_t *p_filter, int32_t i_y, bool b_left, uin
 int puzzle_generate_sect_border( filter_t *p_filter, piece_shape_t *ps_piece_shape, uint8_t i_plane, uint8_t i_border)
 {
     /* generate data required to draw a sector of border puzzle piece */
-    if (!ps_piece_shape)
-        return VLC_EGENERIC;
-
+	if (!ps_piece_shape)
+	{
+		return VLC_EGENERIC;
+	}
     filter_sys_t *p_sys = p_filter->p_sys;
 
     int32_t i_width = p_sys->ps_desk_planes[i_plane].i_pce_max_width;
@@ -657,9 +661,10 @@ int puzzle_generate_sect_border( filter_t *p_filter, piece_shape_t *ps_piece_sha
 int puzzle_generate_sect_bezier( filter_t *p_filter, piece_shape_t *ps_piece_shape, uint8_t i_pts_nbr, point_t *ps_pt, uint8_t i_plane, uint8_t i_border)
 {
     /* generate data required to draw a sector of puzzle piece using bezier shape */
-    if ((!ps_pt) || (!ps_piece_shape))
-        return VLC_EGENERIC;
-
+	if ((!ps_pt) || (!ps_piece_shape))
+	{
+		return VLC_EGENERIC;
+	}
     filter_sys_t *p_sys = p_filter->p_sys;
 
     int32_t i_width = p_sys->ps_desk_planes[i_plane].i_pce_max_width;
@@ -858,9 +863,10 @@ int puzzle_detect_curve( filter_t *p_filter, int32_t i_y, float f_x_ratio, float
  *****************************************************************************/
 int puzzle_generate_sectLeft2Right( filter_t *p_filter, piece_shape_t *ps_piece_shape, piece_shape_t *ps_left_piece_shape, uint8_t i_plane)
 {
-    if ((!ps_piece_shape) || (!ps_left_piece_shape))
-        return VLC_EGENERIC;
-
+	if ((!ps_piece_shape) || (!ps_left_piece_shape))
+	{
+		return VLC_EGENERIC;
+	}
     filter_sys_t *p_sys = p_filter->p_sys;
 
     int32_t i_min_y = ps_left_piece_shape->i_first_row_offset;
@@ -912,9 +918,10 @@ int puzzle_generate_sectLeft2Right( filter_t *p_filter, piece_shape_t *ps_piece_
  *****************************************************************************/
 int puzzle_generate_sectTop2Btm( filter_t *p_filter, piece_shape_t *ps_piece_shape, piece_shape_t *ps_top_piece_shape, uint8_t i_plane)
 {
-    if ((!ps_piece_shape) || (!ps_top_piece_shape))
-        return VLC_EGENERIC;
-
+	if ((!ps_piece_shape) || (!ps_top_piece_shape))
+	{
+		return VLC_EGENERIC;
+	}
     filter_sys_t *p_sys = p_filter->p_sys;
 
     int32_t i_top_min_y = ps_top_piece_shape->i_first_row_offset;

@@ -94,9 +94,10 @@ static int rtp_xiph_pack_headers(size_t room, void *p_extra, size_t i_extra,
     *i_buffer = room + 1 + length_size[0] + length_size[1]
                 + packet_size[0] + packet_size[1] + packet_size[2];
     *p_buffer = malloc(*i_buffer);
-    if (*p_buffer == NULL)
-        return VLC_ENOMEM;
-
+	if (*p_buffer == NULL)
+	{
+		return VLC_ENOMEM;
+	}
     uint8_t *p = *p_buffer + room;
     /* Number of headers */
     *p++ = 2;
@@ -1602,9 +1603,10 @@ static int rtp_packetize_jpeg( sout_stream_id_sys_t *id, block_t *in )
             hdr_size += 4 + 64 * nb_qtables;
 
         int i_payload = __MIN( i_data, (int)(rtp_mtu (id) - hdr_size) );
-        if ( i_payload <= 0 )
-            goto error;
-
+		if (i_payload <= 0)
+		{
+			goto error;
+		}
         block_t *out = block_Alloc( 12 + hdr_size + i_payload );
         if( out == NULL )
         {

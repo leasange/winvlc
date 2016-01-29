@@ -37,10 +37,11 @@ typedef struct
 vlc_inhibit_t *vlc_inhibit_Create (vlc_object_t *parent)
 {
     inhibit_t *priv = vlc_custom_create (parent, sizeof (*priv), "inhibit" );
+	vlc_inhibit_t *ih;
     if (priv == NULL)
         return NULL;
 
-    vlc_inhibit_t *ih = &priv->ih;
+	ih = &priv->ih;
     ih->p_sys = NULL;
     ih->inhibit = NULL;
 

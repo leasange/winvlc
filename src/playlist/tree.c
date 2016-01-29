@@ -395,8 +395,10 @@ playlist_item_t *GetNextItem( playlist_t *p_playlist,
     }
 
     /* Node with children, get the first one */
-    if( p_item->i_children > 0 )
-        return p_item->pp_children[0];
+	if (p_item->i_children > 0)
+	{
+		return p_item->pp_children[0];
+	}
 
     playlist_item_t* p_parent = p_item->p_parent;
     for( int i = 0 ; i < p_parent->i_children ; i++ )

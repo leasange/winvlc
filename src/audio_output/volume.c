@@ -79,10 +79,11 @@ aout_volume_t *aout_volume_New(vlc_object_t *parent,
  */
 int aout_volume_SetFormat(aout_volume_t *vol, vlc_fourcc_t format)
 {
+	audio_volume_t *obj;
     if (unlikely(vol == NULL))
         return -1;
 
-    audio_volume_t *obj = &vol->object;
+	obj = &vol->object;
     if (vol->module != NULL)
     {
         if (obj->format == format)
@@ -106,10 +107,11 @@ int aout_volume_SetFormat(aout_volume_t *vol, vlc_fourcc_t format)
  */
 void aout_volume_Delete(aout_volume_t *vol)
 {
+	audio_volume_t *obj;
     if (vol == NULL)
         return;
 
-    audio_volume_t *obj = &vol->object;
+	obj = &vol->object;
 
     if (vol->module != NULL)
         module_unneed(obj, vol->module);

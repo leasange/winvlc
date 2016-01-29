@@ -89,8 +89,10 @@ FILE *vlc_fopen (const char *filename, const char *mode)
     }
 
     int fd = vlc_open (filename, rwflags | oflags, 0666);
-    if (fd == -1)
-        return NULL;
+	if (fd == -1)
+	{
+		return NULL;
+	}
 
     FILE *stream = fdopen (fd, mode);
     if (stream == NULL)

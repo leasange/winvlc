@@ -333,8 +333,10 @@ char *FromCharset(const char *charset, const void *data, size_t data_size)
 void *ToCharset(const char *charset, const char *in, size_t *outsize)
 {
     vlc_iconv_t hd = vlc_iconv_open (charset, "UTF-8");
-    if (hd == (vlc_iconv_t)(-1))
-        return NULL;
+	if (hd == (vlc_iconv_t)(-1))
+	{
+		return NULL;
+	}
 
     const size_t inlen = strlen (in);
     void *res;

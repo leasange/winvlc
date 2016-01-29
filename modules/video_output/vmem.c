@@ -120,9 +120,10 @@ static int Open(vlc_object_t *object)
 {
     vout_display_t *vd = (vout_display_t *)object;
     vout_display_sys_t *sys = malloc(sizeof(*sys));
-    if (unlikely(!sys))
-        return VLC_ENOMEM;
-
+	if (unlikely(!sys))
+	{
+		return VLC_ENOMEM;
+	}
     /* Get the callbacks */
     vlc_format_cb setup = var_InheritAddress(vd, "vmem-setup");
 
@@ -251,9 +252,10 @@ static picture_pool_t *Pool(vout_display_t *vd, unsigned count)
     if (sys->pool)
         return sys->pool;
 
-    if (count > sys->count)
-        count = sys->count;
-
+	if (count > sys->count)
+	{
+		count = sys->count;
+	}
 //    picture_t *pictures[count];
 	picture_t **pictures = (picture_t **)malloc(sizeof(picture_t *) * count);			// sunqueen modify
 

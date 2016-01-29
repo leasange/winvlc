@@ -164,8 +164,10 @@ void luaopen_dialog( lua_State *L, void *opaque )
 
 static int vlclua_dialog_create( lua_State *L )
 {
-    if( !lua_isstring( L, 1 ) )
-        return luaL_error( L, "vlc.dialog() usage: (title)" );
+	if (!lua_isstring(L, 1))
+	{
+		return luaL_error(L, "vlc.dialog() usage: (title)");
+	}
     const char *psz_title = luaL_checkstring( L, 1 );
 
     vlc_object_t *p_this = vlclua_get_this( L );
@@ -232,9 +234,10 @@ static int vlclua_dialog_delete( lua_State *L )
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
 
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
-
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
     *pp_dlg = NULL;
 
@@ -298,8 +301,10 @@ static int vlclua_dialog_show( lua_State *L )
 {
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
 
     p_dlg->b_hide = false;
@@ -313,8 +318,10 @@ static int vlclua_dialog_hide( lua_State *L )
 {
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
 
     p_dlg->b_hide = true;
@@ -329,8 +336,10 @@ static int vlclua_dialog_set_title( lua_State *L )
 {
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
 
     vlc_mutex_lock( &p_dlg->lock );
@@ -353,8 +362,10 @@ static int vlclua_dialog_update( lua_State *L )
 
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
 
     // Updating dialog immediately
@@ -415,9 +426,10 @@ int lua_DialogFlush( lua_State *L )
 static int vlclua_dialog_add_button( lua_State *L )
 {
     /* Verify arguments */
-    if( !lua_isstring( L, 2 ) || !lua_isfunction( L, 3 ) )
-        return luaL_error( L, "dialog:add_button usage: (text, func)" );
-
+	if (!lua_isstring(L, 2) || !lua_isfunction(L, 3))
+	{
+		return luaL_error(L, "dialog:add_button usage: (text, func)");
+	}
     extension_widget_t *p_widget = calloc( 1, sizeof( extension_widget_t ) );
     p_widget->type = EXTENSION_WIDGET_BUTTON;
     p_widget->psz_text = strdup( luaL_checkstring( L, 2 ) );
@@ -438,8 +450,10 @@ static int vlclua_dialog_add_button( lua_State *L )
 static int vlclua_dialog_add_label( lua_State *L )
 {
     /* Verify arguments */
-    if( !lua_isstring( L, 2 ) )
-        return luaL_error( L, "dialog:add_label usage: (text)" );
+	if (!lua_isstring(L, 2))
+	{
+		return luaL_error(L, "dialog:add_label usage: (text)");
+	}
     extension_widget_t *p_widget = calloc( 1, sizeof( extension_widget_t ) );
     p_widget->type = EXTENSION_WIDGET_LABEL;
     p_widget->psz_text = strdup( luaL_checkstring( L, 2 ) );
@@ -455,9 +469,10 @@ static int vlclua_dialog_add_label( lua_State *L )
 static int vlclua_dialog_add_text_inner( lua_State *L, int i_type )
 {
     /* Verify arguments */
-    if( !lua_isstring( L, 2 ) && !lua_isnil( L, 2 ) )
-        return luaL_error( L, "dialog:add_text_input usage: (text = nil)" );
-
+	if (!lua_isstring(L, 2) && !lua_isnil(L, 2))
+	{
+		return luaL_error(L, "dialog:add_text_input usage: (text = nil)");
+	}
     extension_widget_t *p_widget = calloc( 1, sizeof( extension_widget_t ) );
     p_widget->type = i_type;
     if( !lua_isnil( L, 2 ) )
@@ -474,9 +489,10 @@ static int vlclua_dialog_add_text_inner( lua_State *L, int i_type )
 static int vlclua_dialog_add_check_box( lua_State *L )
 {
     /* Verify arguments */
-    if( !lua_isstring( L, 2 ) )
-        return luaL_error( L, "dialog:add_check_box usage: (text, checked)" );
-
+	if (!lua_isstring(L, 2))
+	{
+		return luaL_error(L, "dialog:add_check_box usage: (text, checked)");
+	}
     extension_widget_t *p_widget = calloc( 1, sizeof( extension_widget_t ) );
     p_widget->type = EXTENSION_WIDGET_CHECK_BOX;
     p_widget->psz_text = strdup( luaL_checkstring( L, 2 ) );
@@ -520,9 +536,10 @@ static int vlclua_dialog_add_list( lua_State *L )
 static int vlclua_dialog_add_image( lua_State *L )
 {
     /* Verify arguments */
-    if( !lua_isstring( L, 2 ) )
-        return luaL_error( L, "dialog:add_image usage: (filename)" );
-
+	if (!lua_isstring(L, 2))
+	{
+		return luaL_error(L, "dialog:add_image usage: (filename)");
+	}
     extension_widget_t *p_widget = calloc( 1, sizeof( extension_widget_t ) );
     p_widget->type = EXTENSION_WIDGET_IMAGE;
     p_widget->psz_text = strdup( luaL_checkstring( L, 2 ) );
@@ -538,9 +555,10 @@ static int vlclua_dialog_add_image( lua_State *L )
 static int vlclua_dialog_add_spin_icon( lua_State *L )
 {
     /* Verify arguments */
-    if( !lua_isstring( L, 2 ) )
-        return luaL_error( L, "dialog:add_image usage: (filename)" );
-
+	if (!lua_isstring(L, 2))
+	{
+		return luaL_error(L, "dialog:add_image usage: (filename)");
+	}
     extension_widget_t *p_widget = calloc( 1, sizeof( extension_widget_t ) );
     p_widget->type = EXTENSION_WIDGET_SPIN_ICON;
 
@@ -561,8 +579,10 @@ static int vlclua_create_widget_inner( lua_State *L, int i_args,
     /* Get dialog */
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
 
     /* Set parent dialog */
@@ -617,8 +637,10 @@ static int vlclua_widget_set_text( lua_State *L )
     /* Get dialog */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     /* Verify arguments */
@@ -661,8 +683,10 @@ static int vlclua_widget_get_text( lua_State *L )
     /* Get dialog */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     /* Verify widget type */
@@ -701,8 +725,10 @@ static int vlclua_widget_get_checked( lua_State *L )
     /* Get widget */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_CHECK_BOX )
@@ -720,8 +746,10 @@ static int vlclua_widget_add_value( lua_State *L )
     /* Get widget */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_DROPDOWN
@@ -766,8 +794,10 @@ static int vlclua_widget_get_value( lua_State *L )
     /* Get widget */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_DROPDOWN )
@@ -801,8 +831,10 @@ static int vlclua_widget_clear( lua_State *L )
     /* Get widget */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_DROPDOWN
@@ -837,8 +869,10 @@ static int vlclua_widget_get_selection( lua_State *L )
     /* Get widget */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_LIST )
@@ -872,8 +906,10 @@ static int vlclua_widget_set_checked( lua_State *L )
     /* Get dialog */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_CHECK_BOX )
@@ -905,8 +941,10 @@ static int vlclua_widget_animate( lua_State *L )
     /* Get dialog */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_SPIN_ICON )
@@ -932,8 +970,10 @@ static int vlclua_widget_stop( lua_State *L )
     /* Get dialog */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 1, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     if( p_widget->type != EXTENSION_WIDGET_SPIN_ICON )
@@ -966,19 +1006,25 @@ static int vlclua_dialog_delete_widget( lua_State *L )
     /* Get dialog */
     extension_dialog_t **pp_dlg =
             (extension_dialog_t**) luaL_checkudata( L, 1, "dialog" );
-    if( !pp_dlg || !*pp_dlg )
-        return luaL_error( L, "Can't get pointer to dialog" );
+	if (!pp_dlg || !*pp_dlg)
+	{
+		return luaL_error(L, "Can't get pointer to dialog");
+	}
     extension_dialog_t *p_dlg = *pp_dlg;
 
     /* Get widget */
-    if( !lua_isuserdata( L, 2 ) )
-        return luaL_error( L, "Argument to del_widget is not a widget" );
+	if (!lua_isuserdata(L, 2))
+	{
+		return luaL_error(L, "Argument to del_widget is not a widget");
+	}
 
     /* Get dialog */
     extension_widget_t **pp_widget =
             (extension_widget_t **) luaL_checkudata( L, 2, "widget" );
-    if( !pp_widget || !*pp_widget )
-        return luaL_error( L, "Can't get pointer to widget" );
+	if (!pp_widget || !*pp_widget)
+	{
+		return luaL_error(L, "Can't get pointer to widget");
+	}
     extension_widget_t *p_widget = *pp_widget;
 
     /* Delete widget */

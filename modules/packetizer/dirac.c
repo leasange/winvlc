@@ -408,9 +408,11 @@ static block_t *dirac_Reorder( decoder_t *p_dec, block_t *p_block_in, uint32_t u
 {
     decoder_sys_t *p_sys = p_dec->p_sys;
 
-    if( !p_sys->reorder_buf.u_size_max )
-        /* reorder buffer disabled */
-        return p_block_in;
+	if (!p_sys->reorder_buf.u_size_max)
+		/* reorder buffer disabled */
+	{
+		return p_block_in;
+	}
 
     /* Modeling the reorder buffer:
      * 1. If the reorder buffer is not full, insert picture for reordering.
@@ -736,9 +738,10 @@ static block_t *dirac_DoSync( decoder_t *p_dec )
             /* fall through */
         case TRY_SYNC: /* -> SYNCED | NOT_SYNCED */
         {
-            if( !p_sys->i_offset )
-                goto sync_fail; /* if a is at start of bytestream, b can't be in buffer */
-
+			if (!p_sys->i_offset)
+			{
+				goto sync_fail; /* if a is at start of bytestream, b can't be in buffer */
+			}
             parse_info_t pu_a;
             bool a = dirac_UnpackParseInfo( &pu_a, &p_sys->bytestream, p_sys->i_offset );
             if( !a || (pu_a.u_prev_offset > p_sys->i_offset) )
@@ -1137,8 +1140,10 @@ static int dirac_TimeGenPush( decoder_t *p_dec, block_t *p_block_in )
     /* If pts and dts have been seen, there is no need to simulate operation
      * of the decoder reorder buffer */
     /* If neither have been seen, there is little point in simulating */
-    if( p_sys->b_dts == p_sys->b_pts )
-        return 0;
+	if (p_sys->b_dts == p_sys->b_pts)
+	{
+		return 0;
+	}
 
     /* model the reorder buffer */
     block_t *p_block = dirac_Reorder( p_dec, p_block_in, u_picnum );

@@ -118,8 +118,10 @@ static int Demux( demux_t *p_demux )
 
                 if( !strcmp( node, "item" ) )
                     b_item = true;
-                else if( !strcmp( node, "image" ) )
-                    b_image = true;
+				else if (!strcmp(node, "image"))
+				{
+					b_image = true;
+				}
 
                 // Read the attributes
                 const char *attr, *value;

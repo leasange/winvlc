@@ -632,7 +632,7 @@ int playlist_TreeMove( playlist_t * p_playlist, playlist_item_t *p_item,
 {
     PL_ASSERT_LOCKED;
 
-    if( p_node->i_children == -1 ) return VLC_EGENERIC;
+	if (p_node->i_children == -1){ return VLC_EGENERIC; }
 
     playlist_item_t *p_detach = p_item->p_parent;
     int i_index = ItemIndex( p_item );
@@ -707,8 +707,10 @@ void playlist_SendAddNotify( playlist_t *p_playlist, int i_item_id,
     PL_ASSERT_LOCKED;
 
     p_sys->b_reset_currently_playing = true;
-    if( b_signal )
-        vlc_cond_signal( &p_sys->signal );
+	if (b_signal)
+	{
+		vlc_cond_signal(&p_sys->signal);
+	}
 
     playlist_add_t add;
     add.i_item = i_item_id;
@@ -880,14 +882,14 @@ static int RecursiveInsertCopy (
     PL_ASSERT_LOCKED;
     assert( p_parent != NULL && p_item != NULL );
 
-    if( p_item == p_parent ) return i_pos;
+	if (p_item == p_parent){ return i_pos; }
 
     input_item_t *p_input = p_item->p_input;
 
     if( !(p_item->i_children != -1 && b_flat) )
     {
         input_item_t *p_new_input = input_item_Copy( p_input );
-        if( !p_new_input ) return i_pos;
+		if (!p_new_input) { return i_pos; }
 
         playlist_item_t *p_new_item = NULL;
         if( p_item->i_children == -1 )

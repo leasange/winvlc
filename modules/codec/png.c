@@ -387,8 +387,10 @@ static block_t *EncodeBlock(encoder_t *p_enc, picture_t *p_pic)
     png_set_error_fn( p_png, p_enc, user_error, user_warning );
 
     p_info = png_create_info_struct( p_png );
-    if( p_info == NULL )
-        goto error;
+	if (p_info == NULL)
+	{
+		goto error;
+	}
 
     png_infop p_end_info = png_create_info_struct( p_png );
     if( p_end_info == NULL ) goto error;

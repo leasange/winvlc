@@ -378,8 +378,10 @@ static int Setup(vlc_va_t *va, void **hw, vlc_fourcc_t *chroma,
 
     *hw = NULL;
     *chroma = 0;
-    if (width <= 0 || height <= 0)
-        return VLC_EGENERIC;
+	if (width <= 0 || height <= 0)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* FIXME transmit a video_format_t by VaSetup directly */
     video_format_t fmt;
@@ -498,8 +500,10 @@ static int Get(vlc_va_t *va, void **opaque, uint8_t **data)
         if (surface->order < sys->surface[old].order)
             old = i;
     }
-    if (i >= sys->surface_count)
-        i = old;
+	if (i >= sys->surface_count)
+	{
+		i = old;
+	}
 
     vlc_va_surface_t *surface = &sys->surface[i];
 

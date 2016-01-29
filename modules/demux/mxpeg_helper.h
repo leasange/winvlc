@@ -51,8 +51,10 @@ static bool IsMxpeg(stream_t *s)
     if (find_jpeg_marker(&position, header, position + 2) != 0xe0)
         return false;
 
-    if (position + 2 > size)
-        return false;
+	if (position + 2 > size)
+	{
+		return false;
+	}
 
     /* Skip this jpeg header */
     uint32_t header_size = GetWBE(&header[position]);

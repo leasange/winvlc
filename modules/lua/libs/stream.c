@@ -136,7 +136,7 @@ static int vlclua_stream_add_filter( lua_State *L )
     lua_settop( L, 2 );
 
     stream_t **pp_stream = (stream_t **)luaL_checkudata( L, 1, "stream" );
-    if( !*pp_stream ) return vlclua_error( L );
+	if (!*pp_stream){ return vlclua_error(L); }
     const char *psz_filter = NULL;
 
     if( lua_isstring( L, 2 ) )

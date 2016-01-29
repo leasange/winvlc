@@ -68,9 +68,10 @@ static int vlclua_osd_icon( lua_State *L )
     const char *psz_icon = luaL_checkstring( L, 1 );
     int i_icon = vlc_osd_icon_from_string( psz_icon );
     int i_chan = luaL_optint( L, 2, SPU_DEFAULT_CHANNEL );
-    if( !i_icon )
-        return luaL_error( L, "\"%s\" is not a valid osd icon.", psz_icon );
-
+	if (!i_icon)
+	{
+		return luaL_error(L, "\"%s\" is not a valid osd icon.", psz_icon);
+	}
     input_thread_t *p_input = vlclua_get_input_internal( L );
     if( p_input )
     {
@@ -158,10 +159,11 @@ static int vlclua_osd_slider( lua_State *L )
     const char *psz_type = luaL_checkstring( L, 2 );
     int i_type = vlc_osd_slider_type_from_string( psz_type );
     int i_chan = luaL_optint( L, 3, SPU_DEFAULT_CHANNEL );
-    if( !i_type )
-        return luaL_error( L, "\"%s\" is not a valid slider type.",
-                           psz_type );
-
+	if (!i_type)
+	{
+		return luaL_error(L, "\"%s\" is not a valid slider type.",
+			psz_type);
+	}
     input_thread_t *p_input = vlclua_get_input_internal( L );
     if( p_input )
     {
@@ -179,8 +181,10 @@ static int vlclua_osd_slider( lua_State *L )
 static int vlclua_spu_channel_register( lua_State *L )
 {
     input_thread_t *p_input = vlclua_get_input_internal( L );
-    if( !p_input )
-        return luaL_error( L, "Unable to find input." );
+	if (!p_input)
+	{
+		return luaL_error(L, "Unable to find input.");
+	}
 
     vout_thread_t *p_vout = input_GetVout( p_input );
     if( !p_vout )
@@ -200,8 +204,10 @@ static int vlclua_spu_channel_clear( lua_State *L )
 {
     int i_chan = luaL_checkint( L, 1 );
     input_thread_t *p_input = vlclua_get_input_internal( L );
-    if( !p_input )
-        return luaL_error( L, "Unable to find input." );
+	if (!p_input)
+	{
+		return luaL_error(L, "Unable to find input.");
+	}
     vout_thread_t *p_vout = input_GetVout( p_input );
     if( !p_vout )
     {

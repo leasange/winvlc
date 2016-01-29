@@ -177,9 +177,10 @@ rtcp_sender_t *OpenRTCP (vlc_object_t *obj, int rtp_fd, int proto,
 
 void CloseRTCP (rtcp_sender_t *rtcp)
 {
-    if (rtcp == NULL)
-        return;
-
+	if (rtcp == NULL)
+	{
+		return;
+	}
     uint8_t *ptr = rtcp->payload;
     uint64_t now64 = NTPtime64 ();
     SetQWBE (ptr + 8, now64); /* Update the Sender Report timestamp */
@@ -212,9 +213,10 @@ void SendRTCP (rtcp_sender_t *restrict rtcp, const block_t *rtp)
     rtcp->counter += rtp->i_buffer;
 
     /* 1.25% rate limit */
-    if ((rtcp->counter / 80) < rtcp->length)
-        return;
-
+	if ((rtcp->counter / 80) < rtcp->length)
+	{
+		return;
+	}
     uint8_t *ptr = rtcp->payload;
     uint32_t last = GetDWBE (ptr + 8); // last RTCP SR send time
     uint64_t now64 = NTPtime64 ();

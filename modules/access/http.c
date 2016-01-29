@@ -822,8 +822,10 @@ static int ReadICYMeta( access_t *p_access )
     /* Read meta data length */
     if( ReadData( p_access, &i_read, &buffer, 1 ) )
         return VLC_EGENERIC;
-    if( i_read != 1 )
-        return VLC_EGENERIC;
+	if (i_read != 1)
+	{
+		return VLC_EGENERIC;
+	}
     const int i_size = buffer << 4;
     /* msg_Dbg( p_access, "ICY meta size=%u", i_size); */
 

@@ -601,10 +601,9 @@ static void MainLoopDemux( input_thread_t *p_input, bool *pb_changed, bool *pb_d
 static int MainLoopTryRepeat( input_thread_t *p_input, mtime_t *pi_start_mdate )
 {
     int i_repeat = var_GetInteger( p_input, "input-repeat" );
+	vlc_value_t val;
     if( i_repeat == 0 )
         return VLC_EGENERIC;
-
-    vlc_value_t val;
 
     msg_Dbg( p_input, "repeating the same input (%d)", i_repeat );
     if( i_repeat > 0 )
@@ -1099,15 +1098,19 @@ static void UpdatePtsDelay( input_thread_t *p_input )
     for( int i = 0; i < p_sys->i_slave; i++ )
         i_pts_delay = __MAX( i_pts_delay, p_sys->slave[i]->i_pts_delay );
 
-    if( i_pts_delay < 0 )
-        i_pts_delay = 0;
+	if (i_pts_delay < 0)
+	{
+		i_pts_delay = 0;
+	}
 
     /* Take care of audio/spu delay */
     const mtime_t i_audio_delay = var_GetTime( p_input, "audio-delay" );
     const mtime_t i_spu_delay   = var_GetTime( p_input, "spu-delay" );
     const mtime_t i_extra_delay = __MIN( i_audio_delay, i_spu_delay );
-    if( i_extra_delay < 0 )
-        i_pts_delay -= i_extra_delay;
+	if (i_extra_delay < 0)
+	{
+		i_pts_delay -= i_extra_delay;
+	}
 
     /* Update cr_average depending on the caching */
     const int i_cr_average = var_GetInteger( p_input, "cr-average" ) * i_pts_delay / DEFAULT_PTS_DELAY;
@@ -2542,8 +2545,10 @@ static void InputSourceMeta( input_thread_t *p_input,
 
     /* If the demux report unsupported meta data, or if we don't have meta data
      * try an external "meta reader" */
-    if( has_meta && !has_unsupported )
-        return;
+	if (has_meta && !has_unsupported)
+	{
+		return;
+	}
 
     demux_meta_t *p_demux_meta =
         vlc_custom_create( p_demux, sizeof( *p_demux_meta ), "demux meta" );
@@ -2836,8 +2841,10 @@ static void InputGetExtraFiles( input_thread_t *p_input,
 
     TAB_INIT( *pi_list, *pppsz_list );
 
-    if( ( psz_access && *psz_access && strcmp( psz_access, "file" ) ) || !psz_path )
-        return;
+	if ((psz_access && *psz_access && strcmp(psz_access, "file")) || !psz_path)
+	{
+		return;
+	}
 
     const size_t i_path = strlen(psz_path);
 
@@ -3002,10 +3009,11 @@ static void input_SubtitleAdd( input_thread_t *p_input,
                                const char *url, unsigned i_flags )
 {
     input_source_t *sub = InputSourceNew( p_input );
+	vlc_value_t count;
+
     if( sub == NULL )
         return;
 
-    vlc_value_t count;
 
     var_Change( p_input, "spu-es", VLC_VAR_CHOICESCOUNT, &count, NULL );
 
@@ -3016,12 +3024,12 @@ static void input_SubtitleAdd( input_thread_t *p_input,
         return;
     }
     TAB_APPEND( p_input->p->i_slave, p_input->p->slave, sub );
+	/* Select the ES */
+	vlc_value_t list;
 
     if( !(i_flags & SUB_FORCED) )
         return;
 
-    /* Select the ES */
-    vlc_value_t list;
 
     if( var_Change( p_input, "spu-es", VLC_VAR_GETLIST, &list, NULL ) )
         return;

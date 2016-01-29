@@ -1032,9 +1032,10 @@ static void vlc_av_packet_Release(block_t *block)
 static block_t *vlc_av_packet_Wrap(AVPacket *packet, mtime_t i_length)
 {
     vlc_av_packet_t *b = malloc( sizeof( *b ) );
-    if( unlikely(b == NULL) )
-        return NULL;
-
+	if (unlikely(b == NULL))
+	{
+		return NULL;
+	}
     block_t *p_block = &b->self;
 
     block_Init(p_block, packet->data, packet->size);

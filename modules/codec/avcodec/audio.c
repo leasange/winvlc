@@ -138,13 +138,16 @@ static block_t *vlc_av_frame_Wrap(AVFrame *frame)
     for (unsigned i = 1; i < AV_NUM_DATA_POINTERS; i++)
         assert(frame->linesize[i] == 0); /* only packed frame supported */
 
-    if (av_frame_make_writable(frame)) /* TODO: read-only block_t */
-        return NULL;
+	if (av_frame_make_writable(frame)) /* TODO: read-only block_t */
+	{
+		return NULL;
+	}
 
     vlc_av_frame_t *b = malloc(sizeof (*b));
-    if (unlikely(b == NULL))
-        return NULL;
-
+	if (unlikely(b == NULL))
+	{
+		return NULL;
+	}
     block_t *block = &b->self;
 
     block_Init(block, frame->extended_data[0], frame->linesize[0]);
@@ -266,9 +269,10 @@ block_t * DecodeAudio ( decoder_t *p_dec, block_t **pp_block )
     decoder_sys_t *p_sys = p_dec->p_sys;
     AVCodecContext *ctx = p_sys->p_context;
 
-    if( !pp_block || !*pp_block )
-        return NULL;
-
+	if (!pp_block || !*pp_block)
+	{
+		return NULL;
+	}
     block_t *p_block = *pp_block;
 
     if( !ctx->extradata_size && p_dec->fmt_in.i_extra && p_sys->b_delayed_open)
@@ -321,8 +325,10 @@ block_t * DecodeAudio ( decoder_t *p_dec, block_t **pp_block )
 
     for( int got_frame = 0; !got_frame; )
     {
-        if( p_block->i_buffer == 0 )
-            goto end;
+		if (p_block->i_buffer == 0)
+		{
+			goto end;
+		}
 
         AVPacket pkt;
         av_init_packet( &pkt );
@@ -548,8 +554,10 @@ static void SetupOutputFormat( decoder_t *p_dec, bool b_trust )
                 pi_order_src[i_channels_src++] = pi_channels_map[i][1];
         }
     }
-    if( i_channels_src != p_sys->p_context->channels && b_trust )
-        msg_Err( p_dec, "Channel layout not understood" );
+	if (i_channels_src != p_sys->p_context->channels && b_trust)
+	{
+		msg_Err(p_dec, "Channel layout not understood");
+	}
 
     uint32_t i_layout_dst;
     int      i_channels_dst;

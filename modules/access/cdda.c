@@ -454,8 +454,10 @@ static int GetTracks( access_t *p_access, input_item_t *p_current )
     if( NONEMPTY( psz_year ) )
         input_item_SetDate( p_current, psz_year );
 
-    if( NONEMPTY( psz_description ) )
-        input_item_SetDescription( p_current, psz_description );
+	if (NONEMPTY(psz_description))
+	{
+		input_item_SetDescription(p_current, psz_description);
+	}
 
     const mtime_t i_duration = (int64_t)( p_sys->p_sectors[i_titles] - p_sys->p_sectors[0] ) *
                                CDDA_DATA_SIZE * 1000000 / 44100 / 2 / 2;
@@ -474,8 +476,10 @@ static int GetTracks( access_t *p_access, input_item_t *p_current )
             continue;
 
         /* Define a "default name" */
-        if( asprintf( &psz_name, _("Audio CD - Track %02i"), (i+1) ) == -1 )
-            psz_name = psz_uri;
+		if (asprintf(&psz_name, _("Audio CD - Track %02i"), (i + 1)) == -1)
+		{
+			psz_name = psz_uri;
+		}
 
         /* Create playlist items */
         const mtime_t i_duration = (int64_t)( p_sys->p_sectors[i+1] - p_sys->p_sectors[i] ) *
@@ -655,10 +659,12 @@ static cddb_disc_t *GetCDDBInfo( access_t *p_access, int i_titles, int *p_sector
     int64_t i_length = 2000000; /* PreGap */
     for( int i = 0; i < i_titles; i++ )
     {
-        cddb_track_t *t = cddb_track_new();
-        cddb_track_set_frame_offset( t, p_sectors[i] + 150 );  /* Pregap offset */
+		cddb_track_t *t = cddb_track_new();
+		{
+			cddb_track_set_frame_offset(t, p_sectors[i] + 150);  /* Pregap offset */
 
-        cddb_disc_add_track( p_disc, t );
+			cddb_disc_add_track(p_disc, t);
+		}
         const int64_t i_size = ( p_sectors[i+1] - p_sectors[i] ) *
                                (int64_t)CDDA_DATA_SIZE;
         i_length += INT64_C(1000000) * i_size / 44100 / 4  ;

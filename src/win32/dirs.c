@@ -51,14 +51,15 @@ char *config_GetLibDir (void)
 #else
     /* Get our full path */
     MEMORY_BASIC_INFORMATION mbi;
+	wchar_t wpath[MAX_PATH];
+	wchar_t *file;
     if (!VirtualQuery (config_GetLibDir, &mbi, sizeof(mbi)))
         goto error;
 
-    wchar_t wpath[MAX_PATH];
     if (!GetModuleFileName ((HMODULE) mbi.AllocationBase, wpath, MAX_PATH))
         goto error;
 
-    wchar_t *file = wcsrchr (wpath, L'\\');
+	file = wcsrchr(wpath, L'\\');
     if (file == NULL)
         goto error;
     *file = L'\0';

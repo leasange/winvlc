@@ -48,11 +48,13 @@ static void rtp_process (demux_t *demux, block_t *block)
 {
     demux_sys_t *sys = demux->p_sys;
 
-    if (block->i_buffer < 2)
-        goto drop;
+	if (block->i_buffer < 2)
+	{
+		goto drop;
+	}
     const uint8_t ptype = rtp_ptype (block);
-    if (ptype >= 72 && ptype <= 76)
-        goto drop; /* Muxed RTCP, ignore for now FIXME */
+	if (ptype >= 72 && ptype <= 76)
+	  goto drop; /* Muxed RTCP, ignore for now FIXME */
 
 #ifdef HAVE_SRTP
     if (sys->srtp != NULL)
@@ -82,8 +84,10 @@ drop:
 
 static int rtp_timeout (mtime_t deadline)
 {
-    if (deadline == VLC_TS_INVALID)
-        return -1; /* infinite */
+	if (deadline == VLC_TS_INVALID)
+	{
+		return -1; /* infinite */
+	}
 
     mtime_t t = mdate ();
     if (t >= deadline)

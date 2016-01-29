@@ -181,14 +181,18 @@ static int Open(vlc_object_t *object)
     var_Create(vd, "directx-device", VLC_VAR_STRING | VLC_VAR_DOINHERIT);
 
     /* Initialisation */
-    if (CommonInit(vd))
-        goto error;
+	if (CommonInit(vd))
+	{
+		goto error;
+	}
 
     /* */
     video_format_t fmt = vd->fmt;
 
-    if (DirectXOpen(vd, &fmt))
-        goto error;
+	if (DirectXOpen(vd, &fmt))
+	{
+		goto error;
+	}
 
     /* */
     vout_display_info_t info = vd->info;
@@ -347,9 +351,10 @@ static void Manage(vout_display_t *vd)
 
     if (sys->changes & DX_POSITION_CHANGE) {
         /* Update overlay */
-        if (sys->use_overlay)
-            DirectXUpdateOverlay(vd, NULL);
-
+		if (sys->use_overlay)
+		{
+			DirectXUpdateOverlay(vd, NULL);
+		}
         /* Check if we are still on the same monitor */
         HMONITOR hmon = MonitorFromWindow(sys->hwnd, MONITOR_DEFAULTTONEAREST);
         if (sys->hmonitor != hmon) {
@@ -720,9 +725,10 @@ static uint32_t DirectXFindColorkey(vout_display_t *vd, uint32_t *color)
     DDSURFACEDESC ddsd;
     ddsd.dwSize = sizeof(ddsd);
     hr = IDirectDrawSurface2_Lock(sys->display, NULL, &ddsd, DDLOCK_WAIT, NULL);
-    if (hr != DD_OK)
-        return 0;
-
+	if (hr != DD_OK)
+	{
+		return 0;
+	}
     uint32_t backup = *(uint32_t *)ddsd.lpSurface;
 
     switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
@@ -879,9 +885,10 @@ static int DirectXCreateSurface(vout_display_t *vd,
 
     /* Create the video surface */
     LPDIRECTDRAWSURFACE surface_v1;
-    if (IDirectDraw2_CreateSurface(sys->ddobject, &ddsd, &surface_v1, NULL) != DD_OK)
-        return VLC_EGENERIC;
-
+	if (IDirectDraw2_CreateSurface(sys->ddobject, &ddsd, &surface_v1, NULL) != DD_OK)
+	{
+		return VLC_EGENERIC;
+	}
     /* Now that the surface is created, try to get a newer DirectX interface */
     HRESULT hr = IDirectDrawSurface_QueryInterface(surface_v1,
                                                    &IID_IDirectDrawSurface2,
@@ -1060,9 +1067,10 @@ static int DirectXCreatePictureResourceYuv(vout_display_t *vd,
      * because a few buggy drivers don't mind creating the surface
      * even if they don't know about the chroma. */
     DWORD count;
-    if (IDirectDraw2_GetFourCCCodes(sys->ddobject, &count, NULL) != DD_OK)
-        return VLC_EGENERIC;
-
+	if (IDirectDraw2_GetFourCCCodes(sys->ddobject, &count, NULL) != DD_OK)
+	{
+		return VLC_EGENERIC;
+	}
     DWORD *list = calloc(count, sizeof(*list));
     if (!list)
         return VLC_ENOMEM;
@@ -1076,9 +1084,10 @@ static int DirectXCreatePictureResourceYuv(vout_display_t *vd,
             break;
     }
     free(list);
-    if (index >= count)
-        return VLC_EGENERIC;
-
+	if (index >= count)
+	{
+		return VLC_EGENERIC;
+	}
     /* */
     LPDIRECTDRAWSURFACE2 surface;
     if (DirectXCreateSurface(vd, &surface, fmt, fourcc, false, allow_sysmem, 0))
@@ -1239,9 +1248,10 @@ static int DirectXCreatePool(vout_display_t *vd,
     /* */
     *fmt = vd->source;
 
-    if (DirectXCreatePictureResource(vd, use_overlay, fmt))
-        return VLC_EGENERIC;
-
+	if (DirectXCreatePictureResource(vd, use_overlay, fmt))
+	{
+		return VLC_EGENERIC;
+	}
     /* Create the associated picture */
     picture_resource_t resource = { .p_sys = sys->picsys };
     picture_t *picture = picture_NewFromResource(fmt, &resource);
@@ -1346,9 +1356,10 @@ static void WallpaperChange(vout_display_t *vd, bool use_wallpaper)
 {
     vout_display_sys_t *sys = vd->sys;
 
-    if (!sys->use_wallpaper == !use_wallpaper)
-        return;
-
+	if (!sys->use_wallpaper == !use_wallpaper)
+	{
+		return;
+	}
     HWND hwnd = FindWindow(_T("Progman"), NULL);
     if (hwnd)
         hwnd = FindWindowEx(hwnd, NULL, _T("SHELLDLL_DefView"), NULL);

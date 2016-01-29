@@ -380,8 +380,10 @@ static int Open( vlc_object_t * p_this )
     for( i = 0 ; i < i_track; i++ )
     {
         avi_track_t           *tk     = calloc( 1, sizeof( avi_track_t ) );
-        if( unlikely( !tk ) )
-            goto error;
+		if (unlikely(!tk))
+		{
+			goto error;
+		}
 
         avi_chunk_list_t      *p_strl = AVI_ChunkFind( p_hdrl, AVIFOURCC_strl, i );
         avi_chunk_strh_t      *p_strh = AVI_ChunkFind( p_strl, AVIFOURCC_strh, 0 );
@@ -586,10 +588,11 @@ static int Open( vlc_object_t * p_this )
                 fmt.video.i_frame_rate_base = tk->i_scale;
 
                  /* Uncompresse Bitmap or YUV, YUV being always topdown */
-                if ( fmt.video.i_height > INT32_MAX )
-                    fmt.video.i_height =
-                        (unsigned int)(-(int)p_vids->p_bih->biHeight);
-
+				if (fmt.video.i_height > INT32_MAX)
+				{
+					fmt.video.i_height =
+						(unsigned int)(-(int)p_vids->p_bih->biHeight);
+				}
                 avi_chunk_vprp_t *p_vprp = AVI_ChunkFind( p_strl, AVIFOURCC_vprp, 0 );
                 if( p_vprp )
                 {
@@ -871,9 +874,10 @@ block_t * ReadFrame( demux_t *p_demux, const avi_track_t *tk,
         p_frame->i_buffer -= i_header;
     }
 
-    if ( !tk->i_width_bytes )
-        return p_frame;
-
+	if (!tk->i_width_bytes)
+	{
+		return p_frame;
+	}
     const unsigned int i_stride_bytes = ((( (tk->i_width_bytes << 3) + 31) & ~31) >> 3);
 
     if ( p_frame->i_buffer < i_stride_bytes )
@@ -1652,8 +1656,10 @@ static int Control( demux_t *p_demux, int i_query, va_list args )
 
         case DEMUX_GET_ATTACHMENTS:
         {
-            if( p_sys->i_attachment <= 0 )
-                return VLC_EGENERIC;
+									  if (p_sys->i_attachment <= 0)
+									  {
+										  return VLC_EGENERIC;
+									  }
 
             input_attachment_t ***ppp_attach = va_arg( args, input_attachment_t*** );
             int *pi_int = va_arg( args, int * );
@@ -2446,8 +2452,10 @@ static void AVI_IndexLoad_indx( demux_t *p_demux,
         }
         else if( p_indx->i_indextype == AVI_INDEX_OF_INDEXES )
         {
-            if ( !p_sys->b_seekable )
-                return;
+			if (!p_sys->b_seekable)
+			{
+				return;
+			}
             avi_chunk_t    ck_sub;
             for( unsigned i = 0; i < p_indx->i_entriesinuse; i++ )
             {
@@ -2746,8 +2754,10 @@ static void AVI_DvHandleAudio( demux_t *p_demux, avi_track_t *tk, block_t *p_fra
     if( p_frame->i_buffer < i_offset + 5 )
         return;
 
-    if( p_frame->p_buffer[i_offset] != 0x50 )
-        return;
+	if (p_frame->p_buffer[i_offset] != 0x50)
+	{
+		return;
+	}
 
     es_format_t fmt;
     dv_get_audio_format( &fmt, &p_frame->p_buffer[i_offset + 1] );
@@ -2846,8 +2856,10 @@ static void AVI_ExtractSubtitle( demux_t *p_demux,
     if( stream_Seek( p_demux->s, i_position ) )
         goto exit;
     p_block = stream_Block( p_demux->s, i_size );
-    if( !p_block )
-        goto exit;
+	if (!p_block)
+	{
+		goto exit;
+	}
 
     /* Parse packet header */
     const uint8_t *p = p_block->p_buffer;
@@ -2857,9 +2869,11 @@ static void AVI_ExtractSubtitle( demux_t *p_demux,
     i_size -= 8;
 
     /* Parse subtitle chunk header */
-    if( i_size < 11 || memcmp( p, "GAB2", 4 ) ||
-        p[4] != 0x00 || GetWLE( &p[5] ) != 0x2 )
-        goto exit;
+	if (i_size < 11 || memcmp(p, "GAB2", 4) ||
+		p[4] != 0x00 || GetWLE(&p[5]) != 0x2)
+	{
+		goto exit;
+	}
     const unsigned i_name = GetDWLE( &p[7] );
     if( 11 + i_size <= i_name )
         goto exit;
@@ -2867,16 +2881,20 @@ static void AVI_ExtractSubtitle( demux_t *p_demux,
         psz_description = FromCharset( "UTF-16LE", &p[11], i_name );
     p += 11 + i_name;
     i_size -= 11 + i_name;
-    if( i_size < 6 || GetWLE( &p[0] ) != 0x04 )
-        goto exit;
+	if (i_size < 6 || GetWLE(&p[0]) != 0x04)
+	{
+		goto exit;
+	}
     const unsigned i_payload = GetDWLE( &p[2] );
     if( i_size < 6 + i_payload || i_payload <= 0 )
         goto exit;
     p += 6;
     i_size -= 6;
 
-    if( !psz_description )
-        psz_description = p_strn ? FromACP( p_strn->p_str ) : NULL;
+	if (!psz_description)
+	{
+		psz_description = p_strn ? FromACP(p_strn->p_str) : NULL;
+	}
     char *psz_name;
     if( asprintf( &psz_name, "subtitle%d.srt", p_sys->i_attachment ) <= 0 )
         psz_name = NULL;

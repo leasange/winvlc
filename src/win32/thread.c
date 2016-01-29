@@ -290,8 +290,10 @@ int vlc_cond_timedwait (vlc_cond_t *p_condvar, vlc_mutex_t *p_mutex,
                 return 0;
         }
         total = (deadline - total) / 1000;
-        if( total < 0 )
-            total = 0;
+		if (total < 0)
+		{
+			total = 0;
+		}
 
         DWORD delay = (total > 0x7fffffff) ? 0x7fffffff : total;
         vlc_mutex_unlock (p_mutex);
@@ -736,8 +738,10 @@ static mtime_t mdate_perf (void)
 {
     /* We don't need the real date, just the value of a high precision timer */
     LARGE_INTEGER counter;
-    if (!QueryPerformanceCounter (&counter))
-        abort ();
+	if (!QueryPerformanceCounter(&counter))
+	{
+		abort();
+	}
 
     /* Convert to from (1/freq) to microsecond resolution */
     /* We need to split the division to avoid 63-bits overflow */

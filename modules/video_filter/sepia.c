@@ -175,7 +175,7 @@ static picture_t *Filter( filter_t *p_filter, picture_t *p_pic )
 {
     picture_t *p_outpic;
 
-    if( !p_pic ) return NULL;
+	if (!p_pic) { return NULL; }
 
     filter_sys_t *p_sys = p_filter->p_sys;
     int intensity = atomic_load( &p_sys->i_intensity );
@@ -321,8 +321,10 @@ static void PlanarI420Sepia( picture_t *p_pic, picture_t *p_outpic,
                                int i_intensity )
 {
 #if defined(CAN_COMPILE_SSE2)
-    if (vlc_CPU_SSE2())
-        return PlanarI420SepiaSSE( p_pic, p_outpic, i_intensity );
+	if (vlc_CPU_SSE2())
+	{
+		return PlanarI420SepiaSSE(p_pic, p_outpic, i_intensity);
+	}
 #endif
 
     // prepared values to copy for U and V channels

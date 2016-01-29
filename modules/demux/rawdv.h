@@ -122,8 +122,10 @@ static inline block_t *dv_extract_audio( block_t *p_frame_block )
     const uint16_t (*audio_shuffle)[9];
     int i, j, d, of;
 
-    if( p_frame_block->i_buffer < 4 )
-        return NULL;
+	if (p_frame_block->i_buffer < 4)
+	{
+		return NULL;
+	}
     const int i_dsf = (p_frame_block->p_buffer[3] & 0x80) >> 7;
     if( p_frame_block->i_buffer < (i_dsf ? DV_PAL_FRAME_SIZE
                                          : DV_NTSC_FRAME_SIZE ) )

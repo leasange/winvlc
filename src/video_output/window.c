@@ -120,10 +120,11 @@ static void vout_window_stop(void *func, va_list ap)
 
 void vout_window_Delete(vout_window_t *window)
 {
+	window_t *w;
     if (!window)
         return;
 
-    window_t *w = (window_t *)window;
+	w = (window_t *)window;
     if (w->inhibit)
     {
         vlc_inhibit_Set (w->inhibit, VLC_INHIBIT_NONE);

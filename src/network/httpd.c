@@ -363,8 +363,10 @@ httpd_file_t *httpd_FileNew(httpd_host_t *host,
                              httpd_file_sys_t *p_sys)
 {
     const char *mime = psz_mime;
-    if (mime == NULL || mime[0] == '\0')
-        mime = vlc_mime_Ext2Mime(psz_url);
+	if (mime == NULL || mime[0] == '\0')
+	{
+		mime = vlc_mime_Ext2Mime(psz_url);
+	}
 
     size_t mimelen = strlen(mime);
     httpd_file_t *file = malloc(sizeof(*file) + mimelen);
@@ -427,11 +429,11 @@ httpd_HandlerCallBack(httpd_callback_sys_t *p_sys, httpd_client_t *cl,
 
     /* We do it ourselves, thanks */
     answer->i_status = 0;
-
+	uint8_t *psz_args;
     if (!httpd_ClientIP(cl, psz_remote_addr, NULL))
         *psz_remote_addr = '\0';
 
-    uint8_t *psz_args = query->psz_args;
+	psz_args = query->psz_args;
     handler->pf_fill(handler->p_sys, handler, query->psz_url, psz_args,
                       query->i_type, query->p_body, query->i_body,
                       psz_remote_addr, NULL,

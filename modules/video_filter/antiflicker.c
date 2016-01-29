@@ -200,7 +200,7 @@ static int GetLuminanceAvg( picture_t *p_pic )
  *****************************************************************************/
 static picture_t *Filter( filter_t *p_filter, picture_t *p_pic )
 {
-    if( !p_pic ) return NULL;
+	if (!p_pic) { return NULL; }
 
     picture_t *p_outpic = filter_NewPicture( p_filter );
     if( !p_outpic )

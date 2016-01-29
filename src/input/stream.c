@@ -1906,7 +1906,7 @@ int stream_Control( stream_t *s, int i_query, ... )
  */
 block_t *stream_Block( stream_t *s, int i_size )
 {
-    if( i_size <= 0 ) return NULL;
+	if (i_size <= 0) { return NULL; }
 
     /* emulate block read */
     block_t *p_bk = block_Alloc( i_size );
@@ -1944,8 +1944,10 @@ block_t *stream_BlockRemaining( stream_t *s, int i_max_size )
         }
         i_allocate = i_size - i_position;
     }
-    if( i_allocate <= 0 )
-        return NULL;
+	if (i_allocate <= 0)
+	{
+		return NULL;
+	}
 
     block_t *p_block = block_Alloc( i_allocate );
     int i_index = 0;

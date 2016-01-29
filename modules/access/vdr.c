@@ -182,9 +182,11 @@ static int Open( vlc_object_t *p_this )
 
     /* Only directories can be recordings */
     struct stat st;
-    if( vlc_stat( p_access->psz_filepath, &st ) ||
-        !S_ISDIR( st.st_mode ) )
-        return VLC_EGENERIC;
+	if (vlc_stat(p_access->psz_filepath, &st) ||
+		!S_ISDIR(st.st_mode))
+	{
+		return VLC_EGENERIC;
+	}
 
     access_sys_t *p_sys;
     STANDARD_READ_ACCESS_INIT;
@@ -597,10 +599,12 @@ static FILE *OpenRelativeFile( access_t *p_access, const char *psz_file )
 {
     /* build path and add extension */
     char *psz_path;
-    if( asprintf( &psz_path, "%s" DIR_SEP "%s%s",
-        p_access->psz_filepath, psz_file,
-        p_access->p_sys->b_ts_format ? "" : ".vdr" ) == -1 )
-        return NULL;
+	if (asprintf(&psz_path, "%s" DIR_SEP "%s%s",
+		p_access->psz_filepath, psz_file,
+		p_access->p_sys->b_ts_format ? "" : ".vdr") == -1)
+	{
+		return NULL;
+	}
 
     FILE *file = vlc_fopen( psz_path, "rb" );
     if( !file )
@@ -641,8 +645,10 @@ static void ImportMeta( access_t *p_access )
     access_sys_t *p_sys = p_access->p_sys;
 
     FILE *infofile = OpenRelativeFile( p_access, "info" );
-    if( !infofile )
-        return;
+	if (!infofile)
+	{
+		return;
+	}
 
     vlc_meta_t *p_meta = vlc_meta_New();
     p_sys->p_meta = p_meta;
@@ -784,8 +790,10 @@ static void ImportMarks( access_t *p_access )
     access_sys_t *p_sys = p_access->p_sys;
 
     FILE *marksfile = OpenRelativeFile( p_access, "marks" );
-    if( !marksfile )
-        return;
+	if (!marksfile)
+	{
+		return;
+	}
 
     FILE *indexfile = OpenRelativeFile( p_access, "index" );
     if( !indexfile )
@@ -929,8 +937,10 @@ static int64_t ParseFrameNumber( const char *psz_line, float fps )
     n = sscanf( psz_line, "%u:%u:%u.%u", &h, &m, &s, &f );
     if( n >= 3 )
     {
-        if( n < 4 )
-            f = 1;
+		if (n < 4)
+		{
+			f = 1;
+		}
         int64_t i_seconds = (int64_t)h * 3600 + (int64_t)m * 60 + s;
         return (int64_t)( i_seconds * (double)fps ) + __MAX(1, f) - 1;
     }

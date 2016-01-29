@@ -234,8 +234,10 @@ static void *Slave(void *handle)
             continue;
 
         const mtime_t receive_date = mdate();
-        if (recv(sys->fd, data, sizeof(data), 0) <= 0)
-            goto wait;
+		if (recv(sys->fd, data, sizeof(data), 0) <= 0)
+		{
+			goto wait;
+		}
 
         const mtime_t master_date   = ntoh64(data[0]);
         const mtime_t master_system = ntoh64(data[1]);

@@ -262,8 +262,10 @@ static picture_t *Filter( filter_t *p_filter, picture_t *p_inpic )
 {
     filter_sys_t *p_sys = p_filter->p_sys;
 
-    if( !p_inpic )
-        return NULL;
+	if (!p_inpic)
+	{
+		return NULL;
+	}
 
     picture_t *p_outpic = filter_NewPicture( p_filter );
     if( !p_outpic )

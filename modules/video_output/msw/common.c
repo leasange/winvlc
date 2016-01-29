@@ -67,9 +67,10 @@ int CommonInit(vout_display_t *vd)
 
     /* */
     sys->event = EventThreadCreate(vd);
-    if (!sys->event)
-        return VLC_EGENERIC;
-
+	if (!sys->event)
+	{
+		return VLC_EGENERIC;
+	}
     event_cfg_t cfg;
     memset(&cfg, 0, sizeof(cfg));
 #ifdef MODULE_NAME_IS_direct3d
@@ -151,10 +152,12 @@ void CommonManage(vout_display_t *vd)
              * For directx, it is still important to call UpdateRects
              * on a move of the parent window, even if no resize occurred
              */
+#if !VIDEO_PANEL_USE_ORIGIN
             SetWindowPos(sys->hwnd, 0, 0, 0,
                          rect_parent.right - rect_parent.left,
                          rect_parent.bottom - rect_parent.top,
                          SWP_NOZORDER);
+#endif
 
             UpdateRects(vd, NULL, NULL, true);
         }
@@ -179,6 +182,7 @@ void CommonDisplay(vout_display_t *vd)
     /* Video window is initially hidden, show it now since we got a
      * picture to show.
      */
+#if !VIDEO_PANEL_USE_ORIGIN
     SetWindowPos(sys->hvideownd, 0, 0, 0, 0, 0,
                  SWP_ASYNCWINDOWPOS|
                  SWP_FRAMECHANGED|
@@ -186,6 +190,7 @@ void CommonDisplay(vout_display_t *vd)
                  SWP_NOMOVE|
                  SWP_NOSIZE|
                  SWP_NOZORDER);
+#endif
     sys->is_first_display = false;
 }
 
@@ -316,12 +321,20 @@ void UpdateRects(vout_display_t *vd,
         source = &vd->source;
 
     /* Retrieve the window size */
-    GetClientRect(sys->hwnd, &rect);
-
+	GetClientRect(sys->hwnd, &rect);
+	/*
+#if VIDEO_PANEL_USE_ORIGIN==1
+	int w = rect.right - rect.left;
+	int h = rect.bottom - rect.top;
+	rect.left = 0;
+	rect.top = 0;
+	rect.right=w;
+	rect.bottom = h;
+#endif
+	*/
     /* Retrieve the window position */
     point.x = point.y = 0;
-    ClientToScreen(sys->hwnd, &point);
-
+	ClientToScreen(sys->hwnd, &point);
     /* If nothing changed, we can return */
     bool has_moved;
     bool is_resized;
@@ -330,9 +343,11 @@ void UpdateRects(vout_display_t *vd,
                                     rect.right, rect.bottom);
     if (is_resized)
         vout_display_SendEventDisplaySize(vd, rect.right, rect.bottom, cfg->is_fullscreen);
-    if (!is_forced && !has_moved && !is_resized )
-        return;
-
+	if (!is_forced && !has_moved && !is_resized)
+	{
+		return;
+	}
+	
     /* Update the window position and size */
     vout_display_cfg_t place_cfg = *cfg;
     place_cfg.display.width  = rect.right;
@@ -342,12 +357,12 @@ void UpdateRects(vout_display_t *vd,
     vout_display_PlacePicture(&place, source, &place_cfg, false);
 
     EventThreadUpdateSourceAndPlace(sys->event, source, &place);
-
+#if VIDEO_PANEL_USE_ORIGIN!=1
     if (sys->hvideownd)
         SetWindowPos(sys->hvideownd, 0,
                      place.x, place.y, place.width, place.height,
                      SWP_NOCOPYBITS|SWP_NOZORDER|SWP_ASYNCWINDOWPOS);
-
+#endif
     /* Destination image position and dimensions */
 #if defined(MODULE_NAME_IS_direct3d) || defined(MODULE_NAME_IS_direct2d)
     rect_dest.left   = 0;
@@ -359,13 +374,36 @@ void UpdateRects(vout_display_t *vd,
     rect_dest.right = rect_dest.left + place.width;
     rect_dest.top = point.y + place.y;
     rect_dest.bottom = rect_dest.top + place.height;
-
 #ifdef MODULE_NAME_IS_directdraw
     /* Apply overlay hardware constraints */
     if (sys->use_overlay)
         AlignRect(&rect_dest, sys->i_align_dest_boundary, sys->i_align_dest_size);
 #endif
 
+#endif
+#if VIDEO_PANEL_USE_ORIGIN==1
+	rect_dest.left += place.x;
+	rect_dest.right += place.x;
+	rect_dest.top+=place.y;
+	rect_dest.bottom += place.y;
+	if (is_resized)
+	{
+		HDC dc = GetDC(sys->hvideownd);
+		if (dc)//ÖØ»æ±³¾°
+		{
+			HBRUSH brush = CreateSolidBrush(RGB(0, 0, 0));
+			RECT wndrect;
+			int w = rect.right - rect.left;
+			int h = rect.bottom - rect.top;
+			wndrect.left = 0;
+			wndrect.top = 0;
+			wndrect.right = w;
+			wndrect.bottom = h;
+			FillRect(dc, &wndrect, brush);
+			ReleaseDC(sys->hvideownd, dc);
+			DeleteObject(brush);
+		}
+	}
 #endif
 
 #if defined(MODULE_NAME_IS_directdraw)
@@ -421,7 +459,6 @@ void UpdateRects(vout_display_t *vd,
       source->i_visible_height -
       (rect_dest.bottom - rect_dest_clipped.bottom) *
       source->i_visible_height / (rect_dest.bottom - rect_dest.top);
-
 #ifdef MODULE_NAME_IS_directdraw
     /* Apply overlay hardware constraints */
     if (sys->use_overlay)
@@ -472,9 +509,10 @@ static int CommonControlSetFullscreen(vout_display_t *vd, bool is_fullscreen)
 #endif
 
     /* */
-    if (sys->parent_window)
-        return vout_window_SetFullScreen(sys->parent_window, is_fullscreen);
-
+	if (sys->parent_window)
+	{
+		return vout_window_SetFullScreen(sys->parent_window, is_fullscreen);
+	}
     /* */
     HWND hwnd = sys->hparent && sys->hfswnd ? sys->hfswnd : sys->hwnd;
 

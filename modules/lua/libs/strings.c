@@ -135,11 +135,11 @@ static int vlclua_convert_xml_special_chars( lua_State *L )
 
 static int vlclua_from_charset( lua_State *L )
 {
-    if( lua_gettop( L ) < 2 ) return vlclua_error( L );
+	if (lua_gettop(L) < 2){ return vlclua_error(L); }
 
     size_t i_in_bytes;
     const char *psz_input = luaL_checklstring( L, 2, &i_in_bytes );
-    if( i_in_bytes == 0 ) return vlclua_error( L );
+	if (i_in_bytes == 0) { return vlclua_error(L); }
 
     const char *psz_charset = luaL_checkstring( L, 1 );
     char *psz_output = FromCharset( psz_charset, psz_input, i_in_bytes );

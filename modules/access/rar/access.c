@@ -47,8 +47,10 @@ static int Seek(access_t *access, uint64_t position)
     access_sys_t *sys = access->p_sys;
     const rar_file_t *file = sys->file;
 
-    if (position > file->real_size)
-        position = file->real_size;
+	if (position > file->real_size)
+	{
+		position = file->real_size;
+	}
 
     /* Search the chunk */
     const rar_file_chunk_t *old_chunk = sys->chunk;
@@ -158,12 +160,14 @@ int RarAccessOpen(vlc_object_t *object)
         goto error;
     int count = 0;
     rar_file_t **files;
-     if ( RarProbe(s) || (
-            RarParse(s, &count, &files, false ) &&
-            RarParse(s, &count, &files, true )
-          ) ||
-          count <= 0 )
-         goto error;
+	if (RarProbe(s) || (
+		RarParse(s, &count, &files, false) &&
+		RarParse(s, &count, &files, true)
+		) ||
+		count <= 0)
+	{
+		goto error;
+	}
     rar_file_t *file = NULL;
     for (int i = 0; i < count; i++) {
         if (!file && !strcmp(files[i]->name, name))
@@ -172,8 +176,10 @@ int RarAccessOpen(vlc_object_t *object)
             RarFileDelete(files[i]);
     }
     free(files);
-    if (!file)
-        goto error;
+	if (!file)
+	{
+		goto error;
+	}
 
     access_sys_t *sys = access->p_sys = malloc(sizeof(*sys));
     sys->s    = s;

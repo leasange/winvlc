@@ -204,8 +204,10 @@ static int vlclua_var_create( lua_State *L )
         return vlclua_push_ret( L, i_ret );
 
     // Special case for void variables
-    if( i_type == VLC_VAR_VOID )
-        return 0;
+	if (i_type == VLC_VAR_VOID)
+	{
+		return 0;
+	}
 
     vlc_value_t val;
     vlclua_tovalue( L, i_type, &val );

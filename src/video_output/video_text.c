@@ -105,11 +105,12 @@ static void OSDTextDestroy(subpicture_t *subpic)
 void vout_OSDText(vout_thread_t *vout, int channel,
                    int position, mtime_t duration, const char *text)
 {
+	subpicture_updater_sys_t *sys;
     assert( (position & ~SUBPICTURE_ALIGN_MASK) == 0);
     if (!var_InheritBool(vout, "osd") || duration <= 0)
         return;
 
-    subpicture_updater_sys_t *sys = malloc(sizeof(*sys));
+	sys = malloc(sizeof(*sys));
     if (!sys)
         return;
     sys->position = position;

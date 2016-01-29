@@ -161,8 +161,10 @@ static int Open(vlc_object_t *object)
 
     bool is_stl_25 = !memcmp(&peek[3], "STL25.01", 8);
     bool is_stl_30 = !memcmp(&peek[3], "STL30.01", 8);
-    if (!is_stl_25 && !is_stl_30)
-        return VLC_EGENERIC;
+	if (!is_stl_25 && !is_stl_30)
+	{
+		return VLC_EGENERIC;
+	}
     const double fps = is_stl_25 ? 25 : 30;
 
     uint8_t header[1024];
@@ -211,8 +213,10 @@ static int Open(vlc_object_t *object)
         if (ebn == 0xff && sys->count < tti_count)
             s->count = 0;
     }
-    if (sys->count > 0)
-        stream_Seek(demux->s, 1024 + 128LL * sys->index[0].index);
+	if (sys->count > 0)
+	{
+		stream_Seek(demux->s, 1024 + 128LL * sys->index[0].index);
+	}
 
     es_format_t fmt;
     es_format_Init(&fmt, SPU_ES, VLC_CODEC_EBU_STL);

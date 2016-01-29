@@ -118,9 +118,10 @@ static int Read( stream_t *s, void *p_read, unsigned int i_read )
     void *p_record = p_read;
 
     /* Allocate a temporary buffer for record when no p_read */
-    if( p_sys->f && !p_record )
-        p_record = malloc( i_read );
-
+	if (p_sys->f && !p_record)
+	{
+		p_record = malloc(i_read);
+	}
     /* */
     const int i_record = stream_Read( s->p_source, p_record, i_read );
 

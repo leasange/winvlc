@@ -533,8 +533,10 @@ static void Eia608EraseToEndOfRow( eia608_t *h )
 
 static void Eia608RollUp( eia608_t *h )
 {
-    if( h->mode == EIA608_MODE_TEXT )
-        return;
+	if (h->mode == EIA608_MODE_TEXT)
+	{
+		return;
+	}
 
     const int i_screen = Eia608GetWritingScreenIndex( h );
     eia608_screen *screen = &h->screen[i_screen];

@@ -256,8 +256,10 @@ static void Draw(BarGraph_t *b)
     if (b->p_pic)
         picture_Release(b->p_pic);
     b->p_pic = picture_New(VLC_FOURCC('Y','U','V','A'), w, h, 1, 1);
-    if (!b->p_pic)
-        return;
+	if (!b->p_pic)
+	{
+		return;
+	}
     picture_t *p_pic = b->p_pic;
     plane_t *p = p_pic->p;
 
@@ -451,8 +453,10 @@ static picture_t *FilterVideo(filter_t *p_filter, picture_t *p_src)
 
     /* */
     const picture_t *p_pic = p_BarGraph->p_pic;
-    if (!p_pic)
-        goto out;
+	if (!p_pic)
+	{
+		goto out;
+	}
 
     const video_format_t *p_fmt = &p_pic->format;
     const int i_dst_w = p_filter->fmt_out.video.i_visible_width;

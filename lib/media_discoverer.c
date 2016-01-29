@@ -189,8 +189,10 @@ libvlc_media_discoverer_new_from_name( libvlc_instance_t * p_inst,
                                        const char * psz_name )
 {
     /* podcast SD is a hack and only works with custom playlist callbacks. */
-    if( !strncasecmp( psz_name, "podcast", 7 ) )
-        return NULL;
+	if (!strncasecmp(psz_name, "podcast", 7))
+	{
+		return NULL;
+	}
 
     libvlc_media_discoverer_t *p_mdis = malloc(sizeof(*p_mdis));
     if( unlikely(!p_mdis) )

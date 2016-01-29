@@ -205,9 +205,10 @@ static int AVI_ChunkRead_list( stream_t *s, avi_chunk_t *p_container )
 int AVI_ChunkFetchIndexes( stream_t *s, avi_chunk_t *p_riff )
 {
     avi_chunk_t *p_movi = AVI_ChunkFind( p_riff, AVIFOURCC_movi, 0 );
-    if ( !p_movi )
-        return VLC_EGENERIC;
-
+	if (!p_movi)
+	{
+		return VLC_EGENERIC;
+	}
     avi_chunk_t *p_chk;
     uint64_t i_indexpos = 8 + p_movi->common.i_chunk_pos + p_movi->common.i_chunk_size;
     bool b_seekable = false;

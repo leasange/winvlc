@@ -290,10 +290,11 @@ static FILE *GetTmpFile( char **ppsz_file, const char *psz_path );
 es_out_t *input_EsOutTimeshiftNew( input_thread_t *p_input, es_out_t *p_next_out, int i_rate )
 {
     es_out_t *p_out = malloc( sizeof(*p_out) );
+	es_out_sys_t *p_sys;
     if( !p_out )
         return NULL;
 
-    es_out_sys_t *p_sys = malloc( sizeof(*p_sys) );
+	p_sys = malloc(sizeof(*p_sys));
     if( !p_sys )
     {
         free( p_out );
@@ -674,11 +675,12 @@ static int ControlLocked( es_out_t *p_out, int i_query, va_list args )
     }
     case ES_OUT_GET_PCR_SYSTEM:
     {
+		mtime_t *pi_system, *pi_delay;
         if( p_sys->b_delayed )
             return VLC_EGENERIC;
 
-        mtime_t *pi_system = (mtime_t*)va_arg( args, mtime_t * );
-        mtime_t *pi_delay  = (mtime_t*)va_arg( args, mtime_t * );
+        pi_system = (mtime_t*)va_arg( args, mtime_t * );
+        pi_delay  = (mtime_t*)va_arg( args, mtime_t * );
         return es_out_ControlGetPcrSystem( p_sys->p_out, pi_system, pi_delay );
     }
     case ES_OUT_MODIFY_PCR_SYSTEM:
@@ -1333,9 +1335,10 @@ static int CmdInitControl( ts_cmd_t *p_cmd, int i_query, va_list args, bool b_co
     case ES_OUT_SET_META:        /* arg1=const vlc_meta_t* */
     case ES_OUT_SET_GROUP_META:  /* arg1=int i_group arg2=const vlc_meta_t* */
     {
+		const vlc_meta_t *p_meta;
         if( i_query == ES_OUT_SET_GROUP_META )
             p_cmd->u.control.u.int_meta.i_int = (int)va_arg( args, int );
-        const vlc_meta_t *p_meta = va_arg( args, const vlc_meta_t * );
+		p_meta = va_arg(args, const vlc_meta_t *);
 
         if( b_copy )
         {

@@ -260,11 +260,10 @@ static void print_section(const module_t *m, const module_config_t **sect,
 static void print_desc(const char *str, unsigned margin, bool color)
 {
     unsigned width = ConsoleWidth() - margin;
-
+	const char *word = str;
     if (color)
         fputs(BLUE, stdout);
 
-    const char *word = str;
     int wordlen = 0, wordwidth = 0;
     unsigned offset = 0;
     bool newline = true;
@@ -483,10 +482,11 @@ static void print_item(const module_t *m, const module_config_t *item,
 
 static bool module_match(const module_t *m, const char *pattern, bool strict)
 {
+	const char *objname;
     if (pattern == NULL)
         return true;
 
-    const char *objname = module_get_object(m);
+	objname = module_get_object(m);
 
     if (strict ? (strcmp(objname, pattern) == 0)
                : (strstr(objname, pattern) != NULL))

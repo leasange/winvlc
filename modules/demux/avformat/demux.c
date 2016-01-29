@@ -722,8 +722,10 @@ static int Demux( demux_t *p_demux )
         memcpy( p_frame->p_buffer, pkt.data, pkt.size );
     }
 
-    if( pkt.flags & AV_PKT_FLAG_KEY )
-        p_frame->i_flags |= BLOCK_FLAG_TYPE_I;
+	if (pkt.flags & AV_PKT_FLAG_KEY)
+	{
+		p_frame->i_flags |= BLOCK_FLAG_TYPE_I;
+	}
 
     /* Used to avoid timestamps overlow */
     lldiv_t q;
@@ -772,9 +774,10 @@ static int Demux( demux_t *p_demux )
     msg_Dbg( p_demux, "tk[%d] dts=%"PRId64" pts=%"PRId64,
              pkt.stream_index, p_frame->i_dts, p_frame->i_pts );
 #endif
-    if( p_frame->i_dts > VLC_TS_INVALID )
-        p_sys->tk_pcr[pkt.stream_index] = p_frame->i_dts;
-
+	if (p_frame->i_dts > VLC_TS_INVALID)
+	{
+		p_sys->tk_pcr[pkt.stream_index] = p_frame->i_dts;
+	}
     int64_t i_ts_max = INT64_MIN;
     for( int i = 0; i < p_sys->i_tk; i++ )
         i_ts_max = __MAX( i_ts_max, p_sys->tk_pcr[i] );
@@ -865,9 +868,10 @@ static block_t *BuildSsaFrame( const AVPacket *p_pkt, unsigned i_order )
         return NULL;
 
     char *p;
-    if( asprintf( &p, "%u,%d,%.*s", i_order, i_layer, p_pkt->size - i_position, p_pkt->data + i_position ) < 0 )
-        return NULL;
-
+	if (asprintf(&p, "%u,%d,%.*s", i_order, i_layer, p_pkt->size - i_position, p_pkt->data + i_position) < 0)
+	{
+		return NULL;
+	}
     block_t *p_frame = block_heap_Alloc( p, strlen(p) + 1 );
     if( p_frame )
         p_frame->i_length = CLOCK_FREQ * ((h1-h0) * 3600 +

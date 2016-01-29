@@ -299,8 +299,10 @@ static int Demux( demux_t *p_demux )
     }
 
     /* Read Packet Header */
-    if( stream_Read( p_demux->s, header, 12 ) < 12 )
-        return 0;
+	if (stream_Read(p_demux->s, header, 12) < 12)
+	{
+		return 0;
+	}
     //const int i_version = GetWBE( &header[0] );
     const size_t  i_size = GetWBE( &header[2] ) - 12;
     const int     i_id   = GetWBE( &header[4] );
@@ -315,8 +317,10 @@ static int Demux( demux_t *p_demux )
     }
 
     p_sys->i_buffer = stream_Read( p_demux->s, p_sys->buffer, i_size );
-    if( p_sys->i_buffer < i_size )
-        return 0;
+	if (p_sys->i_buffer < i_size)
+	{
+		return 0;
+	}
 
     real_track_t *tk = NULL;
     for( int i = 0; i < p_sys->i_track; i++ )
@@ -635,9 +639,10 @@ static void DemuxAudioMethod1( demux_t *p_demux, real_track_t *tk, mtime_t i_pts
         {
             int i_index = tk->i_subpacket_h * i +
                           ((tk->i_subpacket_h + 1) / 2) * (y&1) + (y>>1);
-            if( i_index >= tk->i_subpackets )
-                return;
-
+			if (i_index >= tk->i_subpackets)
+			{
+				return;
+			}
             block_t *p_block = block_Alloc( tk->i_subpacket_size );
             if( !p_block )
                 return;
@@ -670,8 +675,10 @@ static void DemuxAudioMethod1( demux_t *p_demux, real_track_t *tk, mtime_t i_pts
         for( int i = 0; i < tk->i_subpacket_h / 2; i++ )
         {
             int i_index = (i * 2 * tk->i_frame_size / tk->i_coded_frame_size) + y;
-            if( i_index >= tk->i_subpackets )
-                return;
+			if (i_index >= tk->i_subpackets)
+			{
+				return;
+			}
 
             block_t *p_block = block_Alloc( tk->i_coded_frame_size);
             if( !p_block )
@@ -737,8 +744,10 @@ static void DemuxAudioMethod2( demux_t *p_demux, real_track_t *tk, mtime_t i_pts
         return;
 
     unsigned i_sub = (p_sys->buffer[1] >> 4)&0x0f;
-    if( p_sys->i_buffer < 2+2*i_sub )
-        return;
+	if (p_sys->i_buffer < 2 + 2 * i_sub)
+	{
+		return;
+	}
 
     uint8_t *p_sub = &p_sys->buffer[2+2*i_sub];
 
@@ -766,8 +775,10 @@ static void DemuxAudioMethod3( demux_t *p_demux, real_track_t *tk, mtime_t i_pts
 {
     demux_sys_t *p_sys = p_demux->p_sys;
 
-    if( p_sys->i_buffer <= 0 )
-        return;
+	if (p_sys->i_buffer <= 0)
+	{
+		return;
+	}
 
     block_t *p_block = block_Alloc( p_sys->i_buffer );
     if( !p_block )
@@ -956,9 +967,10 @@ static char *StreamReadString2( stream_t *s )
 {
     uint8_t p_tmp[2];
 
-    if( stream_Read( s, p_tmp, 2 ) < 2 )
-        return NULL;
-
+	if (stream_Read(s, p_tmp, 2) < 2)
+	{
+		return NULL;
+	}
     const int i_length = GetWBE( p_tmp );
     if( i_length <= 0 )
         return NULL;
@@ -1096,9 +1108,10 @@ static int HeaderMDPR( demux_t *p_demux )
 {
     uint8_t p_buffer[30];
 
-    if( stream_Read( p_demux->s, p_buffer, 30 ) < 30 )
-        return VLC_EGENERIC;
-
+	if (stream_Read(p_demux->s, p_buffer, 30) < 30)
+	{
+		return VLC_EGENERIC;
+	}
     const int i_num = GetWBE( &p_buffer[0] );
     msg_Dbg( p_demux, "    - id=0x%x", i_num );
     msg_Dbg( p_demux, "    - max bitrate=%d avg bitrate=%d",
@@ -1133,9 +1146,10 @@ static int HeaderMDPR( demux_t *p_demux )
         return VLC_EGENERIC;
 
     /* */
-    if( stream_Read( p_demux->s, p_buffer, 4 ) < 4 )
-        return VLC_EGENERIC;
-
+	if (stream_Read(p_demux->s, p_buffer, 4) < 4)
+	{
+		return VLC_EGENERIC;
+	}
     const uint32_t i_size = GetDWBE( p_buffer );
     if( i_size > 0 )
     {
@@ -1184,9 +1198,10 @@ static void HeaderINDX( demux_t *p_demux )
 
     stream_Seek( p_demux->s, p_sys->i_index_offset );
 
-    if( stream_Read( p_demux->s, buffer, 20 ) < 20 )
-        return ;
-
+	if (stream_Read(p_demux->s, buffer, 20) < 20)
+	{
+		return;
+	}
     const uint32_t i_id = VLC_FOURCC( buffer[0], buffer[1], buffer[2], buffer[3] );
     const uint32_t i_size      = GetDWBE( &buffer[4] );
     int i_version   = GetWBE( &buffer[8] );
@@ -1260,9 +1275,10 @@ static int HeaderRead( demux_t *p_demux )
         uint8_t header[100];    /* FIXME */
 
         /* Read the header */
-        if( stream_Read( p_demux->s, header, 10 ) < 10 )
-            return VLC_EGENERIC;
-
+		if (stream_Read(p_demux->s, header, 10) < 10)
+		{
+			return VLC_EGENERIC;
+		}
         const uint32_t i_id = VLC_FOURCC( header[0], header[1],
                                           header[2], header[3] );
         const uint32_t i_size = GetDWBE( &header[4] );
@@ -1365,8 +1381,10 @@ static int CodecVideoParse( demux_t *p_demux, int i_tk_id, const uint8_t *p_data
 {
     demux_sys_t *p_sys = p_demux->p_sys;
 
-    if( i_data < 34 )
-        return VLC_EGENERIC;
+	if (i_data < 34)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* */
     es_format_t fmt;
@@ -1728,7 +1746,7 @@ static void RVoid( const uint8_t **pp_data, int *pi_data, int i_size )
 #define RX(name, type, size, code ) \
 static type name( const uint8_t **pp_data, int *pi_data ) { \
     if( *pi_data < (size) )          \
-        return 0;                    \
+	{ return 0;  }                  \
     type v = code;                   \
     RVoid( pp_data, pi_data, size ); \
     return v;                        \

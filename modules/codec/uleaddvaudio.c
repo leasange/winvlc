@@ -58,8 +58,10 @@ static block_t *Decode(decoder_t *dec, block_t **block_ptr)
 {
     decoder_sys_t *sys  = dec->p_sys;
 
-    if (!block_ptr || !*block_ptr)
-        return NULL;
+	if (!block_ptr || !*block_ptr)
+	{
+		return NULL;
+	}
 
     block_t *block = *block_ptr;
     if (block->i_flags & (BLOCK_FLAG_DISCONTINUITY | BLOCK_FLAG_CORRUPTED)) {
@@ -123,8 +125,10 @@ static int Open(vlc_object_t *object)
         return VLC_EGENERIC;
     if (dec->fmt_in.audio.i_channels != 2)
         return VLC_EGENERIC;
-    if (dec->fmt_in.audio.i_rate <= 0)
-        return VLC_EGENERIC;
+	if (dec->fmt_in.audio.i_rate <= 0)
+	{
+		return VLC_EGENERIC;
+	}
 
     decoder_sys_t *sys = dec->p_sys = malloc(sizeof(*sys));
     if (!sys)

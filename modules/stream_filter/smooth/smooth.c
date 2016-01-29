@@ -720,9 +720,10 @@ static int chunk_Seek( stream_t *s, const uint64_t pos )
 {
     stream_sys_t *p_sys = s->p_sys;
 
-    if( pos == p_sys->playback.boffset )
-        return VLC_SUCCESS;
-
+	if (pos == p_sys->playback.boffset)
+	{
+		return VLC_SUCCESS;
+	}
     chunk_t *chunk = get_chunk( s, false );
     if( chunk == NULL )
         return VLC_EGENERIC;

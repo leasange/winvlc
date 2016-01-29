@@ -360,8 +360,10 @@ static void *ProcessPacket( decoder_t *p_dec, ogg_packet *p_oggpacket,
 
     *pp_block = NULL; /* To avoid being fed the same packet again */
 
-    if( !p_block )
-        return NULL;
+	if (!p_block)
+	{
+		return NULL;
+	}
 
     block_t *p_aout_buffer = DecodePacket( p_dec, p_oggpacket,
                                            p_block->i_nb_samples,
@@ -389,8 +391,10 @@ static block_t *DecodePacket( decoder_t *p_dec, ogg_packet *p_oggpacket,
 
     /* Since the information isn't always available at the demux level
      * use the packet's sample number */
-    if(!i_nb_samples)
-        i_nb_samples = spp;
+	if (!i_nb_samples)
+	{
+		i_nb_samples = spp;
+	}
 
     block_t *p_aout_buffer=decoder_NewAudioBuffer( p_dec, spp );
     if ( !p_aout_buffer )
@@ -491,8 +495,10 @@ static block_t *Encode(encoder_t *enc, block_t *buf)
 {
     encoder_sys_t *sys = enc->p_sys;
 
-    if (!buf)
-        return NULL;
+	if (!buf)
+	{
+		return NULL;
+	}
 
     mtime_t i_pts = buf->i_pts -
                 (mtime_t) CLOCK_FREQ * (mtime_t) sys->i_samples_delay /
@@ -568,8 +574,10 @@ static int OpenEncoder(vlc_object_t *p_this)
 {
     encoder_t *enc = (encoder_t *)p_this;
 
-    if (enc->fmt_out.i_codec != VLC_CODEC_OPUS)
-        return VLC_EGENERIC;
+	if (enc->fmt_out.i_codec != VLC_CODEC_OPUS)
+	{
+		return VLC_EGENERIC;
+	}
 
     encoder_sys_t *sys = malloc(sizeof(*sys));
     if (!sys)

@@ -334,7 +334,7 @@ static void aout_DecSynchronize (audio_output_t *aout, mtime_t dec_pts,
 int aout_DecPlay (audio_output_t *aout, block_t *block, int input_rate)
 {
     aout_owner_t *owner = aout_owner (aout);
-
+	mtime_t now, advance;
     assert (input_rate >= INPUT_RATE_DEFAULT / AOUT_MAX_INPUT_RATE);
     assert (input_rate <= INPUT_RATE_DEFAULT * AOUT_MAX_INPUT_RATE);
     assert (block->i_pts >= VLC_TS_0);
@@ -346,7 +346,8 @@ int aout_DecPlay (audio_output_t *aout, block_t *block, int input_rate)
     if (unlikely(aout_CheckReady (aout)))
         goto drop; /* Pipeline is unrecoverably broken :-( */
 
-    const mtime_t now = mdate (), advance = block->i_pts - now;
+	now = mdate();
+	advance = block->i_pts - now;
     if (advance < -AOUT_MAX_PTS_DELAY)
     {   /* Late buffer can be caused by bugs in the decoder, by scheduling
          * latency spikes (excessive load, SIGSTOP, etc.) or if buffering is

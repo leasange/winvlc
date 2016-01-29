@@ -250,8 +250,10 @@ static int fixAccessMux( sout_stream_t *p_stream, char **ppsz_mux,
     if( !psz_mux )
     {
         const char *psz_ext = psz_url ? strrchr( psz_url, '.' ) : NULL;
-        if( psz_ext )
-            psz_ext++; /* use extension */
+		if (psz_ext)
+		{
+			psz_ext++; /* use extension */
+		}
         const char *psz_mux_byext = getMuxFromAlias( psz_ext );
 
         if( !psz_access )

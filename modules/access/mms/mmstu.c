@@ -415,8 +415,10 @@ static block_t *Block( access_t *p_access )
 
         if( p_sys->i_media_used < p_sys->i_media )
             i_copy = p_sys->i_media - p_sys->i_media_used;
-        if( __MAX( p_sys->i_media, p_sys->i_media_used ) < p_sys->i_packet_length )
-            i_padding = p_sys->i_packet_length - __MAX( p_sys->i_media, p_sys->i_media_used );
+		if (__MAX(p_sys->i_media, p_sys->i_media_used) < p_sys->i_packet_length)
+		{
+			i_padding = p_sys->i_packet_length - __MAX(p_sys->i_media, p_sys->i_media_used);
+		}
 
         block_t *p_block = block_Alloc( i_copy + i_padding );
         if( !p_block )

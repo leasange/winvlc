@@ -410,8 +410,10 @@ static int Demux( demux_t *p_demux )
      * we ensure that the TS packet start at the begining of the buffer,
      * it ensure proper TS parsing */
     block_t *p_block = block_Alloc( i_packets * BD_TS_PACKET_SIZE + BD_TS_PACKET_HEADER );
-    if( !p_block )
-        return -1;
+	if (!p_block)
+	{
+		return -1;
+	}
 
     const int i_read = stream_Read( p_sys->p_m2ts, p_block->p_buffer, p_block->i_buffer - BD_TS_PACKET_HEADER );
     if( i_read <= 0 )
@@ -598,8 +600,10 @@ static int SetPlayItem( demux_t *p_demux, int i_mpls, int i_play_item )
     const bd_mpls_t *p_mpls = p_sys->pp_mpls[i_mpls];
 
     /* */
-    if( i_play_item < 0 || i_play_item >= p_mpls->i_play_item )
-        return VLC_EGENERIC;
+	if (i_play_item < 0 || i_play_item >= p_mpls->i_play_item)
+	{
+		return VLC_EGENERIC;
+	}
 
     const bd_mpls_play_item_t *p_item = &p_mpls->p_play_item[i_play_item];
     const bd_mpls_clpi_t *p_mpls_clpi = &p_item->clpi;
@@ -710,12 +714,16 @@ static int64_t GetClpiPacket( demux_t *p_demux, int *pi_ep, const bd_mpls_clpi_t
     const bd_clpi_t *p_clpi = p_sys->p_clpi;
     assert( p_clpi );
 
-    if( p_clpi->i_ep_map <= 0 )
-        return -1;
+	if (p_clpi->i_ep_map <= 0)
+	{
+		return -1;
+	}
     const bd_clpi_ep_map_t *p_ep_map = &p_clpi->p_ep_map[0];
 
-    if( p_mpls_clpi->i_stc_id < 0 || p_mpls_clpi->i_stc_id >= p_clpi->i_stc )
-        return -1;
+	if (p_mpls_clpi->i_stc_id < 0 || p_mpls_clpi->i_stc_id >= p_clpi->i_stc)
+	{
+		return -1;
+	}
 
     const bd_clpi_stc_t *p_stc = &p_clpi->p_stc[p_mpls_clpi->i_stc_id];
 #if 0
@@ -765,13 +773,17 @@ static int64_t GetTime( demux_t *p_demux )
     const bd_mpls_play_item_t *p_item = &p_mpls->p_play_item[p_sys->i_play_item];
 
     const bd_clpi_t *p_clpi = p_sys->p_clpi;
-    if( !p_clpi || p_clpi->i_ep_map <= 0 )
-        return 0;
+	if (!p_clpi || p_clpi->i_ep_map <= 0)
+	{
+		return 0;
+	}
 
     /* */
     const bd_clpi_ep_map_t *p_ep_map = &p_clpi->p_ep_map[0];
-    if( p_sys->i_clpi_ep < 0 || p_sys->i_clpi_ep >= p_ep_map->i_ep )
-        return 0;
+	if (p_sys->i_clpi_ep < 0 || p_sys->i_clpi_ep >= p_ep_map->i_ep)
+	{
+		return 0;
+	}
 
     const bd_clpi_ep_t *p_ep = &p_ep_map->p_ep[p_sys->i_clpi_ep];
     int64_t i_time = p_ep->i_pts / 2 - p_item->i_in_time +
@@ -828,12 +840,16 @@ static int SetTime( demux_t *p_demux, int64_t i_time )
 
 
     /* Find the right entry point */
-    if( p_sys->p_clpi->i_ep_map <= 0 )
-        goto update;
+	if (p_sys->p_clpi->i_ep_map <= 0)
+	{
+		goto update;
+	}
 
     const bd_clpi_ep_map_t *p_ep_map = &p_sys->p_clpi->p_ep_map[0];
-    if( p_ep_map->i_ep <= 0 )
-        goto update;
+	if (p_ep_map->i_ep <= 0)
+	{
+		goto update;
+	}
 
     int64_t i_next_display_date = -1;
     for( ; p_sys->i_clpi_ep+1 < p_ep_map->i_ep; p_sys->i_clpi_ep++ )
@@ -1007,8 +1023,10 @@ error:
 static block_t *LoadBlock( demux_t *p_demux, const char *psz_name )
 {
     stream_t *s = stream_UrlNew( p_demux, psz_name );
-    if( !s )
-        return NULL;
+	if (!s)
+	{
+		return NULL;
+	}
 
     const int64_t i_size = stream_Size( s );
     block_t *p_block = NULL;
@@ -1042,13 +1060,17 @@ static void LoadMpls( demux_t *p_demux, const char *psz_name, int i_id )
 #endif
 
     block_t *p_block = LoadBlock( p_demux, psz_name );
-    if( !p_block )
-        goto error;
+	if (!p_block)
+	{
+		goto error;
+	}
 
     /* */
     bd_mpls_t *p_mpls = malloc( sizeof(*p_mpls) );
-    if( !p_mpls )
-        goto error;
+	if (!p_mpls)
+	{
+		goto error;
+	}
 
     /* */
     bs_t s;
@@ -1136,13 +1158,17 @@ static void LoadClpi( demux_t *p_demux, const char *psz_name, int i_id )
 #endif
 
     block_t *p_block = LoadBlock( p_demux, psz_name );
-    if( !p_block )
-        goto error;
+	if (!p_block)
+	{
+		goto error;
+	}
 
     /* */
     bd_clpi_t *p_clpi = malloc( sizeof(*p_clpi) );
-    if( !p_clpi )
-        goto error;
+	if (!p_clpi)
+	{
+		goto error;
+	}
 
     /* */
     bs_t s;
@@ -1297,8 +1323,10 @@ static es_out_id_t *EsOutAdd( es_out_t *p_out, const es_format_t *p_fmt )
         }
         break;
     }
-    if( fmt.i_priority < ES_PRIORITY_SELECTABLE_MIN )
-        msg_Dbg( p_demux, "Hiding one stream (pid=%d)", fmt.i_id );
+	if (fmt.i_priority < ES_PRIORITY_SELECTABLE_MIN)
+	{
+		msg_Dbg(p_demux, "Hiding one stream (pid=%d)", fmt.i_id);
+	}
 
     /* */
     es_out_id_t *p_es = es_out_Add( p_demux->out, &fmt );

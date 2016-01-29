@@ -182,8 +182,10 @@ nop:
         mtime_t length = f * CLOCK_FREQ;
 
         msg_Info( p_demux, "command `pause %f'", f );
-        if( length == 0 )
-            goto nop; /* avoid division by zero */
+		if (length == 0)
+		{
+			goto nop; /* avoid division by zero */
+		}
 
         demux_sys_t *p_sys = malloc( sizeof( *p_sys ) );
         if( p_sys == NULL )

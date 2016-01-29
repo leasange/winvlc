@@ -578,8 +578,10 @@ libvlc_media_subitems( libvlc_media_t * p_md )
 int libvlc_media_get_stats( libvlc_media_t *p_md,
                             libvlc_media_stats_t *p_stats )
 {
-    if( !p_md->p_input_item )
-        return false;
+	if (!p_md->p_input_item)
+	{
+		return false;
+	}
 
     input_stats_t *p_itm_stats = p_md->p_input_item->p_stats;
     vlc_mutex_lock( &p_itm_stats->lock );

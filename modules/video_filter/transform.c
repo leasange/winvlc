@@ -307,8 +307,10 @@ static int Open(vlc_object_t *object)
 
     const vlc_chroma_description_t *chroma =
         vlc_fourcc_GetChromaDescription(src->i_chroma);
-    if (chroma == NULL)
-        return VLC_EGENERIC;
+	if (chroma == NULL)
+	{
+		return VLC_EGENERIC;
+	}
 
     filter_sys_t *sys = malloc(sizeof(*sys));
     if (!sys)

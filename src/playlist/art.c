@@ -162,12 +162,12 @@ static char *ArtCacheName( input_item_t *p_item, const char *psz_type )
 int playlist_FindArtInCache( input_item_t *p_item )
 {
     char *psz_path = ArtCachePath( p_item );
-
+	DIR *p_dir;
     if( !psz_path )
         return VLC_EGENERIC;
 
     /* Check if file exists */
-    DIR *p_dir = vlc_opendir( psz_path );
+	p_dir = vlc_opendir(psz_path);
     if( !p_dir )
     {
         free( psz_path );

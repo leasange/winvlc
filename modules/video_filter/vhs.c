@@ -168,8 +168,10 @@ static void Close( vlc_object_t *p_this ) {
  * Filter a picture
  */
 static picture_t *Filter( filter_t *p_filter, picture_t *p_pic_in ) {
-    if( unlikely( !p_pic_in || !p_filter) )
-        return NULL;
+	if (unlikely(!p_pic_in || !p_filter))
+	{
+		return NULL;
+	}
 
     filter_sys_t *p_sys = p_filter->p_sys;
 

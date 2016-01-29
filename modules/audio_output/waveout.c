@@ -730,8 +730,10 @@ static int ReloadWaveoutDevices( vlc_object_t *p_this, char const *psz_name,
 */
 static uint32_t findDeviceID(char *psz_device_name)
 {
-    if( !psz_device_name )
-       return WAVE_MAPPER;
+	if (!psz_device_name)
+	{
+		return WAVE_MAPPER;
+	}
 
     uint32_t wave_devices = waveOutGetNumDevs();
 
@@ -961,8 +963,10 @@ static int WaveoutMuteSet( audio_output_t * p_aout, bool mute )
         const HWAVEOUT hwo = sys->h_waveout;
 		uint32_t vol = mute ? 0 : lroundf(sys->f_volume * /*0x7fff.fp0*/ 32767.937500f);			// sunqueen modify
 
-        if( vol > 0xffff )
-            vol = 0xffff;
+		if (vol > 0xffff)
+		{
+			vol = 0xffff;
+		}
 
         MMRESULT r = waveOutSetVolume( hwo, vol | ( vol << 16 ) );
         if( r != MMSYSERR_NOERROR )

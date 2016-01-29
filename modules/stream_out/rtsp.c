@@ -309,9 +309,10 @@ void RtspDelId( rtsp_stream_t *rtsp, rtsp_stream_id_t *id )
 /** rtsp must be locked */
 static void RtspUpdateTimer( rtsp_stream_t *rtsp )
 {
-    if (rtsp->timeout <= 0)
-        return;
-
+	if (rtsp->timeout <= 0)
+	{
+		return;
+	}
     mtime_t timeout = 0;
     for (int i = 0; i < rtsp->sessionc; i++)
     {
@@ -445,9 +446,10 @@ int RtspTrackAttach( rtsp_stream_t *rtsp, const char *name,
     vlc_mutex_lock(&rtsp->lock);
     session = RtspClientGet(rtsp, name);
 
-    if (session == NULL)
-        goto out;
-
+	if (session == NULL)
+	{
+		goto out;
+	}
     rtsp_strack_t *tr = NULL;
     for (int i = 0; i < session->trackc; i++)
     {

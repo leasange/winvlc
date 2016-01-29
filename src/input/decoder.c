@@ -184,12 +184,14 @@ void decoder_UnlinkPicture( decoder_t *p_decoder, picture_t *p_picture )
 
 block_t *decoder_NewAudioBuffer( decoder_t *dec, int samples )
 {
+	size_t length;
+	block_t *block;
     if( decoder_UpdateAudioFormat( dec ) )
         return NULL;
 
-    size_t length = samples * dec->fmt_out.audio.i_bytes_per_frame
+    length = samples * dec->fmt_out.audio.i_bytes_per_frame
                             / dec->fmt_out.audio.i_frame_length;
-    block_t *block = block_Alloc( length );
+	block = block_Alloc(length);
     if( likely(block != NULL) )
     {
         block->i_nb_samples = samples;
@@ -1054,11 +1056,11 @@ static void DecoderFixTs( decoder_t *p_dec, mtime_t *pi_ts0, mtime_t *pi_ts1,
     vlc_assert_locked( &p_owner->lock );
 
     const mtime_t i_es_delay = p_owner->i_ts_delay;
-
+	bool b_ephemere;
     if( !p_clock )
         return;
 
-    const bool b_ephemere = pi_ts1 && *pi_ts0 == *pi_ts1;
+    b_ephemere = pi_ts1 && *pi_ts0 == *pi_ts1;
     int i_rate;
 
     if( *pi_ts0 > VLC_TS_INVALID )
@@ -2171,10 +2173,11 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
      */
     for( ;; )
     {
+		picture_t *p_picture;
         if( DecoderIsExitRequested( p_dec ) || p_dec->b_error )
             return NULL;
 
-        picture_t *p_picture = vout_GetPicture( p_owner->p_vout );
+		p_picture = vout_GetPicture(p_owner->p_vout);
         if( p_picture )
             return p_picture;
 

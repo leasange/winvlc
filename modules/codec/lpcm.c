@@ -550,7 +550,7 @@ static block_t *EncodeFrames( encoder_t *p_enc, block_t *p_aout_buf )
     encoder_sys_t *p_sys = p_enc->p_sys;
     block_t *p_first_block = NULL, *p_last_block = NULL;
 
-    if( !p_aout_buf || !p_aout_buf->i_buffer ) return NULL;
+	if (!p_aout_buf || !p_aout_buf->i_buffer){ return NULL; }
 
     const int i_num_frames = ( p_sys->i_buffer_used + p_aout_buf->i_nb_samples ) /
         p_sys->i_frame_samples;
@@ -583,8 +583,10 @@ static block_t *EncodeFrames( encoder_t *p_enc, block_t *p_aout_buf )
     for ( int i = 0; i < i_num_frames; ++i )
     {
         block_t *p_block = block_Alloc( i_frame_size );
-        if( !p_block )
-            return NULL;
+		if (!p_block)
+		{
+			return NULL;
+		}
 
         uint8_t *frame = (uint8_t *)p_block->p_buffer;
         frame[0] = 1;  /* one frame in packet */

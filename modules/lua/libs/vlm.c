@@ -54,9 +54,10 @@ static int vlclua_vlm_new( lua_State *L )
 {
     vlc_object_t *p_this = vlclua_get_this( L );
     vlm_t *p_vlm = vlm_New( p_this );
-    if( !p_vlm )
-        return luaL_error( L, "Cannot start VLM." );
-
+	if (!p_vlm)
+	{
+		return luaL_error(L, "Cannot start VLM.");
+	}
     vlm_t **pp_vlm = lua_newuserdata( L, sizeof( vlm_t * ) );
     *pp_vlm = p_vlm;
 

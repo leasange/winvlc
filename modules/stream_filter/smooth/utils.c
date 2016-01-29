@@ -213,8 +213,10 @@ int sms_queue_put( sms_queue_t *queue, const uint64_t value )
 uint64_t sms_queue_avg( sms_queue_t *queue )
 {
     item_t *last = queue->first;
-    if( last == NULL )
-        return 0;
+	if (last == NULL)
+	{
+		return 0;
+	}
     uint64_t sum = queue->first->value;
     for( int i = 0; i < queue->length - 1; i++ )
     {

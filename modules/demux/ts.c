@@ -1197,8 +1197,10 @@ static int UserPmt( demux_t *p_demux, const char *psz_fmt )
 
     /* Parse optional program number */
     i_number = 0;
-    if( *psz == ':' )
-        i_number = strtol( &psz[1], &psz, 0 );
+	if (*psz == ':')
+	{
+		i_number = strtol(&psz[1], &psz, 0);
+	}
 
     /* */
     ts_pid_t *pmt = &p_sys->pid[i_pid];
@@ -1920,8 +1922,10 @@ static int SeekToPCR( demux_t *p_demux, int64_t i_pos )
     mtime_t i_pcr = -1;
     const int64_t i_initial_pos = stream_Tell( p_demux->s );
 
-    if( i_pos < 0 )
-        return VLC_EGENERIC;
+	if (i_pos < 0)
+	{
+		return VLC_EGENERIC;
+	}
 
     int64_t i_last_pos = stream_Size( p_demux->s ) - p_sys->i_packet_size;
     if( i_pos > i_last_pos )
@@ -2173,8 +2177,10 @@ static void PCRHandle( demux_t *p_demux, ts_pid_t *pid, block_t *p_bk )
 {
     demux_sys_t   *p_sys = p_demux->p_sys;
 
-    if( p_sys->i_pmt_es <= 0 )
-        return;
+	if (p_sys->i_pmt_es <= 0)
+	{
+		return;
+	}
 
     mtime_t i_pcr = GetPCR( p_bk );
     if( i_pcr < 0 )
@@ -3949,8 +3955,10 @@ static void PMTParseEsIso639( demux_t *p_demux, ts_pid_t *pid,
     /* get language descriptor */
     dvbpsi_descriptor_t *p_dr = PMTEsFindDescriptor( p_es, 0x0a );
 
-    if( !p_dr )
-        return;
+	if (!p_dr)
+	{
+		return;
+	}
 
     dvbpsi_iso639_dr_t *p_decoded = dvbpsi_DecodeISO639Dr( p_dr );
     if( !p_decoded )
@@ -4066,8 +4074,10 @@ static void PMTCallBack( void *data, dvbpsi_pmt_t *p_pmt )
     prg->i_version = p_pmt->i_version;
 
     ValidateDVBMeta( p_demux, prg->i_pid_pcr );
-    if( ProgramIsSelected( p_demux, prg->i_number ) )
-        SetPIDFilter( p_demux, prg->i_pid_pcr, true ); /* Set demux filter */
+	if (ProgramIsSelected(p_demux, prg->i_number))
+	{
+		SetPIDFilter(p_demux, prg->i_pid_pcr, true); /* Set demux filter */
+	}
 
     /* Parse PMT descriptors */
     ts_pmt_registration_type_t registration_type = TS_PMT_REGISTRATION_NONE;

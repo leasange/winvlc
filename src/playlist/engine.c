@@ -245,7 +245,7 @@ playlist_t *playlist_Create( vlc_object_t *p_parent )
 
     PL_UNLOCK;
 
-    if( !p_playlist->p_playing ) return NULL;
+	if (!p_playlist->p_playing){ return NULL; }
 
     /* Create media library node */
     const bool b_ml = var_InheritBool( p_parent, "media-library");
@@ -288,8 +288,10 @@ playlist_t *playlist_Create( vlc_object_t *p_parent )
 
     /* Input resources */
     p->p_input_resource = input_resource_New( VLC_OBJECT( p_playlist ) );
-    if( unlikely(p->p_input_resource == NULL) )
-        abort();
+	if (unlikely(p->p_input_resource == NULL))
+	{
+		abort();
+	}
 
     /* Audio output (needed for volume and device controls). */
     audio_output_t *aout = input_resource_GetAout( p->p_input_resource );

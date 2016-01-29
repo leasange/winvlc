@@ -268,8 +268,10 @@ static int Demux( demux_t *p_demux )
                        p_sys->fmt.audio.i_channels;
 
     p_frame = block_Alloc( p_sys->fmt.audio.i_rate / 10 * i_bk );
-    if( !p_frame )
-        return -1;
+	if (!p_frame)
+	{
+		return -1;
+	}
 
     const int i_read = ModPlug_Read( p_sys->f, p_frame->p_buffer, p_frame->i_buffer );
     if( i_read <= 0 )

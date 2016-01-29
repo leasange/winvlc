@@ -411,10 +411,12 @@ static int StreamProbeDVD( stream_t *s )
 {
     /* ISO 9660 volume descriptor */
     char iso_dsc[6];
-    if( stream_Seek( s, 0x8000 + 1 ) != VLC_SUCCESS
-     || stream_Read( s, iso_dsc, sizeof (iso_dsc) ) < (int)sizeof (iso_dsc)
-     || memcmp( iso_dsc, "CD001\x01", 6 ) )
-        return VLC_EGENERIC;
+	if (stream_Seek(s, 0x8000 + 1) != VLC_SUCCESS
+		|| stream_Read(s, iso_dsc, sizeof (iso_dsc)) < (int)sizeof (iso_dsc)
+		|| memcmp(iso_dsc, "CD001\x01", 6))
+	{
+		return VLC_EGENERIC;
+	}
 
     /* Try to find the anchor (2 bytes at LBA 256) */
     uint16_t anchor;
@@ -465,8 +467,10 @@ static int DemuxOpen ( vlc_object_t *p_this )
     i_init_pos = stream_Tell( p_demux->s );
 
     /* Try some simple probing to avoid going through dvdnav_open too often */
-    if( !forced && StreamProbeDVD( p_demux->s ) != VLC_SUCCESS )
-        goto bailout;
+	if (!forced && StreamProbeDVD(p_demux->s) != VLC_SUCCESS)
+	{
+		goto bailout;
+	}
 
     static dvdnav_stream_cb stream_cb =
     {
@@ -1590,10 +1594,12 @@ static int ProbeDVD( const char *psz_name )
 
     /* ISO 9660 volume descriptor */
     char iso_dsc[6];
-    if( lseek( fd, 0x8000 + 1, SEEK_SET ) == -1
-     || read( fd, iso_dsc, sizeof (iso_dsc) ) < sizeof (iso_dsc)
-     || memcmp( iso_dsc, "CD001\x01", 6 ) )
-        goto bailout;
+	if (lseek(fd, 0x8000 + 1, SEEK_SET) == -1
+		|| read(fd, iso_dsc, sizeof (iso_dsc)) < sizeof (iso_dsc)
+		|| memcmp(iso_dsc, "CD001\x01", 6))
+	{
+		goto bailout;
+	}
 
     /* Try to find the anchor (2 bytes at LBA 256) */
     uint16_t anchor;

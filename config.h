@@ -1,6 +1,8 @@
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/*播放窗体是否使用原始窗体*/
+#define VIDEO_PANEL_USE_ORIGIN 1
 
 #ifndef _REENTRANT
 # define _REENTRANT

@@ -249,6 +249,8 @@ libvlc_video_set_subtitle_file
 libvlc_video_set_teletext
 libvlc_video_set_track
 libvlc_video_take_snapshot
+libvlc_video_toggle_record
+libvlc_video_is_recording
 libvlc_vlm_add_broadcast
 libvlc_vlm_add_vod
 libvlc_vlm_add_input

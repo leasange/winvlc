@@ -409,10 +409,11 @@ static void get_custom_from_packedyuv422( picture_t *p_inpic,
                                           int *m )
 {
     int i_y_offset, i_u_offset, i_v_offset;
-    if( GetPackedYuvOffsets( p_inpic->format.i_chroma, &i_y_offset,
-                         &i_u_offset, &i_v_offset ) != VLC_SUCCESS )
-        return;
-
+	if (GetPackedYuvOffsets(p_inpic->format.i_chroma, &i_y_offset,
+		&i_u_offset, &i_v_offset) != VLC_SUCCESS)
+	{
+		return;
+	}
     uint8_t *yin = p_inpic->p->p_pixels + i_y_offset;
     uint8_t *uin = p_inpic->p->p_pixels + i_u_offset;
     uint8_t *vin = p_inpic->p->p_pixels + i_v_offset;

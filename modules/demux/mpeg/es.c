@@ -237,9 +237,10 @@ static int OpenVideo( vlc_object_t *p_this )
     bool b_m4v_ext    = demux_IsPathExtension( p_demux, ".m4v" );
     bool b_m4v_forced = demux_IsForced( p_demux, "m4v" ) ||
                         demux_IsForced( p_demux, "mp4v" );
-    if( !b_m4v_ext && !b_m4v_forced )
-        return VLC_EGENERIC;
-
+	if (!b_m4v_ext && !b_m4v_forced)
+	{
+		return VLC_EGENERIC;
+	}
     const uint8_t *p_peek;
     if( stream_Peek( p_demux->s, &p_peek, 4 ) < 4 )
         return VLC_EGENERIC;
@@ -516,8 +517,10 @@ static int WavSkipHeader( demux_t *p_demux, int *pi_skip, const int pi_format[] 
         return VLC_EGENERIC;
 
     i_peek += i_len + 8;
-    if( stream_Peek( p_demux->s, &p_peek, i_peek ) != i_peek )
-        return VLC_EGENERIC;
+	if (stream_Peek(p_demux->s, &p_peek, i_peek) != i_peek)
+	{
+		return VLC_EGENERIC;
+	}
     const int i_format = GetWLE( p_peek + i_peek - i_len - 8 /* wFormatTag */ );
     int i_format_idx;
     for( i_format_idx = 0; pi_format[i_format_idx] != WAVE_FORMAT_UNKNOWN; i_format_idx++ )
@@ -738,8 +741,10 @@ static void MpgaXingSkip( const uint8_t **pp_xing, int *pi_xing, int i_count )
 
 static uint32_t MpgaXingGetDWBE( const uint8_t **pp_xing, int *pi_xing, uint32_t i_default )
 {
-    if( *pi_xing < 4 )
-        return i_default;
+	if (*pi_xing < 4)
+	{
+		return i_default;
+	}
 
     uint32_t v = GetDWBE( *pp_xing );
 
@@ -760,12 +765,16 @@ static int MpgaInit( demux_t *p_demux )
 
     /* Load a potential xing header */
     i_peek = stream_Peek( p_demux->s, &p_peek, 4 + 1024 );
-    if( i_peek < 4 + 21 )
-        return VLC_SUCCESS;
+	if (i_peek < 4 + 21)
+	{
+		return VLC_SUCCESS;
+	}
 
     const uint32_t header = GetDWBE( p_peek );
-    if( !MpgaCheckSync( p_peek ) )
-        return VLC_SUCCESS;
+	if (!MpgaCheckSync(p_peek))
+	{
+		return VLC_SUCCESS;
+	}
 
     /* Xing header */
     const uint8_t *p_xing = p_peek;
@@ -777,8 +786,10 @@ static int MpgaInit( demux_t *p_demux )
     else
         i_skip = MPGA_MODE( header ) != 3 ? 21 : 13;
 
-    if( i_skip + 8 >= i_xing || memcmp( &p_xing[i_skip], "Xing", 4 ) )
-        return VLC_SUCCESS;
+	if (i_skip + 8 >= i_xing || memcmp(&p_xing[i_skip], "Xing", 4))
+	{
+		return VLC_SUCCESS;
+	}
 
     const uint32_t i_flags = GetDWBE( &p_xing[i_skip+4] );
 

@@ -211,8 +211,10 @@ static void check_crashdump(void)
     wcscpy (mv_crashdump_path, crashdump_path);
     wcscat (mv_crashdump_path, L".mv");
 
-    if (_wrename (crashdump_path, mv_crashdump_path))
-        return;
+	if (_wrename(crashdump_path, mv_crashdump_path))
+	{
+		return;
+	}
 
     FILE * fd = _wfopen ( mv_crashdump_path, L"r, ccs=UTF-8" );
     if( !fd )

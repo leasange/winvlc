@@ -187,14 +187,16 @@ static int vlclua_equalizer_get( lua_State *L )
 static int vlclua_equalizer_set( lua_State *L )
 {
     int bandid = luaL_checknumber( L, 1 );
-    if( bandid < 0 || bandid > 9)
-        return 0;
-
+	if (bandid < 0 || bandid > 9)
+	{
+		return 0;
+	}
     playlist_t *p_playlist = vlclua_get_playlist_internal( L );
     audio_output_t *p_aout = playlist_GetAout( p_playlist );
-    if( p_aout == NULL )
-        return 0;
-
+	if (p_aout == NULL)
+	{
+		return 0;
+	}
     char *psz_af = var_GetNonEmptyString( p_aout, "audio-filter" );
     if( !psz_af || strstr ( psz_af, "equalizer" ) == NULL )
     {
@@ -244,14 +246,16 @@ static int vlclua_equalizer_set( lua_State *L )
 static int vlclua_equalizer_setpreset( lua_State *L )
 {
     int presetid = luaL_checknumber( L, 1 );
-    if( presetid >= NB_PRESETS || presetid < 0 )
-        return 0;
-
+	if (presetid >= NB_PRESETS || presetid < 0)
+	{
+		return 0;
+	}
     playlist_t *p_playlist = vlclua_get_playlist_internal( L );
     audio_output_t *p_aout = playlist_GetAout( p_playlist );
-    if( p_aout == NULL )
-        return 0;
-
+	if (p_aout == NULL)
+	{
+		return 0;
+	}
     int ret = 0;
     char *psz_af = var_InheritString( p_aout, "audio-filter" );
     if( psz_af != NULL && strstr ( psz_af, "equalizer" ) != NULL )

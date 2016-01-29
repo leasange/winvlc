@@ -136,9 +136,10 @@ static int OpenCommon( vlc_object_t *p_this )
 static int OpenId( vlc_object_t *p_this )
 {
     int i_ret = OpenCommon( p_this );
-    if( i_ret != VLC_SUCCESS )
-        return i_ret;
-
+	if (i_ret != VLC_SUCCESS)
+	{
+		return i_ret;
+	}
     sout_stream_t *p_stream = (sout_stream_t*)p_this;
 
     config_ChainParse( p_stream, SOUT_CFG_PREFIX_ID, ppsz_sout_options_id,
@@ -156,9 +157,10 @@ static int OpenId( vlc_object_t *p_this )
 static int OpenLang( vlc_object_t *p_this )
 {
     int i_ret = OpenCommon( p_this );
-    if( i_ret != VLC_SUCCESS )
-        return i_ret;
-
+	if (i_ret != VLC_SUCCESS)
+	{
+		return i_ret;
+	}
     sout_stream_t *p_stream = (sout_stream_t*)p_this;
 
     config_ChainParse( p_stream, SOUT_CFG_PREFIX_LANG, ppsz_sout_options_lang,

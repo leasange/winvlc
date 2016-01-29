@@ -674,16 +674,18 @@ static int ParseSAP( services_discovery_t *p_sd, const uint8_t *buf,
 
     assert (buf[len] == '\0');
 
-    if (len < 4)
-        return VLC_EGENERIC;
-
+	if (len < 4)
+	{
+		return VLC_EGENERIC;
+	}
     uint8_t flags = buf[0];
     uint8_t auth_len = buf[1];
 
     /* First, check the sap announce is correct */
-    if ((flags >> 5) != 1)
-        return VLC_EGENERIC;
-
+	if ((flags >> 5) != 1)
+	{
+		return VLC_EGENERIC;
+	}
     bool b_ipv6 = (flags & 0x10) != 0;
     bool b_need_delete = (flags & 0x04) != 0;
 
@@ -717,9 +719,10 @@ static int ParseSAP( services_discovery_t *p_sd, const uint8_t *buf,
     }
     // Skips auth data
     buf += auth_len;
-    if (buf > end)
-        return VLC_EGENERIC;
-
+	if (buf > end)
+	{
+		return VLC_EGENERIC;
+	}
     uint8_t *decomp = NULL;
     if( b_compressed )
     {
@@ -812,8 +815,10 @@ static int ParseSAP( services_discovery_t *p_sd, const uint8_t *buf,
             {
                 /* No need to go after six, as we start to trust the
                  * average period at six */
-                if( p_announce->i_period_trust <= 5 )
-                    p_announce->i_period_trust++;
+				if (p_announce->i_period_trust <= 5)
+				{
+					p_announce->i_period_trust++;
+				}
 
                 /* Compute the average period */
                 mtime_t now = mdate();
@@ -1174,13 +1179,15 @@ static int ParseSDPConnection (const char *str, struct sockaddr_storage *addr,
  ***********************************************************************/
 static sdp_t *ParseSDP (vlc_object_t *p_obj, const char *psz_sdp)
 {
-    if( psz_sdp == NULL )
-        return NULL;
-
+	if (psz_sdp == NULL)
+	{
+		return NULL;
+	}
     sdp_t *p_sdp = calloc (1, sizeof (*p_sdp));
-    if (p_sdp == NULL)
-        return NULL;
-
+	if (p_sdp == NULL)
+	{
+		return NULL;
+	}
     char expect = 'V';
     struct sockaddr_storage glob_addr;
     memset (&glob_addr, 0, sizeof (glob_addr));

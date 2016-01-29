@@ -269,9 +269,10 @@ static int CreateDefaultHeader( decoder_t *p_dec )
 {
     ogg_packet oggpacket;
     SpeexHeader *p_header = malloc( sizeof(SpeexHeader) );
-    if( !p_header )
-        return VLC_ENOMEM;
-
+	if (!p_header)
+	{
+		return VLC_ENOMEM;
+	}
     const int rate = p_dec->fmt_in.audio.i_rate;
     const unsigned i_mode = (rate / 8000) >> 1;
 
@@ -333,7 +334,7 @@ static block_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
     decoder_sys_t *p_sys = p_dec->p_sys;
     ogg_packet oggpacket;
 
-    if( !pp_block ) return NULL;
+	if (!pp_block) { return NULL; }
 
     block_t *block = *pp_block;
 

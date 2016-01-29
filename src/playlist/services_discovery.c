@@ -324,7 +324,7 @@ static void playlist_sd_item_removeall( const vlc_event_t * p_event, void * user
 {
     VLC_UNUSED(p_event);
     playlist_item_t* p_sd_node = user_data;
-    if( p_sd_node == NULL ) return;
+	if (p_sd_node == NULL){ return; }
     playlist_t* p_playlist = p_sd_node->p_playlist;
     PL_LOCK;
     playlist_NodeEmpty( p_playlist, p_sd_node, true );
@@ -336,14 +336,14 @@ int playlist_ServicesDiscoveryAdd( playlist_t *p_playlist,
 {
     /* Perform the addition */
     services_discovery_t *p_sd;
-
+	vlc_sd_internal_t * p_sds;
     msg_Dbg( p_playlist, "adding services_discovery %s...", psz_name );
     p_sd = vlc_sd_Create( VLC_OBJECT(p_playlist), psz_name );
     if( !p_sd )
         return VLC_ENOMEM;
 
     /* Free in playlist_ServicesDiscoveryRemove */
-    vlc_sd_internal_t * p_sds = malloc( sizeof(*p_sds) );
+	p_sds = malloc(sizeof(*p_sds));
     if( !p_sds )
     {
         vlc_sd_Destroy( p_sd );

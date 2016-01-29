@@ -54,8 +54,10 @@ int module_Load( vlc_object_t *p_this, const char *psz_file,
                  module_handle_t *p_handle, bool lazy )
 {
     wchar_t *wfile = ToWide (psz_file);
-    if (wfile == NULL)
-        return -1;
+	if (wfile == NULL)
+	{
+		return -1;
+	}
 
     module_handle_t handle = NULL;
 #if (_WIN32_WINNT >= 0x601) && !VLC_WINSTORE_APP

@@ -69,9 +69,10 @@ static int Open (vout_window_t *wnd, const vout_window_cfg_t *cfg)
 {
     VLC_UNUSED (cfg);
     uintptr_t val = var_InheritInteger (wnd, "drawable-hwnd");
-    if (val == 0)
-        return VLC_EGENERIC;
-
+	if (val == 0)
+	{
+		return VLC_EGENERIC;
+	}
     uintptr_t *tab;
     size_t n = 0;
 

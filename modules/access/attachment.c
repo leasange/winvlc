@@ -69,8 +69,10 @@ static int Open(vlc_object_t *object)
     access_sys_t *sys;
 
     input_thread_t *input = access_GetParentInput(access);
-    if (!input)
-        return VLC_EGENERIC;
+	if (!input)
+	{
+		return VLC_EGENERIC;
+	}
 
     input_attachment_t *a;
     if (input_Control(input, INPUT_GET_ATTACHMENT, &a, access->psz_location))
@@ -118,8 +120,10 @@ static ssize_t Read(access_t *access, uint8_t *buffer, size_t size)
     access_sys_t *sys = access->p_sys;
 
     access->info.b_eof = access->info.i_pos >= (uint64_t)sys->a->i_data;
-    if (access->info.b_eof)
-        return 0;
+	if (access->info.b_eof)
+	{
+		return 0;
+	}
 
     const size_t copy = __MIN(size, sys->a->i_data - access->info.i_pos);
     memcpy(buffer, (uint8_t*)sys->a->p_data + access->info.i_pos, copy);

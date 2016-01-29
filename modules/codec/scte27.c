@@ -350,8 +350,10 @@ static subpicture_t *DecodeSubtitleMessage(decoder_t *dec,
 
     if (subtitle_type == 1) {
         subpicture_region_t *region = DecodeSimpleBitmap(dec, data, block_length);
-        if (!region)
-            goto error;
+		if (!region)
+		{
+			goto error;
+		}
         subpicture_t *sub = decoder_NewSubpicture(dec, NULL);
         if (!sub) {
             subpicture_region_Delete(region);
@@ -409,8 +411,10 @@ static subpicture_t *Decode(decoder_t *dec, block_t **block)
 {
     decoder_sys_t *sys = dec->p_sys;
 
-    if (block == NULL || *block == NULL)
-        return NULL;
+	if (block == NULL || *block == NULL)
+	{
+		return NULL;
+	}
     block_t *b = *block; *block = NULL;
 
     subpicture_t *sub_first = NULL;
@@ -497,8 +501,10 @@ static int Open(vlc_object_t *object)
 {
     decoder_t *dec = (decoder_t *)object;
 
-    if (dec->fmt_in.i_codec != VLC_CODEC_SCTE_27)
-        return VLC_EGENERIC;
+	if (dec->fmt_in.i_codec != VLC_CODEC_SCTE_27)
+	{
+		return VLC_EGENERIC;
+	}
 
     decoder_sys_t *sys = dec->p_sys = malloc(sizeof(*sys));
     if (!sys)

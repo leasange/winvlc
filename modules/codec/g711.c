@@ -216,8 +216,10 @@ static block_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
 {
     decoder_sys_t *p_sys = p_dec->p_sys;
 
-    if( pp_block == NULL )
-        return NULL;
+	if (pp_block == NULL)
+	{
+		return NULL;
+	}
     block_t *p_block = *pp_block;
     if( p_block == NULL )
         return NULL;
@@ -245,7 +247,7 @@ static block_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
     }
 
     /* Create chunks of max 1024 samples */
-    if( samples > 1024 ) samples = 1024;
+	if (samples > 1024){ samples = 1024; }
 
     block_t *p_out = decoder_NewAudioBuffer( p_dec, samples );
     if( p_out == NULL )
@@ -1167,11 +1169,13 @@ static int EncoderOpen( vlc_object_t *p_this )
 
 static block_t *EncoderEncode( encoder_t *p_enc, block_t *p_aout_buf )
 {
-    if( !p_aout_buf || !p_aout_buf->i_buffer ) return NULL;
+	if (!p_aout_buf || !p_aout_buf->i_buffer){ return NULL; }
 
     block_t *p_block = block_Alloc( p_aout_buf->i_buffer / 2 );
-    if( unlikely(p_block == NULL ) )
-        return NULL;
+	if (unlikely(p_block == NULL))
+	{
+		return NULL;
+	}
 
     const int16_t *src = (int16_t *)p_aout_buf->p_buffer; // source
     int8_t *dst = (int8_t *)p_block->p_buffer; // sink

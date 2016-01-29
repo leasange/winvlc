@@ -160,9 +160,10 @@ static void ReadMetaData(intf_thread_t *p_this)
     intf_sys_t *p_sys = p_this->p_sys;
 
     input_thread_t *p_input = pl_CurrentInput(p_this);
-    if (!p_input)
-        return;
-
+	if (!p_input)
+	{
+		return;
+	}
     input_item_t *p_item = input_GetItem(p_input);
     if (!p_item)
     {
@@ -365,9 +366,10 @@ static int ItemChange(vlc_object_t *p_this, const char *psz_var,
     p_sys->b_submit         = false;
 
     input_thread_t *p_input = pl_CurrentInput(p_intf);
-    if (!p_input || p_input->b_dead)
-        return VLC_SUCCESS;
-
+	if (!p_input || p_input->b_dead)
+	{
+		return VLC_SUCCESS;
+	}
     input_item_t *p_item = input_GetItem(p_input);
     if (!p_item)
     {

@@ -693,8 +693,10 @@ static int Open( vlc_object_t * p_this )
 
 
         MP4_Box_t *p_tkhd = MP4_BoxGet( p_trak, "tkhd" );
-        if( p_tkhd && BOXDATA(p_tkhd) && (BOXDATA(p_tkhd)->i_flags&MP4_TRACK_ENABLED) )
-            b_enabled_es = true;
+		if (p_tkhd && BOXDATA(p_tkhd) && (BOXDATA(p_tkhd)->i_flags&MP4_TRACK_ENABLED))
+		{
+			b_enabled_es = true;
+		}
 
         MP4_Box_t *p_chap = MP4_BoxGet( p_trak, "tref/chap", i );
         if( p_chap && p_chap->data.p_tref_generic &&
@@ -1277,7 +1279,7 @@ static int Control( demux_t *p_demux, int i_query, va_list args )
             int *pi_int = va_arg( args, int * );
 
             MP4_Box_t  *p_covr = MP4_BoxGet( p_sys->p_root, "/moov/udta/meta/ilst/covr" );
-            if ( !p_covr ) return VLC_EGENERIC;
+			if (!p_covr) { return VLC_EGENERIC; }
             MP4_Box_t  *p_box;
             int i_count = 0;
 
@@ -1343,8 +1345,10 @@ static int Control( demux_t *p_demux, int i_query, va_list args )
             MP4_Box_t  *p_0xa9xxx;
 
             MP4_Box_t *p_covr = MP4_BoxGet( p_sys->p_root, "/moov/udta/meta/ilst/covr/data[0]" );
-            if ( p_covr )
-                vlc_meta_SetArtURL( p_meta, "attachment://picture0" );
+			if (p_covr)
+			{
+				vlc_meta_SetArtURL(p_meta, "attachment://picture0");
+			}
 
             MP4_Box_t  *p_udta = MP4_BoxGet( p_sys->p_root, "/moov/udta/meta/ilst" );
             if( p_udta == NULL )
@@ -2138,8 +2142,10 @@ static void TrackGetESSampleRate( demux_t *p_demux,
         return;
     }
 
-    if( p_track->i_chunk_count == 0 )
-        return;
+	if (p_track->i_chunk_count == 0)
+	{
+		return;
+	}
 
     /* */
     const mp4_chunk_t *p_chunk = &p_track->chunk[i_chunk];
@@ -3687,8 +3693,10 @@ static int build_raw_avcC( uint8_t **p_extra, const uint8_t *CodecPrivateData,
 
     uint32_t length = cpd_len + 3;
     avcC = calloc( length, 1 );
-    if( unlikely( avcC == NULL ) )
-        return 0;
+	if (unlikely(avcC == NULL))
+	{
+		return 0;
+	}
 
     uint8_t *sps = avcC + 8;
 
@@ -3867,14 +3875,18 @@ static void FlushChunk( demux_t *p_demux, mp4_track_t *tk )
         block_t *p_block;
         int64_t i_delta;
 
-        if( ck->p_sample_size == NULL || ck->p_sample_data == NULL )
-            return;
+		if (ck->p_sample_size == NULL || ck->p_sample_data == NULL)
+		{
+			return;
+		}
 
         uint32_t sample_size = ck->p_sample_size[ck->i_sample];
         assert( sample_size > 0 );
         p_block = block_Alloc( sample_size );
-        if( unlikely( !p_block ) )
-            return;
+		if (unlikely(!p_block))
+		{
+			return;
+		}
 
         uint8_t *src = ck->p_sample_data[ck->i_sample];
         memcpy( p_block->p_buffer, src, sample_size );
@@ -3985,8 +3997,10 @@ static int MP4_frg_GetChunk( demux_t *p_demux, MP4_Box_t *p_chunk, unsigned *i_t
     msg_Dbg( p_demux, "GetChunk: track ID is %"PRIu32"", i_track_ID );
 
     mp4_track_t *p_track = MP4_frg_GetTrackByID( p_demux, i_track_ID );
-    if( !p_track )
-        return VLC_EGENERIC;
+	if (!p_track)
+	{
+		return VLC_EGENERIC;
+	}
 
     mp4_chunk_t *ret = p_track->cchunk;
 
@@ -4008,16 +4022,22 @@ static int MP4_frg_GetChunk( demux_t *p_demux, MP4_Box_t *p_chunk, unsigned *i_t
     if( ret->i_sample < ret->i_sample_count )
         FlushChunk( p_demux, p_track );
 
-    if( ret->i_sample_count )
-        FreeAndResetChunk( ret );
+	if (ret->i_sample_count)
+	{
+		FreeAndResetChunk(ret);
+	}
 
     uint32_t default_duration = 0;
-    if( BOXDATA(p_tfhd)->i_flags & MP4_TFHD_DFLT_SAMPLE_DURATION )
-        default_duration = BOXDATA(p_tfhd)->i_default_sample_duration;
+	if (BOXDATA(p_tfhd)->i_flags & MP4_TFHD_DFLT_SAMPLE_DURATION)
+	{
+		default_duration = BOXDATA(p_tfhd)->i_default_sample_duration;
+	}
 
     uint32_t default_size = 0;
-    if( BOXDATA(p_tfhd)->i_flags & MP4_TFHD_DFLT_SAMPLE_SIZE )
-        default_size = BOXDATA(p_tfhd)->i_default_sample_size;
+	if (BOXDATA(p_tfhd)->i_flags & MP4_TFHD_DFLT_SAMPLE_SIZE)
+	{
+		default_size = BOXDATA(p_tfhd)->i_default_sample_size;
+	}
 
     MP4_Box_t *p_trun = MP4_BoxGet( p_traf, "trun");
     if( p_trun == NULL)
@@ -4089,8 +4109,10 @@ static int MP4_frg_GetChunk( demux_t *p_demux, MP4_Box_t *p_chunk, unsigned *i_t
         return VLC_ENOMEM;
 
     ret->p_sample_data = calloc( ret->i_sample_count, sizeof( uint8_t * ) );
-    if( !ret->p_sample_data )
-        return VLC_ENOMEM;
+	if (!ret->p_sample_data)
+	{
+		return VLC_ENOMEM;
+	}
 
     uint32_t dur = 0, i_mdatlen = 0, len;
     uint32_t chunk_duration = 0, chunk_size = 0;
@@ -4131,8 +4153,10 @@ static int MP4_frg_GetChunk( demux_t *p_demux, MP4_Box_t *p_chunk, unsigned *i_t
             return VLC_EGENERIC;
 
         ret->p_sample_data[i] = malloc( len );
-        if( ret->p_sample_data[i] == NULL )
-            return VLC_ENOMEM;
+		if (ret->p_sample_data[i] == NULL)
+		{
+			return VLC_ENOMEM;
+		}
         uint32_t i_read = stream_ReadU32( p_demux->s, ret->p_sample_data[i], len );
         if( i_read < len )
             return VLC_EGENERIC;
@@ -4173,8 +4197,10 @@ static int MP4_frg_GetChunks( demux_t *p_demux, const unsigned i_tk_id )
         if( !p_chunk )
             return VLC_EGENERIC;
 
-        if( !p_chunk->p_first )
-            goto MP4_frg_GetChunks_Error;
+		if (!p_chunk->p_first)
+		{
+			goto MP4_frg_GetChunks_Error;
+		}
         uint32_t i_type = p_chunk->p_first->i_type;
         uint32_t tid = 0;
         if( i_type == ATOM_uuid || i_type == ATOM_ftyp )
@@ -5194,8 +5220,10 @@ static int LeafMapTrafTrunContextes( demux_t *p_demux, MP4_Box_t *p_moof )
         p_track->context.p_trun = NULL;
     }
 
-    if ( p_moof->i_type == ATOM_moov )
-        return VLC_SUCCESS;
+	if (p_moof->i_type == ATOM_moov)
+	{
+		return VLC_SUCCESS;
+	}
 
     MP4_Box_t *p_traf = MP4_BoxGet( p_moof, "traf" );
     if( !p_traf )
@@ -5293,8 +5321,10 @@ static int LeafParseMDATwithMOOF( demux_t *p_demux, MP4_Box_t *p_moof )
     if ( p_sys->context.i_mdatbytesleft == 0 )
     {
         int i_ret = LeafMapTrafTrunContextes( p_demux, p_moof );
-        if ( i_ret != VLC_SUCCESS )
-            return i_ret;
+		if (i_ret != VLC_SUCCESS)
+		{
+			return i_ret;
+		}
 
         /* Ready mdat section */
         uint8_t mdat[8];
@@ -5312,8 +5342,10 @@ static int LeafParseMDATwithMOOF( demux_t *p_demux, MP4_Box_t *p_moof )
 
     if ( !MP4_stream_Tell( p_demux->s, &i_pos ) )
         return VLC_EGENERIC;
-    if ( p_sys->b_smooth )
-        i_pos -= p_moof->i_pos;
+	if (p_sys->b_smooth)
+	{
+		i_pos -= p_moof->i_pos;
+	}
     mp4_track_t *p_track = LeafGetTrackByTrunPos( p_demux, i_pos, p_moof->i_pos );
     if( p_track )
     {

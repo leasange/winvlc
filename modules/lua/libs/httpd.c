@@ -83,9 +83,10 @@ static int vlclua_httpd_tls_host_new( lua_State *L )
 {
     vlc_object_t *p_this = vlclua_get_this( L );
     httpd_host_t *p_host = vlc_http_HostNew( p_this );
-    if( !p_host )
-        return luaL_error( L, "Failed to create HTTP host" );
-
+	if (!p_host)
+	{
+		return luaL_error(L, "Failed to create HTTP host");
+	}
     httpd_host_t **pp_host = lua_newuserdata( L, sizeof( httpd_host_t * ) );
     *pp_host = p_host;
 
@@ -342,9 +343,10 @@ static int vlclua_httpd_redirect_new( lua_State *L )
     httpd_redirect_t *p_redirect = httpd_RedirectNew( *pp_host,
                                                       psz_url_dst,
                                                       psz_url_src );
-    if( !p_redirect )
-        return luaL_error( L, "Failed to create HTTPd redirect." );
-
+	if (!p_redirect)
+	{
+		return luaL_error(L, "Failed to create HTTPd redirect.");
+	}
     httpd_redirect_t **pp_redirect = lua_newuserdata( L, sizeof( httpd_redirect_t * ) );
     *pp_redirect = p_redirect;
 

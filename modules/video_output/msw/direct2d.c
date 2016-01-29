@@ -129,8 +129,10 @@ static int Open(vlc_object_t *object)
     if (CommonInit(vd))
         goto error;
 
-    if (D2D_CreateRenderTarget(vd) != VLC_SUCCESS)
-        goto error;
+	if (D2D_CreateRenderTarget(vd) != VLC_SUCCESS)
+	{
+		goto error;
+	}
 
     vout_display_info_t info = vd->info;
     info.is_slow              = false;
@@ -299,26 +301,33 @@ static int D2D_CreateRenderTarget(vout_display_t *vd)
         D2D1_ALPHA_MODE_IGNORE
     };
 
-    D2D1_RENDER_TARGET_PROPERTIES rtp = {
+    D2D1_RENDER_TARGET_PROPERTIES rtp/* = {
         D2D1_RENDER_TARGET_TYPE_DEFAULT,
         pf,
         0,
         0,
         D2D1_RENDER_TARGET_USAGE_NONE,
         D2D1_FEATURE_LEVEL_DEFAULT
-    };
-
+    }*/;
+	rtp.type = D2D1_RENDER_TARGET_TYPE_DEFAULT;
+	rtp.pixelFormat = pf;
+	rtp.dpiX=0;
+	rtp.dpiY=0;
+	rtp.usage = D2D1_RENDER_TARGET_USAGE_NONE;
+	rtp.minLevel = D2D1_FEATURE_LEVEL_DEFAULT;
     D2D1_SIZE_U size = {
         sys->rect_dest.right - sys->rect_dest.left,
         sys->rect_dest.bottom - sys->rect_dest.top
     };
 
-    D2D1_HWND_RENDER_TARGET_PROPERTIES hrtp = {
+    D2D1_HWND_RENDER_TARGET_PROPERTIES hrtp/* = {
         sys->hvideownd,
         size,
-        D2D1_PRESENT_OPTIONS_IMMEDIATELY /* this might need fiddling */
-    };
-
+        D2D1_PRESENT_OPTIONS_IMMEDIATELY // this might need fiddling
+    }*/;
+	hrtp.hwnd = sys->hvideownd;
+	hrtp.pixelSize = size;
+	hrtp.presentOptions = D2D1_PRESENT_OPTIONS_IMMEDIATELY;
     HRESULT hr  = ID2D1Factory_CreateHwndRenderTarget(sys->d2_factory,
                                                       &rtp,
                                                       &hrtp,
@@ -339,12 +348,14 @@ static int D2D_CreateRenderTarget(vout_display_t *vd)
                                &dpi_x,
                                &dpi_y);
 
-    D2D1_BITMAP_PROPERTIES bp = {
+    D2D1_BITMAP_PROPERTIES bp/* = {
         pf,
         dpi_x,
         dpi_y
-    };
-
+    }*/;
+	bp.pixelFormat = pf;
+	bp.dpiX = dpi_x;
+	bp.dpiY = dpi_y;
     D2D1_SIZE_U bitmap_size = {
         vd->fmt.i_visible_width,
         vd->fmt.i_visible_height

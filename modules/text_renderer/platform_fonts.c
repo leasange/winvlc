@@ -265,17 +265,19 @@ char* Win32_Select( filter_t *p_filter, const char* family,
     VLC_UNUSED( i_idx );
     VLC_UNUSED( p_filter );
 
-    if( !family || strlen( family ) < 1 )
-        goto fail;
-
+	if (!family || strlen(family) < 1)
+	{
+		goto fail;
+	}
     /* */
     LOGFONT lf;
     lf.lfCharSet = DEFAULT_CHARSET;
     if( b_italic )
         lf.lfItalic = true;
-    if( b_bold )
-        lf.lfWeight = FW_BOLD;
-
+	if (b_bold)
+	{
+		lf.lfWeight = FW_BOLD;
+	}
     LPTSTR psz_fbuffer = ToT( family );
     _tcsncpy( (LPTSTR)&lf.lfFaceName, psz_fbuffer, LF_FACESIZE );
     free( psz_fbuffer );

@@ -172,10 +172,11 @@ audio_output_t *aout_New (vlc_object_t *parent)
 
     audio_output_t *aout = vlc_custom_create (parent, sizeof (aout_instance_t),
                                               "audio output");
+	aout_owner_t *owner;
     if (unlikely(aout == NULL))
         return NULL;
 
-    aout_owner_t *owner = aout_owner (aout);
+	owner = aout_owner(aout);
 
     vlc_mutex_init (&owner->lock);
     vlc_mutex_init (&owner->req.lock);

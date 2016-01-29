@@ -362,9 +362,10 @@ static filter_t * AppendTransform( filter_chain_t *p_chain, es_format_t *p_fmt1,
             break;
     }
 
-    if( !type )
-        return NULL;
-
+	if (!type)
+	{
+		return NULL;
+	}
     config_chain_t *cfg;
     char *name;
     char config[100];

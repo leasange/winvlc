@@ -287,8 +287,10 @@ int input_item_WriteMeta( vlc_object_t *obj, input_item_t *p_item )
     if( p_export->psz_file == NULL )
         msg_Err( p_export, "cannot write meta to remote media %s", psz_uri );
     free( psz_uri );
-    if( p_export->psz_file == NULL )
-        goto error;
+	if (p_export->psz_file == NULL)
+	{
+		goto error;
+	}
 
     module_t *p_mod = module_need( p_export, "meta writer", NULL, false );
     if( p_mod )

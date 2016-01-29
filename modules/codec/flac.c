@@ -170,8 +170,10 @@ DecoderWriteCallback( const FLAC__StreamDecoder *decoder,
     if( p_dec->fmt_out.audio.i_channels <= 0 ||
         p_dec->fmt_out.audio.i_channels > 8 )
         return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
-    if( date_Get( &p_sys->end_date ) <= VLC_TS_INVALID )
-        return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
+	if (date_Get(&p_sys->end_date) <= VLC_TS_INVALID)
+	{
+		return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
+	}
 
     const unsigned char *pi_reorder = ppi_reorder[p_dec->fmt_out.audio.i_channels];
 

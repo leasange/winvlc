@@ -58,8 +58,10 @@ static int vlclua_xml_delete( lua_State *L )
 static int vlclua_xml_create( lua_State *L )
 {
     xml_t *p_xml = xml_Create( vlclua_get_this( L ) );
-    if( !p_xml )
-        return luaL_error( L, "XML module creation failed." );
+	if (!p_xml)
+	{
+		return luaL_error(L, "XML module creation failed.");
+	}
 
     xml_t **pp_xml = lua_newuserdata( L, sizeof( xml_t * ) );
     *pp_xml = p_xml;
@@ -102,8 +104,10 @@ static int vlclua_xml_create_reader( lua_State *L )
     stream_t *p_stream = *(stream_t **)luaL_checkudata( L, 2, "stream" );
 
     xml_reader_t *p_reader = xml_ReaderCreate( p_xml, p_stream );
-    if( !p_reader )
-        return luaL_error( L, "XML reader creation failed." );
+	if (!p_reader)
+	{
+		return luaL_error(L, "XML reader creation failed.");
+	}
 
     xml_reader_t **pp_reader = lua_newuserdata( L, sizeof( xml_reader_t * ) );
     *pp_reader = p_reader;

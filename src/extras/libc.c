@@ -234,13 +234,15 @@ static size_t ISO6937toUTF8( const unsigned char **inbuf, size_t *inbytesleft,
 
 
 {
+	const unsigned char *iptr, *iend;
+	unsigned char *optr, *oend;
     if( !inbuf || !(*inbuf) )
         return (size_t)(0);    /* Reset state requested */
 
-    const unsigned char *iptr = *inbuf;
-    const unsigned char *iend = iptr + *inbytesleft;
-    unsigned char *optr = *outbuf;
-    unsigned char *oend = optr + *outbytesleft;
+    iptr = *inbuf;
+    iend = iptr + *inbytesleft;
+    optr = *outbuf;
+    oend = optr + *outbytesleft;
     uint16_t ch;
     int err = 0;
 

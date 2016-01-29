@@ -175,8 +175,10 @@ static int Demux(demux_t *demux)
 {
     demux_sys_t *sys = demux->p_sys;
 
-    if (!sys->data)
-        return 0;
+	if (!sys->data)
+	{
+		return 0;
+	}
 
     mtime_t deadline;
     const mtime_t pts_first = sys->pts_origin + date_Get(&sys->pts);
@@ -200,8 +202,10 @@ static int Demux(demux_t *demux)
         if (sys->duration >= 0 && pts >= sys->pts_origin + sys->duration)
             return 0;
 
-        if (pts >= deadline)
-            return 1;
+		if (pts >= deadline)
+		{
+			return 1;
+		}
 
         block_t *data = block_Duplicate(sys->data);
         if (!data)
@@ -241,13 +245,16 @@ static int Control(demux_t *demux, int query, va_list args)
         *time = sys->pts_origin + date_Get(&sys->pts);
         return VLC_SUCCESS;
     }
-    case DEMUX_SET_TIME: {
-        if (sys->duration < 0 || sys->is_realtime)
-            return VLC_EGENERIC;
-        int64_t time = va_arg(args, int64_t);
-        date_Set(&sys->pts, VLC_CLIP(time - sys->pts_origin, 0, sys->duration));
-        return VLC_SUCCESS;
-    }
+	case DEMUX_SET_TIME:
+	{
+						   if (sys->duration < 0 || sys->is_realtime)
+						   {
+							   return VLC_EGENERIC;
+						   }
+						   int64_t time = va_arg(args, int64_t);
+						   date_Set(&sys->pts, VLC_CLIP(time - sys->pts_origin, 0, sys->duration));
+						   return VLC_SUCCESS;
+	}
     case DEMUX_SET_NEXT_DEMUX_TIME: {
         int64_t pts_next = VLC_TS_0 + va_arg(args, int64_t);
         if (sys->pts_next <= VLC_TS_INVALID)
@@ -278,13 +285,15 @@ static bool IsBmp(stream_t *s)
     const uint8_t *header;
     if (stream_Peek(s, &header, 18) < 18)
         return false;
-    if (memcmp(header, "BM", 2) &&
-        memcmp(header, "BA", 2) &&
-        memcmp(header, "CI", 2) &&
-        memcmp(header, "CP", 2) &&
-        memcmp(header, "IC", 2) &&
-        memcmp(header, "PT", 2))
-        return false;
+	if (memcmp(header, "BM", 2) &&
+		memcmp(header, "BA", 2) &&
+		memcmp(header, "CI", 2) &&
+		memcmp(header, "CP", 2) &&
+		memcmp(header, "IC", 2) &&
+		memcmp(header, "PT", 2))
+	{
+		return false;
+	}
     uint32_t file_size   = GetDWLE(&header[2]);
     uint32_t data_offset = GetDWLE(&header[10]);
     uint32_t header_size = GetDWLE(&header[14]);
@@ -439,7 +448,7 @@ static bool FindSVGmarker(int *position, const uint8_t *data, const int size, co
 static bool IsSVG(stream_t *s)
 {
     char *ext = strstr(s->psz_path, ".svg");
-    if (!ext) return false;
+	if (!ext) { return false; }
 
     const uint8_t *header;
     int size = stream_Peek(s, &header, 4096);
@@ -448,14 +457,18 @@ static bool IsSVG(stream_t *s)
     const char xml[] = "<?xml version=\"";
     if (!FindSVGmarker(&position, header, size, xml))
         return false;
-    if (position != 0)
-        return false;
+	if (position != 0)
+	{
+		return false;
+	}
 
     const char endxml[] = ">\0";
     if (!FindSVGmarker(&position, header, size, endxml))
         return false;
-    if (position <= 15)
-        return false;
+	if (position <= 15)
+	{
+		return false;
+	}
 
     const char svg[] = "<svg";
     if (!FindSVGmarker(&position, header, size, svg))
@@ -494,19 +507,27 @@ static bool IsTarga(stream_t *s)
         header[8 + 8] != 15 && header[8 + 8] != 16 &&
         header[8 + 8] != 24 && header[8 + 8] != 32)
         return false;
-    if (header[8 + 9] & 0xc0)               /* Reserved bits */
-        return false;
+	if (header[8 + 9] & 0xc0)               /* Reserved bits */
+	{
+		return false;
+	}
 
     const int64_t size = stream_Size(s);
-    if (size <= 18 + 26)
-        return false;
+	if (size <= 18 + 26)
+	{
+		return false;
+	}
     bool can_seek;
-    if (stream_Control(s, STREAM_CAN_SEEK, &can_seek) || !can_seek)
-        return false;
+	if (stream_Control(s, STREAM_CAN_SEEK, &can_seek) || !can_seek)
+	{
+		return false;
+	}
 
     const int64_t position = stream_Tell(s);
-    if (stream_Seek(s, size - 26))
-        return false;
+	if (stream_Seek(s, size - 26))
+	{
+		return false;
+	}
 
     const uint8_t *footer;
     bool is_targa = stream_Peek(s, &footer, 26) >= 26 &&
@@ -655,8 +676,10 @@ static int Open(vlc_object_t *object)
 
     /* If loadind failed, we still continue to avoid mis-detection
      * by other demuxers. */
-    if (!data)
-        msg_Err(demux, "Failed to load the image");
+	if (!data)
+	{
+		msg_Err(demux, "Failed to load the image");
+	}
 
     /* */
     demux_sys_t *sys = malloc(sizeof(*sys));

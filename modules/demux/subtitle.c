@@ -1156,8 +1156,10 @@ static int  ParseSSA( demux_t *p_demux, subtitle_t *p_subtitle,
         free( psz_text );
 
         /* All the other stuff we add to the header field */
-        if( header_len == 0 && p_sys->psz_header )
-            header_len = strlen( p_sys->psz_header );
+		if (header_len == 0 && p_sys->psz_header)
+		{
+			header_len = strlen(p_sys->psz_header);
+		}
 
         size_t s_len = strlen( s );
         p_sys->psz_header = realloc_or_free( p_sys->psz_header, header_len + s_len + 2 );

@@ -151,8 +151,10 @@ static void DestroyVout( input_resource_t *p_resource )
 static void DisplayVoutTitle( input_resource_t *p_resource,
                               vout_thread_t *p_vout )
 {
-    if( p_resource->p_input == NULL )
-        return;
+	if (p_resource->p_input == NULL)
+	{
+		return;
+	}
 
     /* TODO display the title only one time for the same input ? */
 

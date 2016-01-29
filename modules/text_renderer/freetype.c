@@ -1068,9 +1068,10 @@ static int GetGlyph( filter_t *p_filter,
      * are then don't. */
     if ((i_style_flags & STYLE_BOLD) && !(p_face->style_flags & FT_STYLE_FLAG_BOLD))
         FT_GlyphSlot_Embolden( p_face->glyph );
-    if ((i_style_flags & STYLE_ITALIC) && !(p_face->style_flags & FT_STYLE_FLAG_ITALIC))
-        FT_GlyphSlot_Oblique( p_face->glyph );
-
+	if ((i_style_flags & STYLE_ITALIC) && !(p_face->style_flags & FT_STYLE_FLAG_ITALIC))
+	{
+		FT_GlyphSlot_Oblique(p_face->glyph);
+	}
     FT_Glyph glyph;
     if( FT_Get_Glyph( p_face->glyph, &glyph ) )
     {
@@ -1363,14 +1364,16 @@ static int ProcessLines( filter_t *p_filter,
                 /* If the missing glyph is U+FEFF (ZERO WIDTH NO-BREAK SPACE) */
                 /* we can safely ignore it. Otherwise extra squares show up   */
                 /* in Arabic text.                                            */
-                if( i_glyph_index == 0 && character == 0xFEFF )
-                    goto next;
-
+				if (i_glyph_index == 0 && character == 0xFEFF)
+				{
+					goto next;
+				}
                 /* Get kerning vector */
                 FT_Vector kerning = { .x = 0, .y = 0 };
-                if( FT_HAS_KERNING( p_current_face ) && i_glyph_last != 0 && i_glyph_index != 0 )
-                    FT_Get_Kerning( p_current_face, i_glyph_last, i_glyph_index, ft_kerning_default, &kerning );
-
+				if (FT_HAS_KERNING(p_current_face) && i_glyph_last != 0 && i_glyph_index != 0)
+				{
+					FT_Get_Kerning(p_current_face, i_glyph_last, i_glyph_index, ft_kerning_default, &kerning);
+				}
                 /* Get the glyph bitmap and its bounding box and all the associated properties */
                 FT_Vector pen_new = {
                     .x = pen.x + kerning.x,
@@ -1451,9 +1454,10 @@ static int ProcessLines( filter_t *p_filter,
                     FT_Done_Glyph( glyph );
                     if( outline )
                         FT_Done_Glyph( outline );
-                    if( shadow )
-                        FT_Done_Glyph( shadow );
-
+					if (shadow)
+					{
+						FT_Done_Glyph(shadow);
+					}
                     break_point_t *p_bp = NULL;
                     if( break_point.i_index > i_start )
                         p_bp = &break_point;
@@ -1603,9 +1607,10 @@ static int RenderCommon( filter_t *p_filter, subpicture_region_t *p_region_out,
         return VLC_EGENERIC;
     if( b_html && !p_region_in->psz_html )
         return VLC_EGENERIC;
-    if( !b_html && !p_region_in->psz_text )
-        return VLC_EGENERIC;
-
+	if (!b_html && !p_region_in->psz_text)
+	{
+		return VLC_EGENERIC;
+	}
     const size_t i_text_max = strlen( b_html ? p_region_in->psz_html
                                              : p_region_in->psz_text );
 
@@ -1739,9 +1744,10 @@ static int RenderCommon( filter_t *p_filter, subpicture_region_t *p_region_out,
 
         if( var_InheritBool( p_filter, "freetype-yuvp" ) )
             p_chroma_list = p_chroma_list_yuvp;
-        else if( !p_chroma_list || *p_chroma_list == 0 )
-            p_chroma_list = p_chroma_list_rgba;
-
+		else if (!p_chroma_list || *p_chroma_list == 0)
+		{
+			p_chroma_list = p_chroma_list_rgba;
+		}
         uint8_t i_background_opacity = var_InheritInteger( p_filter, "freetype-background-opacity" );
         i_background_opacity = VLC_CLIP( i_background_opacity, 0, 255 );
         const int i_margin = i_background_opacity > 0 ? i_max_face_height / 4 : 0;

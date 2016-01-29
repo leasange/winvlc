@@ -637,13 +637,14 @@ static bool AddIndexEntry( sout_mux_t *p_mux, uint64_t i_time, sout_input_t *p_i
     i_posdelta = p_sys->i_pos - p_stream->skeleton.i_last_keyframe_pos;
     i_timedelta = i_time - p_stream->skeleton.i_last_keyframe_time;
 
-    if ( i_timedelta <= ( (uint64_t) p_mux->p_sys->skeleton.i_index_intvl * 1000 )
-         || i_posdelta <= 0xFFFF )
-        return false;
-
+	if (i_timedelta <= ((uint64_t)p_mux->p_sys->skeleton.i_index_intvl * 1000)
+		|| i_posdelta <= 0xFFFF)
+	{
+		return false;
+	}
     /* do inserts */
     int i_ret;
-    if ( !p_stream->skeleton.p_index ) return false;
+	if (!p_stream->skeleton.p_index) { return false; }
     uint64_t i_offset = p_stream->skeleton.i_index_payload;
     i_ret = WriteQWVariableLE( i_posdelta, i_offset, p_stream->skeleton.p_index,
                                p_stream->skeleton.i_index_size );
@@ -1657,8 +1658,10 @@ static int MuxBlock( sout_mux_t *p_mux, sout_input_t *p_input )
             else
                 p_stream->i_dirac_last_dt = dt;
 
-            if( p_data->i_flags & BLOCK_FLAG_TYPE_I )
-                p_stream->i_last_keyframe = dt;
+			if (p_data->i_flags & BLOCK_FLAG_TYPE_I)
+			{
+				p_stream->i_last_keyframe = dt;
+			}
             mtime_t dist = dt - p_stream->i_last_keyframe;
 
             /* Everything increments by two for progressive */

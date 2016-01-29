@@ -105,15 +105,18 @@ subpicture_t *subpicture_NewFromPicture( vlc_object_t *p_obj,
 
     /* */
     image_handler_t *p_image = image_HandlerCreate( p_obj );
-    if( !p_image )
-        return NULL;
+	if (!p_image)
+	{
+		return NULL;
+	}
 
     picture_t *p_pip = image_Convert( p_image, p_picture, &fmt_in, &fmt_out );
-
     image_HandlerDelete( p_image );
 
-    if( !p_pip )
-        return NULL;
+	if (!p_pip)
+	{
+		return NULL;
+	}
 
     subpicture_t *p_subpic = subpicture_New( NULL );
     if( !p_subpic )

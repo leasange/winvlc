@@ -456,11 +456,13 @@ static void VoutDisplayCreateRender(vout_display_t *vd)
     v_dst.i_sar_den = 0;
 
     video_format_t v_dst_cmp = v_dst;
-    if ((v_src.i_chroma == VLC_CODEC_J420 && v_dst.i_chroma == VLC_CODEC_I420) ||
-        (v_src.i_chroma == VLC_CODEC_J422 && v_dst.i_chroma == VLC_CODEC_I422) ||
-        (v_src.i_chroma == VLC_CODEC_J440 && v_dst.i_chroma == VLC_CODEC_I440) ||
-        (v_src.i_chroma == VLC_CODEC_J444 && v_dst.i_chroma == VLC_CODEC_I444))
-        v_dst_cmp.i_chroma = v_src.i_chroma;
+	if ((v_src.i_chroma == VLC_CODEC_J420 && v_dst.i_chroma == VLC_CODEC_I420) ||
+		(v_src.i_chroma == VLC_CODEC_J422 && v_dst.i_chroma == VLC_CODEC_I422) ||
+		(v_src.i_chroma == VLC_CODEC_J440 && v_dst.i_chroma == VLC_CODEC_I440) ||
+		(v_src.i_chroma == VLC_CODEC_J444 && v_dst.i_chroma == VLC_CODEC_I444))
+	{
+		v_dst_cmp.i_chroma = v_src.i_chroma;
+	}
 
     const bool convert = memcmp(&v_src, &v_dst_cmp, sizeof(v_src)) != 0;
     if (!convert)
@@ -1604,11 +1606,12 @@ vout_display_t *vout_NewSplitter(vout_thread_t *vout,
 {
     video_splitter_t *splitter =
         video_splitter_New(VLC_OBJECT(vout), splitter_module, source);
+	vout_display_t *wrapper;
     if (!splitter)
         return NULL;
 
     /* */
-    vout_display_t *wrapper =
+	wrapper =
         DisplayNew(vout, source, state, module, true, NULL,
                     double_click_timeout, hide_timeout, NULL);
     if (!wrapper) {

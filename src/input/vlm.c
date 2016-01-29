@@ -642,8 +642,10 @@ static int vlm_OnMediaUpdate( vlm_t *p_vlm, vlm_media_sys_t *p_media )
                 input_item_AddOption( p_media->vod.p_item,
                                       p_cfg->ppsz_option[i], VLC_INPUT_OPTION_TRUSTED );
 
-            if( asprintf( &psz_header, _("Media: %s"), p_cfg->psz_name ) == -1 )
-                psz_header = NULL;
+			if (asprintf(&psz_header, _("Media: %s"), p_cfg->psz_name) == -1)
+			{
+				psz_header = NULL;
+			}
 
             sout_description_data_t data;
             TAB_INIT(data.i_es, data.es);

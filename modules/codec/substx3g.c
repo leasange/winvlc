@@ -106,7 +106,7 @@ static char * str8indup( const char *psz_string, size_t i_skip, size_t n )
         if ( (*psz_string & 0xC0) != 0x80 ) i_skip--;
         psz_string++;
     }
-    if ( ! *psz_string || i_skip ) return NULL;
+	if (!*psz_string || i_skip){ return NULL; }
 
     const char *psz_tmp = psz_string;
     while( n && *psz_tmp )
@@ -276,7 +276,7 @@ static subpicture_t *Decode( decoder_t *p_dec, block_t **pp_block )
     p_buf += i_psz_bytelength + sizeof(uint16_t);
 
     for( uint16_t i=0; i < i_psz_bytelength; i++ )
-     if ( psz_subtitle[i] == '\r' ) psz_subtitle[i] = '\n';
+	if (psz_subtitle[i] == '\r') { psz_subtitle[i] = '\n'; }
 
     segment_t *p_segment = calloc( 1, sizeof(segment_t) );
     if ( !p_segment )

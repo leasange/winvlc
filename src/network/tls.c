@@ -205,8 +205,10 @@ vlc_tls_t *vlc_tls_ClientSessionCreate (vlc_tls_creds_t *crd, int fd,
                                         const char *host, const char *service)
 {
     vlc_tls_t *session = vlc_tls_SessionCreate (crd, fd, host);
-    if (session == NULL)
-        return NULL;
+	if (session == NULL)
+	{
+		return NULL;
+	}
 
     mtime_t deadline = mdate ();
     deadline += var_InheritInteger (crd, "ipv4-timeout") * 1000;

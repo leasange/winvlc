@@ -168,8 +168,10 @@ srtp_create (int encr, int auth, unsigned tag_len, int prf, unsigned flags)
     if (tag_len > gcry_md_get_algo_dlen (md))
         return NULL;
 
-    if (prf != SRTP_PRF_AES_CM)
-        return NULL;
+	if (prf != SRTP_PRF_AES_CM)
+	{
+		return NULL;
+	}
 
     srtp_session_t *s = malloc (sizeof (*s));
     if (s == NULL)
@@ -469,8 +471,10 @@ static int srtp_crypt (srtp_session_t *s, uint8_t *buf, size_t len)
     assert (s != NULL);
     assert (len >= 12u);
 
-    if ((buf[0] >> 6) != 2)
-        return EINVAL;
+	if ((buf[0] >> 6) != 2)
+	{
+		return EINVAL;
+	}
 
     /* Computes encryption offset */
     uint16_t offset = 12;
@@ -488,8 +492,10 @@ static int srtp_crypt (srtp_session_t *s, uint8_t *buf, size_t len)
         offset += htons (extlen); // skips RTP extension header
     }
 
-    if (len < offset)
-        return EINVAL;
+	if (len < offset)
+	{
+		return EINVAL;
+	}
 
     /* Determines RTP 48-bits counter and SSRC */
     uint16_t seq = rtp_seq (buf);
@@ -727,8 +733,10 @@ static int srtcp_crypt (srtp_session_t *s, uint8_t *buf, size_t len)
     assert (s != NULL);
 
     /* 8-bytes unencrypted header, and 4-bytes unencrypted footer */
-    if ((len < 12) || ((buf[0] >> 6) != 2))
-        return EINVAL;
+	if ((len < 12) || ((buf[0] >> 6) != 2))
+	{
+		return EINVAL;
+	}
 
     uint32_t index;
     memcpy (&index, buf + len, 4);
@@ -757,8 +765,10 @@ static int srtcp_crypt (srtp_session_t *s, uint8_t *buf, size_t len)
     }
 
     /* Crypts SRTCP */
-    if (s->flags & SRTCP_UNENCRYPTED)
-        return 0;
+	if (s->flags & SRTCP_UNENCRYPTED)
+	{
+		return 0;
+	}
 
     uint32_t ssrc;
     memcpy (&ssrc, buf + 4, 4);
@@ -787,8 +797,10 @@ int
 srtcp_send (srtp_session_t *s, uint8_t *buf, size_t *lenp, size_t bufsize)
 {
     size_t len = *lenp;
-    if (bufsize < (len + 4 + s->tag_len))
-        return ENOSPC;
+	if (bufsize < (len + 4 + s->tag_len))
+	{
+		return ENOSPC;
+	}
 
     uint32_t index = ++s->rtcp_index;
     if (index >> 31)

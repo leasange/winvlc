@@ -147,8 +147,10 @@ static void *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
 {
     decoder_sys_t *p_sys = p_dec->p_sys;
 
-    if( pp_block == NULL || *pp_block == NULL )
-        return NULL;
+	if (pp_block == NULL || *pp_block == NULL)
+	{
+		return NULL;
+	}
 
     block_t *p_block = *pp_block;
 
@@ -234,8 +236,10 @@ static void FillPicture( decoder_t *p_dec, block_t *p_block, picture_t *p_pic )
 static picture_t *DecodeFrame( decoder_t *p_dec, block_t **pp_block )
 {
     block_t *p_block = DecodeBlock( p_dec, pp_block );
-    if( p_block == NULL )
-        return NULL;
+	if (p_block == NULL)
+	{
+		return NULL;
+	}
 
     decoder_sys_t *p_sys = p_dec->p_sys;
 
@@ -285,8 +289,10 @@ static int OpenDecoder( vlc_object_t *p_this )
 static block_t *SendFrame( decoder_t *p_dec, block_t **pp_block )
 {
     block_t *p_block = DecodeBlock( p_dec, pp_block );
-    if( p_block == NULL )
-        return NULL;
+	if (p_block == NULL)
+	{
+		return NULL;
+	}
 
     decoder_sys_t *p_sys = p_dec->p_sys;
 

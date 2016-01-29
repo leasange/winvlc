@@ -139,9 +139,10 @@ static int Open (vlc_object_t *obj)
         goto error;
 
     sys->gl = vlc_gl_Create (sys->window, API, "$" MODULE_VARNAME);
-    if (sys->gl == NULL)
-        goto error;
-
+	if (sys->gl == NULL)
+	{
+		goto error;
+	}
     /* Initialize video display */
     const vlc_fourcc_t *spu_chromas;
 

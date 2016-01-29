@@ -191,9 +191,10 @@ static int Open(vlc_object_t *object)
     sys->desktop_save.win.top       = var_InheritInteger(vd, "video-y");
     sys->desktop_save.win.bottom    = vd->cfg->display.height;
 
-    if (CommonInit(vd))
-        goto error;
-
+	if (CommonInit(vd))
+	{
+		goto error;
+	}
     /* */
     video_format_t fmt;
     if (Direct3DOpen(vd, &fmt)) {
@@ -656,9 +657,10 @@ static int Direct3DOpen(vout_display_t *vd, video_format_t *fmt)
     vout_display_sys_t *sys = vd->sys;
     LPDIRECT3D9 d3dobj = sys->d3dobj;
 
-    if (Direct3DFillPresentationParameters(vd))
-        return VLC_EGENERIC;
-
+	if (Direct3DFillPresentationParameters(vd))
+	{
+		return VLC_EGENERIC;
+	}
     // Create the D3DDevice
     LPDIRECT3DDEVICE9 d3ddev;
 
@@ -1168,9 +1170,10 @@ static void Direct3DDestroyScene(vout_display_t *vd)
     Direct3DDeleteRegions(sys->d3dregion_count, sys->d3dregion);
 
     LPDIRECT3DVERTEXBUFFER9 d3dvtc = sys->d3dvtc;
-    if (d3dvtc)
-        IDirect3DVertexBuffer9_Release(d3dvtc);
-
+	if (d3dvtc)
+	{
+		IDirect3DVertexBuffer9_Release(d3dvtc);
+	}
     LPDIRECT3DTEXTURE9 d3dtex = sys->d3dtex;
     if (d3dtex)
         IDirect3DTexture9_Release(d3dtex);
@@ -1237,14 +1240,16 @@ static int Direct3DCreateShaders(vout_display_t *vd)
 {
     vout_display_sys_t *sys = vd->sys;
 
-    if (!sys->hd3d9x_dll)
-        return VLC_EGENERIC;
-
+	if (!sys->hd3d9x_dll)
+	{
+		return VLC_EGENERIC;
+	}
     /* Find which shader was selected in the list. */
     char *selected_shader = var_InheritString(vd, "direct3d-shader");
-    if (!selected_shader)
-        return VLC_SUCCESS; /* Nothing to do */
-
+	if (!selected_shader)
+	{
+		return VLC_SUCCESS; /* Nothing to do */
+	}
     const char *shader_source_builtin = NULL;
     char *shader_source_file = NULL;
     FILE *fs = NULL;

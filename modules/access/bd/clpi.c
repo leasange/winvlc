@@ -69,8 +69,10 @@ int bd_clpi_ep_map_Parse( bd_clpi_ep_map_t *p_ep_map,
 
     p_ep_map->i_ep = i_fine;
     p_ep_map->p_ep = calloc( i_fine, sizeof(*p_ep_map->p_ep) );
-    if( !p_ep_map->p_ep )
-        return VLC_EGENERIC;
+	if (!p_ep_map->p_ep)
+	{
+		return VLC_EGENERIC;
+	}
 
     bs_t cs = *s;
     bs_skip( &cs, 8*(i_ep_map_start + i_coarse_start) - bs_pos( s ) );
@@ -122,11 +124,15 @@ int bd_clpi_Parse( bd_clpi_t *p_clpi, bs_t *s, int i_id )
     const int i_start = bs_pos( s ) / 8;
 
     /* */
-    if( bs_read( s, 32 ) != 0x48444D56 )
-        return VLC_EGENERIC;
+	if (bs_read(s, 32) != 0x48444D56)
+	{
+		return VLC_EGENERIC;
+	}
     const uint32_t i_version = bs_read( s, 32 );
-    if( i_version != 0x30313030 && i_version != 0x30323030 )
-        return VLC_EGENERIC;
+	if (i_version != 0x30313030 && i_version != 0x30323030)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* */
     const uint32_t i_sequence_start = bs_read( s, 32 );

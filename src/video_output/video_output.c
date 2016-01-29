@@ -113,11 +113,12 @@ static vout_thread_t *VoutCreate(vlc_object_t *object,
                                  const vout_configuration_t *cfg)
 {
     video_format_t original;
+	vout_thread_t *vout;
     if (VoutValidateFormat(&original, cfg->fmt))
         return NULL;
 
     /* Allocate descriptor */
-    vout_thread_t *vout = vlc_custom_create(object,
+	vout = vlc_custom_create(object,
                                             sizeof(*vout) + sizeof(*vout->p),
                                             "video output");
     if (!vout) {
@@ -468,8 +469,10 @@ int vout_GetSnapshot(vout_thread_t *vout,
 
     if (image_dst) {
         vlc_fourcc_t codec = VLC_CODEC_PNG;
-        if (type && image_Type2Fourcc(type))
-            codec = image_Type2Fourcc(type);
+		if (type && image_Type2Fourcc(type))
+		{
+			codec = image_Type2Fourcc(type);
+		}
 
         const int override_width  = var_InheritInteger(vout, "snapshot-width");
         const int override_height = var_InheritInteger(vout, "snapshot-height");
@@ -766,14 +769,14 @@ static void ThreadChangeFilters(vout_thread_t *vout,
         free(current);
         current = next;
     }
-
+	es_format_t fmt_target;
+	es_format_t fmt_current;
     if (!is_locked)
         vlc_mutex_lock(&vout->p->filter.lock);
 
-    es_format_t fmt_target;
     es_format_InitFromVideo(&fmt_target, source ? source : &vout->p->filter.format);
 
-    es_format_t fmt_current = fmt_target;
+    fmt_current = fmt_target;
 
     for (int a = 0; a < 2; a++) {
         vlc_array_t    *array = a == 0 ? &array_static :
@@ -899,8 +902,10 @@ static int ThreadDisplayRenderPicture(vout_thread_t *vout, bool is_forced)
     if (!filtered)
         return VLC_EGENERIC;
 
-    if (filtered->date != vout->p->displayed.current->date)
-        msg_Warn(vout, "Unsupported timestamp modifications done by chain_interactive");
+	if (filtered->date != vout->p->displayed.current->date)
+	{
+		msg_Warn(vout, "Unsupported timestamp modifications done by chain_interactive");
+	}
 
     /*
      * Get the subpicture to be displayed

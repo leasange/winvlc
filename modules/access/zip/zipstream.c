@@ -557,12 +557,14 @@ static int WriteXSPF( char **pp_buffer, vlc_array_t *p_filenames,
     char *psz_zip = strrchr( psz_zippath, DIR_SEP_CHAR );
     psz_zip = convert_xml_special_chars( psz_zip ? (psz_zip+1) : psz_zippath );
 
-    if( asprintf( pp_buffer, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\" "
-                "xmlns:vlc=\"http://www.videolan.org/vlc/playlist/ns/0/\">\n"
-                " <title>%s</title>\n"
-                " <trackList>\n", psz_zip ) == -1)
-        return -1;
+	if (asprintf(pp_buffer, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		"<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\" "
+		"xmlns:vlc=\"http://www.videolan.org/vlc/playlist/ns/0/\">\n"
+		" <title>%s</title>\n"
+		" <trackList>\n", psz_zip) == -1)
+	{
+		return -1;
+	}
 
     /* Root node */
     node *playlist = new_node( psz_zip );
@@ -671,8 +673,10 @@ static int nodeToXSPF( char **pp_buffer, node *n, bool b_root )
         if( astrcatf( pp_buffer, "  <vlc:node title=\"%s\">\n", n->name ) < 0 )
             return -1;
     }
-    if( n->child )
-        nodeToXSPF( pp_buffer, n->child, false );
+	if (n->child)
+	{
+		nodeToXSPF(pp_buffer, n->child, false);
+	}
     item *i = n->media;
     while( i )
     {

@@ -169,21 +169,27 @@ static int SkipFile(stream_t *s, int *count, rar_file_t ***file,
     if (hdr->size < (unsigned)min_size)
         return VLC_EGENERIC;
 
-    if (stream_Peek(s, &peek, min_size) < min_size)
-        return VLC_EGENERIC;
+	if (stream_Peek(s, &peek, min_size) < min_size)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* */
     uint32_t file_size_low = GetDWLE(&peek[7+4]);
     uint8_t  method = peek[7+18];
     uint16_t name_size = GetWLE(&peek[7+19]);
     uint32_t file_size_high = 0;
-    if (hdr->flags & RAR_BLOCK_FILE_HAS_HIGH)
-        file_size_high = GetDWLE(&peek[7+29]);
+	if (hdr->flags & RAR_BLOCK_FILE_HAS_HIGH)
+	{
+		file_size_high = GetDWLE(&peek[7 + 29]);
+	}
     const uint64_t file_size = ((uint64_t)file_size_high << 32) | file_size_low;
 
     char *name = calloc(1, name_size + 1);
-    if (!name)
-        return VLC_EGENERIC;
+	if (!name)
+	{
+		return VLC_EGENERIC;
+	}
 
     const int name_offset = (hdr->flags & RAR_BLOCK_FILE_HAS_HIGH) ? (7+33) : (7+25);
     if (name_offset + name_size <= hdr->size) {
@@ -318,9 +324,11 @@ int RarParse(stream_t *s, int *count, rar_file_t ***file, bool b_extonly)
     int volume_offset = 0;
 
     char *volume_mrl;
-    if (asprintf(&volume_mrl, "%s://%s",
-                 s->psz_access, s->psz_path) < 0)
-        return VLC_EGENERIC;
+	if (asprintf(&volume_mrl, "%s://%s",
+		s->psz_access, s->psz_path) < 0)
+	{
+		return VLC_EGENERIC;
+	}
 
     stream_t *vol = s;
     for (;;) {
@@ -393,8 +401,10 @@ int RarParse(stream_t *s, int *count, rar_file_t ***file, bool b_extonly)
         }
         free(volume_base);
 
-        if (!volume_mrl)
-            return VLC_SUCCESS;
+		if (!volume_mrl)
+		{
+			return VLC_SUCCESS;
+		}
 
         const int s_flags = s->i_flags;
         s->i_flags |= OBJECT_FLAGS_NOINTERACT;

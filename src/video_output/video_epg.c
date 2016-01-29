@@ -283,12 +283,12 @@ int vout_OSDEpg(vout_thread_t *vout, input_item_t *input)
 
     vlc_mutex_unlock(&input->lock);
     free(now_playing);
-
+	subpicture_updater_sys_t *sys;
     /* If no EPG event has been found. */
     if (epg == NULL)
         return VLC_EGENERIC;
 
-    subpicture_updater_sys_t *sys = malloc(sizeof(*sys));
+	sys = malloc(sizeof(*sys));
     if (!sys) {
         vlc_epg_Delete(epg);
         return VLC_EGENERIC;

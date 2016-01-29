@@ -773,8 +773,10 @@ int libvlc_media_player_play( libvlc_media_player_t *p_mi )
 void libvlc_media_player_set_pause( libvlc_media_player_t *p_mi, int paused )
 {
     input_thread_t * p_input_thread = libvlc_get_input_thread( p_mi );
-    if( !p_input_thread )
-        return;
+	if (!p_input_thread)
+	{
+		return;
+	}
 
     libvlc_state_t state = libvlc_media_player_get_state( p_mi );
     if( state == libvlc_Playing || state == libvlc_Buffering )
@@ -1324,8 +1326,10 @@ void libvlc_media_player_navigate( libvlc_media_player_t* p_mi,
         INPUT_NAV_LEFT, INPUT_NAV_RIGHT,
     };
 
-    if( navigate >= sizeof(map) / sizeof(map[0]) )
-      return;
+	if (navigate >= sizeof(map) / sizeof(map[0]))
+	{
+		return;
+	}
 
     input_thread_t *p_input = libvlc_get_input_thread ( p_mi );
     if ( p_input == NULL )
@@ -1344,8 +1348,10 @@ libvlc_track_description_t *
     libvlc_track_description_t *p_track_description = NULL,
                                *p_actual, *p_previous;
 
-    if( !p_input )
-        return NULL;
+	if (!p_input)
+	{
+		return NULL;
+	}
 
     vlc_value_t val_list, text_list;
     int i_ret = var_Change( p_input, psz_variable, VLC_VAR_GETLIST, &val_list, &text_list );

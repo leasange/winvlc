@@ -30,9 +30,10 @@
 LRESULT DecodeGesture( vlc_object_t *p_this, win32_gesture_sys_t *p_gesture,
                        HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-    if( !p_gesture )
-        return DefWindowProc( hWnd, message, wParam, lParam );
-
+	if (!p_gesture)
+	{
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
     GESTUREINFO gi;
     ZeroMemory( &gi, sizeof( GESTUREINFO ) );
     gi.cbSize = sizeof( GESTUREINFO );

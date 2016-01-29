@@ -355,9 +355,10 @@ static int Retrieve( addons_finder_t *p_finder, addon_entry_t *p_entry )
     }
     char *psz_archive_uri = strdup( p_entry->psz_archive_uri );
     vlc_mutex_unlock( &p_entry->lock );
-    if ( !psz_archive_uri )
-        return VLC_ENOMEM;
-
+	if (!psz_archive_uri)
+	{
+		return VLC_ENOMEM;
+	}
     /* get archive and parse manifest */
     stream_t *p_stream;
 
@@ -457,10 +458,11 @@ static int FindDesignated( addons_finder_t *p_finder )
     char *psz_manifest;
     const char *psz_path = p_finder->psz_uri + 7; // remove scheme
 
-    if ( asprintf( &psz_manifest, "unzip://%s!/manifest.xml",
-                   psz_path ) < 1 )
-        return VLC_ENOMEM;
-
+	if (asprintf(&psz_manifest, "unzip://%s!/manifest.xml",
+		psz_path) < 1)
+	{
+		return VLC_ENOMEM;
+	}
     stream_t *p_stream = stream_UrlNew( p_finder, psz_manifest );
     free( psz_manifest );
     if ( !p_stream ) return VLC_EGENERIC;

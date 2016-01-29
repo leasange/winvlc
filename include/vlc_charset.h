@@ -67,10 +67,11 @@ VLC_USED
 static inline wchar_t *ToWide (const char *utf8)
 {
     int len = MultiByteToWideChar (CP_UTF8, 0, utf8, -1, NULL, 0);
+	wchar_t *out;
     if (len == 0)
         return NULL;
 
-    wchar_t *out = (wchar_t *)malloc (len * sizeof (wchar_t));
+	out = (wchar_t *)malloc(len * sizeof (wchar_t));
 
     if (likely(out))
         MultiByteToWideChar (CP_UTF8, 0, utf8, -1, out, len);
@@ -81,14 +82,16 @@ VLC_USED VLC_MALLOC
 static inline char *ToCodePage (unsigned cp, const char *utf8)
 {
     wchar_t *wide = ToWide (utf8);
+	size_t len;
+	char *out;
     if (wide == NULL)
         return NULL;
 
-    size_t len = WideCharToMultiByte (cp, 0, wide, -1, NULL, 0, NULL, NULL);
+    len = WideCharToMultiByte (cp, 0, wide, -1, NULL, 0, NULL, NULL);
     if (len == 0)
         return NULL;
 
-    char *out = (char *)malloc (len);
+    out = (char *)malloc (len);
     if (likely(out != NULL))
         WideCharToMultiByte (cp, 0, wide, -1, out, len, NULL, NULL);
     free (wide);
@@ -99,10 +102,11 @@ VLC_USED VLC_MALLOC
 static inline char *FromCodePage (unsigned cp, const char *mb)
 {
     int len = MultiByteToWideChar (cp, 0, mb, -1, NULL, 0);
+	wchar_t *wide;
     if (len == 0)
         return NULL;
 
-    wchar_t *wide = (wchar_t *)malloc (len * sizeof (wchar_t));
+	wide = (wchar_t *)malloc(len * sizeof (wchar_t));
     if (unlikely(wide == NULL))
         return NULL;
     MultiByteToWideChar (cp, 0, mb, -1, wide, len);

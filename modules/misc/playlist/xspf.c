@@ -70,9 +70,10 @@ static void xspf_export_item( playlist_item_t *p_item, FILE *p_file,
     }
 
     /* don't write empty nodes */
-    if( p_item->i_children == 0 )
-        return;
-
+	if (p_item->i_children == 0)
+	{
+		return;
+	}
     input_item_t *p_input = p_item->p_input;
     char *psz;
     mtime_t i_duration;

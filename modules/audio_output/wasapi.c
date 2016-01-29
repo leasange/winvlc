@@ -65,8 +65,10 @@ static UINT64 GetQPC(void)
 {
     LARGE_INTEGER counter;
 
-    if (!QueryPerformanceCounter(&counter))
-        abort();
+	if (!QueryPerformanceCounter(&counter))
+	{
+		abort();
+	}
 
     lldiv_t d = lldiv(counter.QuadPart, freq.QuadPart);
     return (d.quot * 10000000) + ((d.rem * 10000000) / freq.QuadPart);
@@ -157,8 +159,10 @@ static HRESULT Play(aout_stream_t *s, block_t *block)
 
         assert(frames <= sys->frames);
         frames = sys->frames - frames;
-        if (frames > block->i_nb_samples)
-            frames = block->i_nb_samples;
+		if (frames > block->i_nb_samples)
+		{
+			frames = block->i_nb_samples;
+		}
 
         BYTE *dst;
         hr = IAudioRenderClient_GetBuffer(render, frames, &dst);
@@ -358,9 +362,11 @@ static unsigned vlc_CheckWaveOrder (const WAVEFORMATEX *restrict wf,
 static HRESULT Start(aout_stream_t *s, audio_sample_format_t *restrict fmt,
                      const GUID *sid)
 {
-    if (!s->b_force && var_InheritBool(s, "spdif") && AOUT_FMT_SPDIF(fmt))
-        /* Fallback to other plugin until pass-through is implemented */
-        return E_NOTIMPL;
+	if (!s->b_force && var_InheritBool(s, "spdif") && AOUT_FMT_SPDIF(fmt))
+		/* Fallback to other plugin until pass-through is implemented */
+	{
+		return E_NOTIMPL;
+	}
 
     aout_stream_sys_t *sys = malloc(sizeof (*sys));
     if (unlikely(sys == NULL))

@@ -1094,9 +1094,10 @@ static void Ogg_SendOrQueueBlocks( demux_t *p_demux, logical_stream_t *p_stream,
             block_t *temp = p_stream->p_preparse_block;
             while ( temp )
             {
-                if ( temp && i_firstpts < VLC_TS_0 )
-                    i_firstpts = temp->i_pts;
-
+				if (temp && i_firstpts < VLC_TS_0)
+				{
+					i_firstpts = temp->i_pts;
+				}
                 block_t *tosend = temp;
                 temp = temp->p_next;
                 tosend->p_next = NULL;
@@ -2978,7 +2979,7 @@ static void Ogg_ReadSkeletonHeader( demux_t *p_demux, logical_stream_t *p_stream
 
 static void Ogg_ReadSkeletonBones( demux_t *p_demux, ogg_packet *p_oggpacket )
 {
-    if ( p_demux->p_sys->skeleton.major < 3 || p_oggpacket->bytes < 52 ) return;
+	if (p_demux->p_sys->skeleton.major < 3 || p_oggpacket->bytes < 52){ return; }
 
     /* Find the matching stream for this skeleton data */
     ogg_int32_t i_serialno = GetDWLE( &p_oggpacket->packet[12] );
@@ -2991,7 +2992,7 @@ static void Ogg_ReadSkeletonBones( demux_t *p_demux, ogg_packet *p_oggpacket )
             break;
         }
     }
-    if ( !p_target_stream ) return;
+	if (!p_target_stream) { return; }
 
     ogg_skeleton_t *p_skel = p_target_stream->p_skel;
     if ( !p_skel )
@@ -3047,9 +3048,11 @@ unsigned const char * Read7BitsVariableLE( unsigned const char *p_begin,
 
 static void Ogg_ReadSkeletonIndex( demux_t *p_demux, ogg_packet *p_oggpacket )
 {
-    if ( p_demux->p_sys->skeleton.major < 4
-         || p_oggpacket->bytes < 44 /* Need at least 1 index value (42+1+1) */
-    ) return;
+	if (p_demux->p_sys->skeleton.major < 4
+		|| p_oggpacket->bytes < 44 /* Need at least 1 index value (42+1+1) */
+		){
+		return;
+	}
 
     /* Find the matching stream for this skeleton data */
     int32_t i_serialno = GetDWLE( &p_oggpacket->packet[6] );
@@ -3062,7 +3065,7 @@ static void Ogg_ReadSkeletonIndex( demux_t *p_demux, ogg_packet *p_oggpacket )
             break;
         }
     }
-    if ( !p_stream || !p_stream->p_skel ) return;
+	if (!p_stream || !p_stream->p_skel){ return; }
     uint64_t i_keypoints = GetQWLE( &p_oggpacket->packet[10] );
     msg_Dbg( p_demux, "%" PRIi64 " index data for %" PRIi32, i_keypoints, i_serialno );
     if ( !i_keypoints ) return;

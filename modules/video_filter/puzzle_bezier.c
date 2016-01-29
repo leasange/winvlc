@@ -122,9 +122,10 @@ point_t *puzzle_scale_curve_H(int32_t i_width, int32_t i_lines, uint8_t i_pts_nb
  *****************************************************************************/
 point_t *puzzle_H_2_scale_curve_V(int32_t i_width, int32_t i_lines, uint8_t i_pts_nbr, point_t *ps_pt, int32_t i_shape_size)
 {
-    if (ps_pt == NULL)
-        return NULL;
-
+	if (ps_pt == NULL)
+	{
+		return NULL;
+	}
     point_t *ps_bezier_scale_H = puzzle_scale_curve_H(i_lines, i_width, i_pts_nbr, ps_pt, i_shape_size);
     point_t *ps_pts_V = puzzle_curve_H_2_V(i_pts_nbr, ps_bezier_scale_H);
     free(ps_bezier_scale_H);
@@ -137,9 +138,10 @@ point_t *puzzle_H_2_scale_curve_V(int32_t i_width, int32_t i_lines, uint8_t i_pt
  *****************************************************************************/
 point_t *puzzle_curve_H_2_V(uint8_t i_pts_nbr, point_t *ps_pt)
 {
-    if (ps_pt == NULL)
-        return NULL;
-
+	if (ps_pt == NULL)
+	{
+		return NULL;
+	}
     point_t *ps_new_pt = malloc( sizeof( point_t ) * (3 * (i_pts_nbr-1) + 1) );
 
     if (ps_new_pt == NULL)
@@ -158,9 +160,10 @@ point_t *puzzle_curve_H_2_V(uint8_t i_pts_nbr, point_t *ps_pt)
  *****************************************************************************/
 point_t *puzzle_curve_H_2_negative(uint8_t i_pts_nbr, point_t *ps_pt)
 {
-    if (ps_pt == NULL)
-        return NULL;
-
+	if (ps_pt == NULL)
+	{
+		return NULL;
+	}
     point_t *ps_new_pt = malloc( sizeof( point_t ) * (3 * (i_pts_nbr-1) + 1) );
     if (ps_new_pt == NULL)
         return NULL;
@@ -178,9 +181,10 @@ point_t *puzzle_curve_H_2_negative(uint8_t i_pts_nbr, point_t *ps_pt)
  *****************************************************************************/
 point_t *puzzle_curve_V_2_negative(uint8_t i_pts_nbr, point_t *ps_pt)
 {
-    if (ps_pt == NULL)
-        return NULL;
-
+	if (ps_pt == NULL)
+	{
+		return NULL;
+	}
     point_t *ps_new_pt = malloc( sizeof( point_t ) * (3 * (i_pts_nbr-1) + 1) );
     if (ps_new_pt == NULL)
         return NULL;
@@ -310,9 +314,10 @@ point_t *puzzle_rand_bezier(uint8_t i_pts_nbr)
                                { 0.713223372514099,   -0.000707944210808817}, {1,   0}}
                                };
 
-    if (i_pts_nbr != 7)
-        return NULL;
-
+	if (i_pts_nbr != 7)
+	{
+		return NULL;
+	}
     /* random shape */
     uint8_t i_last_pt = (3 * (i_pts_nbr-1) + 1);
     uint8_t i_item = ((uint16_t) vlc_mrand48()) %  NB_PRIM;

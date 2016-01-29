@@ -494,9 +494,10 @@ static int GetAc3Size( const uint8_t *p_buf )
                                 512, 576, 640 };
     /* */
     const int i_frmsizecod = p_buf[4] & 63;
-    if( i_frmsizecod >= 38 )
-        return 0;
-
+	if (i_frmsizecod >= 38)
+	{
+		return 0;
+	}
     const int bitrate = pi_rate[i_frmsizecod >> 1];
 
     switch( p_buf[4] & 0xc0 )

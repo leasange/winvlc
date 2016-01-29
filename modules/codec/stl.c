@@ -81,8 +81,10 @@ static cct_number_t cct_nums[] = { {CCT_ISO_6937_2, "ISO_6937-2"},
 static char *ParseText(const uint8_t *data, size_t size, const char *charset)
 {
     char *text = malloc(size);
-    if (text == NULL)
-        return NULL;
+	if (text == NULL)
+	{
+		return NULL;
+	}
 
     size_t text_size = 0;
 
@@ -107,8 +109,10 @@ static char *ParseText(const uint8_t *data, size_t size, const char *charset)
 
 static subpicture_t *Decode(decoder_t *dec, block_t **block)
 {
-    if (block == NULL || *block == NULL)
-        return NULL;
+	if (block == NULL || *block == NULL)
+	{
+		return NULL;
+	}
 
     subpicture_t *sub = NULL;
 
@@ -185,9 +189,10 @@ static int Open(vlc_object_t *object)
 {
     decoder_t *dec = (decoder_t*)object;
 
-    if (dec->fmt_in.i_codec != VLC_CODEC_EBU_STL)
-        return VLC_EGENERIC;
-
+	if (dec->fmt_in.i_codec != VLC_CODEC_EBU_STL)
+	{
+		return VLC_EGENERIC;
+	}
     cct_number_value_t cct;
     int rc = ExtractCCT(dec, &cct);
     if (VLC_SUCCESS != rc)

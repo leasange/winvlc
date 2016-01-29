@@ -347,8 +347,10 @@ rtp_queue (demux_t *demux, rtp_session_t *session, block_t *block)
         }
     }
     else
-    if (delta_seq >= 0)
-        src->max_seq = seq + 1;
+	if (delta_seq >= 0)
+	{
+		src->max_seq = seq + 1;
+	}
 
     /* Queues the block in sequence order,
      * hence there is a single queue for all payload types. */

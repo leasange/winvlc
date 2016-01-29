@@ -536,8 +536,10 @@ static int ProcessALACCookie( demux_t *p_demux, const uint8_t *p, uint64_t i_siz
     p_sys->fmt.i_extra = i_extra;
     p_sys->fmt.p_extra = malloc( i_extra );
 
-    if( !p_sys->fmt.p_extra )
-        return VLC_ENOMEM;
+	if (!p_sys->fmt.p_extra)
+	{
+		return VLC_ENOMEM;
+	}
 
     uint8_t *p_extra = ( uint8_t * )p_sys->fmt.p_extra;
 
@@ -620,7 +622,7 @@ static int ProcessAACCookie( demux_t *p_demux, const uint8_t *p, uint64_t i_size
         }
         if( i_flags&0x40 )
         {
-            if( !AACCookieChkLen( 1, i_size, i_offset )) goto aac_kuki_finish;
+			if (!AACCookieChkLen(1, i_size, i_offset)){ goto aac_kuki_finish; }
             uint8_t i_url_len = *( p + i_offset++ );
             i_offset += i_url_len; /* don't care (url) */
         }
@@ -720,8 +722,10 @@ static int ReadKukiChunk( demux_t *p_demux, uint64_t i_size )
 
 static int ReadDataChunk( demux_t *p_demux, uint64_t i_size )
 {
-    if( i_size < 4 )
-        return VLC_EGENERIC;
+	if (i_size < 4)
+	{
+		return VLC_EGENERIC;
+	}
 
     demux_sys_t *p_sys = p_demux->p_sys;
 
@@ -785,8 +789,10 @@ static int Open( vlc_object_t *p_this )
         return VLC_EGENERIC;
 
     /* Is it a caf file? */
-    if( memcmp( p_peek, "caff", 4 ))
-        return VLC_EGENERIC;
+	if (memcmp(p_peek, "caff", 4))
+	{
+		return VLC_EGENERIC;
+	}
 
     /* check file version (we only handle version 1) */
     uint16_t i_version = GetWBE( p_peek + 4 );

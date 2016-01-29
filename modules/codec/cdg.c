@@ -256,8 +256,10 @@ static int DecodeTileBlock( decoder_sys_t *p_cdg, const uint8_t *p_data, int doX
             const int idx = ( p_data[4+y] >> (5-x) ) & 0x01;
 
             unsigned index = (sy+y)*CDG_SCREEN_PITCH+(sx+x);
-            if( index >= CDG_SCREEN_PITCH*CDG_SCREEN_HEIGHT )
-                return 0;
+			if (index >= CDG_SCREEN_PITCH*CDG_SCREEN_HEIGHT)
+			{
+				return 0;
+			}
 
             uint8_t *p = &p_cdg->p_screen[index];
 

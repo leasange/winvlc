@@ -804,17 +804,19 @@ static sout_stream_t *sout_StreamNew( sout_instance_t *p_sout, char *psz_name,
 sout_stream_t *sout_StreamChainNew(sout_instance_t *p_sout, char *psz_chain,
                                 sout_stream_t *p_next, sout_stream_t **pp_last)
 {
+	char *psz_parser;
+	vlc_array_t cfg, name;
+	int i;
     if(!psz_chain || !*psz_chain)
     {
         if(pp_last) *pp_last = NULL;
         return p_next;
     }
 
-    char *psz_parser = strdup(psz_chain);
+	psz_parser = strdup(psz_chain);
     if(!psz_parser)
         return NULL;
 
-    vlc_array_t cfg, name;
     vlc_array_init(&cfg);
     vlc_array_init(&name);
 
@@ -831,7 +833,7 @@ sout_stream_t *sout_StreamChainNew(sout_instance_t *p_sout, char *psz_chain,
         vlc_array_append(&name, psz_name);
     }
 
-    int i = vlc_array_count(&name);
+    i = vlc_array_count(&name);
     vlc_array_t module;
     vlc_array_init(&module);
     while(i--)

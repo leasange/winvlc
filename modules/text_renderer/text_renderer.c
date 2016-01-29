@@ -60,9 +60,10 @@ text_style_t *CreateStyle( char *psz_fontname, int i_font_size,
 int PushFont( font_stack_t **p_font, const char *psz_name, int i_size,
                      uint32_t i_color, uint32_t i_karaoke_bg_color )
 {
-    if( !p_font )
-        return VLC_EGENERIC;
-
+	if (!p_font)
+	{
+		return VLC_EGENERIC;
+	}
     font_stack_t *p_new = malloc( sizeof(*p_new) );
     if( !p_new )
         return VLC_ENOMEM;
@@ -496,9 +497,10 @@ bool FaceStyleEquals( const text_style_t *p_style1,
 {
     if( !p_style1 || !p_style2 )
         return false;
-    if( p_style1 == p_style2 )
-        return true;
-
+	if (p_style1 == p_style2)
+	{
+		return true;
+	}
     const int i_style_mask = STYLE_BOLD | STYLE_ITALIC;
     return (p_style1->i_style_flags & i_style_mask) == (p_style2->i_style_flags & i_style_mask) &&
            !strcmp( p_style1->psz_fontname, p_style2->psz_fontname );
@@ -578,9 +580,10 @@ int ProcessNodes( filter_t *p_filter,
     if( p_default_style->i_style_flags & STYLE_BOLD )
         i_style_flags |= STYLE_BOLD;
 
-    if( rv != VLC_SUCCESS )
-        return rv;
-
+	if (rv != VLC_SUCCESS)
+	{
+		return rv;
+	}
     const char *node;
     int type;
 

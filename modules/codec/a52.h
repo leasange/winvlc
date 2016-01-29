@@ -86,8 +86,10 @@ static inline int vlc_a52_header_ParseAc3( vlc_a52_header_t *p_header,
                                                          & AOUT_CHAN_PHYSMASK);
 
     const unsigned i_frmsizecod = p_buf[4] & 63;
-    if( i_frmsizecod >= 38 )
-        return VLC_EGENERIC;
+	if (i_frmsizecod >= 38)
+	{
+		return VLC_EGENERIC;
+	}
     const unsigned i_bitrate_base = pi_bitrate[i_frmsizecod >> 1];
     p_header->i_bitrate = (i_bitrate_base * 1000) >> i_rate_shift;
 
@@ -192,8 +194,10 @@ static inline int vlc_a52_header_Parse( vlc_a52_header_t *p_header,
         return VLC_EGENERIC;
 
     /* Check synword */
-    if( p_buffer[0] != 0x0b || p_buffer[1] != 0x77 )
-        return VLC_EGENERIC;
+	if (p_buffer[0] != 0x0b || p_buffer[1] != 0x77)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* Check bsid */
     const int bsid = p_buffer[5] >> 3;

@@ -112,8 +112,10 @@ int RarStreamOpen(vlc_object_t *object)
     }
     free(base);
     free(files);
-    if (!data)
-        return VLC_EGENERIC;
+	if (!data)
+	{
+		return VLC_EGENERIC;
+	}
     stream_t *payload = stream_MemoryNew(s, (uint8_t*)data, strlen(data), false);
     if (!payload) {
         free(data);

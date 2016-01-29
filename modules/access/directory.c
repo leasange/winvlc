@@ -106,8 +106,10 @@ int DirOpen( vlc_object_t *p_this )
 {
     access_t *p_access = (access_t*)p_this;
 
-    if( !p_access->psz_filepath )
-        return VLC_EGENERIC;
+	if (!p_access->psz_filepath)
+	{
+		return VLC_EGENERIC;
+	}
 
     DIR *handle = vlc_opendir (p_access->psz_filepath);
     if (handle == NULL)
@@ -130,8 +132,10 @@ int DirInit (access_t *p_access, DIR *handle)
     }
     else
         uri = vlc_path2uri (p_access->psz_filepath, "file");
-    if (unlikely(uri == NULL))
-        goto error;
+	if (unlikely(uri == NULL))
+	{
+		goto error;
+	}
 
     /* "Open" the base directory */
     directory_t *root = malloc (sizeof (*root));
@@ -288,8 +292,10 @@ block_t *DirBlock (access_t *p_access)
                 "%s"
                 " </extension>\n"
                 "</playlist>\n", p_sys->xspf_ext ? p_sys->xspf_ext : "");
-            if (unlikely(len == -1))
-                goto fatal;
+			if (unlikely(len == -1))
+			{
+				goto fatal;
+			}
 
             block_t *block = block_heap_Alloc (footer, len);
             p_access->info.b_eof = true;
@@ -340,8 +346,10 @@ block_t *DirBlock (access_t *p_access)
             goto skip;
         if ((handle = vlc_opendir (path)) == NULL)
             goto notdir;
-        if (p_sys->mode == MODE_NONE)
-            goto skip;
+		if (p_sys->mode == MODE_NONE)
+		{
+			goto skip;
+		}
 #endif
         directory_t *sub = malloc (sizeof (*sub));
         if (unlikely(sub == NULL))

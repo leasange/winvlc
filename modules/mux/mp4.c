@@ -449,9 +449,10 @@ static int Mux(sout_mux_t *p_mux)
 
     for (;;) {
         int i_stream = sout_MuxGetStream(p_mux, 2, NULL);
-        if (i_stream < 0)
-            return(VLC_SUCCESS);
-
+		if (i_stream < 0)
+		{
+			return(VLC_SUCCESS);
+		}
         sout_input_t *p_input  = p_mux->pp_inputs[i_stream];
         mp4_stream_t *p_stream = (mp4_stream_t*)p_input->p_sys;
 
@@ -1384,9 +1385,10 @@ static bo_t *GetStblBox(sout_mux_t *p_mux, mp4_stream_t *p_stream)
         box_gather(stsd, GetSounBox(p_mux, p_stream));
     else if (p_stream->fmt.i_cat == VIDEO_ES)
         box_gather(stsd, GetVideBox(p_stream));
-    else if (p_stream->fmt.i_cat == SPU_ES)
-        box_gather(stsd, GetTextBox());
-
+	else if (p_stream->fmt.i_cat == SPU_ES)
+	{
+		box_gather(stsd, GetTextBox());
+	}
     /* chunk offset table */
     bo_t *stco;
     if (p_sys->i_pos >= (((uint64_t)0x1) << 32)) {
@@ -1525,9 +1527,10 @@ static bo_t *GetStblBox(sout_mux_t *p_mux, mp4_stream_t *p_stream)
         }
     }
 
-    if (stss)
-        bo_fix_32be(stss, 12, i_index);
-
+	if (stss)
+	{
+		bo_fix_32be(stss, 12, i_index);
+	}
     /* Now gather all boxes into stbl */
     bo_t *stbl = box_new("stbl");
 

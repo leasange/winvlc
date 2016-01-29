@@ -507,8 +507,10 @@ static block_t *Read (access_t *access)
 {
 #define BUFSIZE (20*188)
     block_t *block = block_Alloc (BUFSIZE);
-    if (unlikely(block == NULL))
-        return NULL;
+	if (unlikely(block == NULL))
+	{
+		return NULL;
+	}
 
     access_sys_t *sys = access->p_sys;
     ssize_t val = dvb_read (sys->dev, block->p_buffer, BUFSIZE);
@@ -695,8 +697,10 @@ static uint64_t var_InheritFrequency (vlc_object_t *obj)
 static uint32_t var_InheritCodeRate (vlc_object_t *obj, const char *varname)
 {
     char *code_rate = var_InheritString (obj, varname);
-    if (code_rate == NULL)
-        return VLC_FEC_AUTO;
+	if (code_rate == NULL)
+	{
+		return VLC_FEC_AUTO;
+	}
 
     uint16_t a, b;
     int v = sscanf (code_rate, "%"SCNu16"/%"SCNu16, &a, &b);
@@ -730,8 +734,10 @@ static int modcmp (const void *a, const void *b)
 static const char *var_InheritModulation (vlc_object_t *obj, const char *var)
 {
     char *mod = var_InheritString (obj, var);
-    if (mod == NULL)
-        return "";
+	if (mod == NULL)
+	{
+		return "";
+	}
 
     size_t n = sizeof (modulation_vlc) / sizeof (modulation_vlc[0]);
     const char *const *p = lfind (mod, modulation_vlc, &n, sizeof (mod), modcmp);
@@ -765,8 +771,10 @@ static const char *var_InheritModulation (vlc_object_t *obj, const char *var)
 static unsigned var_InheritGuardInterval (vlc_object_t *obj)
 {
     char *guard = var_InheritString (obj, "dvb-guard");
-    if (guard == NULL)
-        return VLC_GUARD_AUTO;
+	if (guard == NULL)
+	{
+		return VLC_GUARD_AUTO;
+	}
 
     uint16_t a, b;
     int v = sscanf (guard, "%"SCNu16"/%"SCNu16, &a, &b);

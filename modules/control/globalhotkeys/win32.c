@@ -192,7 +192,7 @@ static void *Thread( void *p_data )
         UINT i_keyMod = 0;
         if( i_key & KEY_MODIFIER_SHIFT ) i_keyMod |= MOD_SHIFT;
         if( i_key & KEY_MODIFIER_ALT ) i_keyMod |= MOD_ALT;
-        if( i_key & KEY_MODIFIER_CTRL ) i_keyMod |= MOD_CONTROL;
+		if (i_key & KEY_MODIFIER_CTRL){ i_keyMod |= MOD_CONTROL; }
 
 #define HANDLE( key ) case KEY_##key: i_vk = VK_##key; break
 #define HANDLE2( key, key2 ) case KEY_##key: i_vk = VK_##key2; break
@@ -317,10 +317,12 @@ LRESULT CALLBACK WMHOTKEYPROC( HWND hwnd, UINT uMsg, WPARAM wParam,
                 intf_thread_t *p_intf = (intf_thread_t*)ret;
                 strcpy( psz_atomName, "key-" );
 
-                if( !GlobalGetAtomNameA(
-                        wParam, psz_atomName + 4,
-                        sizeof( psz_atomName ) - 4 ) )
-                    return 0;
+				if (!GlobalGetAtomNameA(
+					wParam, psz_atomName + 4,
+					sizeof(psz_atomName)-4))
+				{
+					return 0;
+				}
 
                 /* search for key associated with VLC */
                 vlc_action_t action = vlc_GetActionId( psz_atomName );

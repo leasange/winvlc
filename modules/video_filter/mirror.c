@@ -188,7 +188,7 @@ static picture_t *Filter( filter_t *p_filter, picture_t *p_pic )
     bool b_vertical_split, b_left_to_right;
     int i_index;
 
-    if( !p_pic ) return NULL;
+	if (!p_pic){ return NULL; }
 
     filter_sys_t *p_sys = p_filter->p_sys;
     b_vertical_split = !atomic_load( &p_sys->i_split );

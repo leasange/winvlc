@@ -106,11 +106,11 @@ void dialog_VFatal (vlc_object_t *obj, bool modal, const char *title,
                     const char *fmt, va_list ap)
 {
     char *text;
-
+	vlc_object_t *provider;
     if (obj->i_flags & OBJECT_FLAGS_NOINTERACT)
         return;
 
-    vlc_object_t *provider = dialog_GetProvider (obj);
+	provider = dialog_GetProvider(obj);
     if (provider == NULL)
     {
         msg_Err (obj, "%s", title);
@@ -145,12 +145,12 @@ void dialog_Login (vlc_object_t *obj, char **username, char **password,
                    const char *title, const char *fmt, ...)
 {
     assert ((username != NULL) && (password != NULL));
-
+	vlc_object_t *provider;
     *username = *password = NULL;
     if (obj->i_flags & OBJECT_FLAGS_NOINTERACT)
         return;
 
-    vlc_object_t *provider = dialog_GetProvider (obj);
+	provider = dialog_GetProvider(obj);
     if (provider == NULL)
         return;
 
@@ -184,10 +184,11 @@ void dialog_Login (vlc_object_t *obj, char **username, char **password,
 int dialog_Question (vlc_object_t *obj, const char *title, const char *fmt,
                      const char *yes, const char *no, const char *cancel, ...)
 {
+	vlc_object_t *provider;
     if (obj->i_flags & OBJECT_FLAGS_NOINTERACT)
         return 0;
 
-    vlc_object_t *provider = dialog_GetProvider (obj);
+	provider = dialog_GetProvider(obj);
     if (provider == NULL)
         return 0;
 
@@ -215,12 +216,15 @@ dialog_progress_bar_t *
 dialog_ProgressCreate (vlc_object_t *obj, const char *title,
                        const char *message, const char *cancel)
 {
+	vlc_object_t *provider;
     if (obj->i_flags & OBJECT_FLAGS_NOINTERACT)
         return NULL;
 
-    vlc_object_t *provider = dialog_GetProvider (obj);
-    if (provider == NULL)
-        return NULL;
+	provider = dialog_GetProvider(obj);
+	if (provider == NULL)
+	{
+		return NULL;
+	}
 
     dialog_progress_bar_t *dialog = malloc (sizeof (*dialog));
     if (dialog != NULL)

@@ -571,9 +571,10 @@ static char *relative_URI(const char *psz_url, const char *psz_path)
 
 
     //If the path is actually an absolute URL, don't do anything.
-    if (strncmp(psz_path, "http", 4) == 0)
-        return NULL;
-
+	if (strncmp(psz_path, "http", 4) == 0)
+	{
+		return NULL;
+	}
     size_t len = strlen(psz_path);
 
     char *new_url = strdup(psz_url);
@@ -1964,8 +1965,10 @@ static ssize_t read_M3U8_from_url(stream_t *s, const char* psz_url, uint8_t **bu
 
     /* Construct URL */
     stream_t *p_m3u8 = stream_UrlNew(s, psz_url);
-    if (p_m3u8 == NULL)
-        return VLC_EGENERIC;
+	if (p_m3u8 == NULL)
+	{
+		return VLC_EGENERIC;
+	}
 
     ssize_t size = read_M3U8_from_stream(p_m3u8, buffer);
     stream_Delete(p_m3u8);
@@ -2351,9 +2354,11 @@ static ssize_t hls_Read(stream_t *s, uint8_t *p_read, unsigned int i_read)
             continue;
         }
 
-        if (segment->size == segment->data->i_buffer)
-            msg_Dbg(s, "playing segment %d from stream %d",
-                     segment->sequence, p_sys->playback.stream);
+		if (segment->size == segment->data->i_buffer)
+		{
+			msg_Dbg(s, "playing segment %d from stream %d",
+				segment->sequence, p_sys->playback.stream);
+		}
 
         ssize_t len = -1;
         if (i_read <= segment->data->i_buffer)
@@ -2535,9 +2540,10 @@ static bool hls_MaySeek(stream_t *s)
 {
     stream_sys_t *p_sys = s->p_sys;
 
-    if (p_sys->hls_stream == NULL)
-        return false;
-
+	if (p_sys->hls_stream == NULL)
+	{
+		return false;
+	}
     hls_stream_t *hls = hls_Get(p_sys->hls_stream, p_sys->playback.stream);
     if (hls == NULL) return false;
 
@@ -2559,15 +2565,18 @@ static uint64_t GetStreamSize(stream_t *s)
 {
     stream_sys_t *p_sys = s->p_sys;
 
-    if (p_sys->b_live)
-        return 0;
-
+	if (p_sys->b_live)
+	{
+		return 0;
+	}
     hls_stream_t *hls = hls_Get(p_sys->hls_stream, p_sys->playback.stream);
     if (hls == NULL) return 0;
 
     vlc_mutex_lock(&hls->lock);
-    if (hls->size == 0)
-        hls->size = hls_GetStreamSize(hls);
+	if (hls->size == 0)
+	{
+		hls->size = hls_GetStreamSize(hls);
+	}
     uint64_t size = hls->size;
     vlc_mutex_unlock(&hls->lock);
 

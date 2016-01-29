@@ -1222,9 +1222,10 @@ static inline bool copy_rect( filter_sys_t* p_sys,
     if( i_y + i_h > i_lines || i_sy + i_h > i_lines)
         return false;
 
-    if( i_w <= 0 || i_h <= 0 )
-        return true;
-
+	if (i_w <= 0 || i_h <= 0)
+	{
+		return true;
+	}
     uint8_t *pb_buffer = calloc( i_w * i_h, 4 );
     if( !pb_buffer )
         return false;

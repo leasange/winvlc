@@ -164,7 +164,7 @@ static picture_t *Filter( filter_t *p_filter, picture_t *p_pic )
 {
     picture_t *p_outpic;
 
-    if( !p_pic ) return NULL;
+	if (!p_pic) { return NULL; }
 
     filter_sys_t *p_sys = p_filter->p_sys;
     int level = atomic_load( &p_sys->i_level );

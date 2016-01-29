@@ -95,7 +95,7 @@ static void CreateGPUAffinityDC(vout_display_t *vd, UINT nVidiaAffinity) {
     wglDeleteContext(hGLRC);
 
     /* see if we have the extensions */
-    if (!fncEnumGpusNV || !fncCreateAffinityDCNV) return;
+	if (!fncEnumGpusNV || !fncCreateAffinityDCNV){ return; }
 
     /* find the graphics card */
     HGPUNV GpuMask[2];
@@ -117,7 +117,7 @@ static void CreateGPUAffinityDC(vout_display_t *vd, UINT nVidiaAffinity) {
 
 /* Destroy an GPU Affinity DC */
 static void DestroyGPUAffinityDC(vout_display_t *vd) {
-    if (vd->sys->affinityHDC == NULL) return;
+	if (vd->sys->affinityHDC == NULL){ return; }
 
     PIXELFORMATDESCRIPTOR pfd;
     memset(&pfd, 0, sizeof(pfd));
@@ -214,9 +214,10 @@ static int Open(vlc_object_t *object)
     video_format_t fmt = vd->fmt;
     const vlc_fourcc_t *subpicture_chromas;
     sys->vgl = vout_display_opengl_New(&fmt, &subpicture_chromas, &sys->gl);
-    if (!sys->vgl)
-        goto error;
-
+	if (!sys->vgl)
+	{
+		goto error;
+	}
     vout_display_info_t info = vd->info;
     info.has_double_click = true;
     info.has_hide_mouse = false;

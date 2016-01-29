@@ -158,8 +158,10 @@ static int Open( vlc_object_t *p_this )
     while( psz_tmp && *psz_tmp )
     {
         char *psz_next = strchr( psz_tmp, ',' );
-        if( psz_next )
-            *psz_next++ = '\0';
+		if (psz_next)
+		{
+			*psz_next++ = '\0';
+		}
 
         const int i_index = atoi( psz_tmp );
         if( i_index >= 0 && i_index < COL_MAX*ROW_MAX )
@@ -187,8 +189,10 @@ static int Open( vlc_object_t *p_this )
         }
         free( psz_aspect );
     }
-    if( i_aspect <= 0 )
-        i_aspect = 4 * VOUT_ASPECT_FACTOR / 3;
+	if (i_aspect <= 0)
+	{
+		i_aspect = 4 * VOUT_ASPECT_FACTOR / 3;
+	}
 
     /* Compute placements/size of the windows */
     const unsigned w1 = ( p_splitter->fmt.i_width / p_sys->i_col ) & ~1;

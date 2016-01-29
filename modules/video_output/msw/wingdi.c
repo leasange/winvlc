@@ -76,13 +76,16 @@ static int Open(vlc_object_t *object)
     if (!sys)
         return VLC_ENOMEM;
 
-    if (CommonInit(vd))
-        goto error;
-
+	if (CommonInit(vd))
+	{
+		goto error;
+	}
     /* */
     video_format_t fmt = vd->fmt;
-    if (Init(vd, &fmt, fmt.i_width, fmt.i_height))
-        goto error;
+	if (Init(vd, &fmt, fmt.i_width, fmt.i_height))
+	{
+		goto error;
+	}
 
     vout_display_info_t info = vd->info;
     info.is_slow              = false;

@@ -843,9 +843,10 @@ char *SDPGenerate( sout_stream_t *p_stream, const char *rtsp_url )
     if( p_sys->rtcp_mux )
         sdp_AddAttribute( &psz_sdp, "rtcp-mux", NULL );
 
-    if( rtsp_url != NULL )
-        sdp_AddAttribute ( &psz_sdp, "control", "%s", rtsp_url );
-
+	if (rtsp_url != NULL)
+	{
+		sdp_AddAttribute(&psz_sdp, "control", "%s", rtsp_url);
+	}
     const char *proto = "RTP/AVP"; /* protocol */
     if( rtsp_url == NULL )
     {
@@ -1562,9 +1563,10 @@ uint16_t rtp_get_seq( sout_stream_id_sys_t *id )
 static int64_t rtp_init_ts( const vod_media_t *p_media,
                             const char *psz_vod_session )
 {
-    if (p_media == NULL || psz_vod_session == NULL)
-        return mdate();
-
+	if (p_media == NULL || psz_vod_session == NULL)
+	{
+		return mdate();
+	}
     uint64_t i_ts_init;
     /* As per RFC 2326, session identifiers are at least 8 bytes long */
     strncpy((char *)&i_ts_init, psz_vod_session, sizeof(uint64_t));
@@ -1590,22 +1592,25 @@ int64_t rtp_get_ts( const sout_stream_t *p_stream, const sout_stream_id_sys_t *i
     if (id != NULL)
         p_stream = id->p_stream;
 
-    if (p_stream == NULL)
-        return rtp_init_ts(p_media, psz_vod_session);
-
+	if (p_stream == NULL)
+	{
+		return rtp_init_ts(p_media, psz_vod_session);
+	}
     sout_stream_sys_t *p_sys = p_stream->p_sys;
     mtime_t i_npt_zero;
     vlc_mutex_lock( &p_sys->lock_ts );
     i_npt_zero = p_sys->i_npt_zero;
     vlc_mutex_unlock( &p_sys->lock_ts );
 
-    if( i_npt_zero == VLC_TS_INVALID )
-        return p_sys->i_pts_zero;
-
+	if (i_npt_zero == VLC_TS_INVALID)
+	{
+		return p_sys->i_pts_zero;
+	}
     mtime_t now = mdate();
-    if( now < i_npt_zero )
-        return p_sys->i_pts_zero;
-
+	if (now < i_npt_zero)
+	{
+		return p_sys->i_pts_zero;
+	}
     int64_t npt = now - i_npt_zero;
     if (p_npt != NULL)
         *p_npt = npt;

@@ -845,7 +845,7 @@ static block_t *Encode( encoder_t *p_enc, block_t *p_aout_buf )
     float **buffer;
 
     /* FIXME: flush buffers in here */
-    if( unlikely( !p_aout_buf ) ) return NULL;
+	if (unlikely(!p_aout_buf)){ return NULL; }
 
     mtime_t i_pts = p_aout_buf->i_pts -
                 (mtime_t)1000000 * (mtime_t)p_sys->i_samples_delay /

@@ -229,8 +229,10 @@ static int SetInputType(decoder_t *p_dec, DWORD stream_id, IMFMediaType **result
             /* The output type must be set before setting the input type for this MFT. */
             return VLC_SUCCESS;
         }
-        else if (FAILED(hr))
-            goto error;
+		else if (FAILED(hr))
+		{
+			goto error;
+		}
 
         GUID subtype;
         hr = IMFMediaType_GetGUID(input_media_type, &MF_MT_SUBTYPE, &subtype);
@@ -357,8 +359,10 @@ static int SetOutputType(decoder_t *p_dec, DWORD stream_id, IMFMediaType **resul
             /* The input type must be set before setting the output type for this MFT. */
             return VLC_SUCCESS;
         }
-        else if (FAILED(hr))
-            goto error;
+		else if (FAILED(hr))
+		{
+			goto error;
+		}
 
         GUID subtype;
         hr = IMFMediaType_GetGUID(output_media_type, &MF_MT_SUBTYPE, &subtype);
@@ -397,8 +401,10 @@ static int SetOutputType(decoder_t *p_dec, DWORD stream_id, IMFMediaType **resul
         goto error;
 
     hr = IMFTransform_SetOutputType(p_sys->mft, stream_id, output_media_type, 0);
-    if (FAILED(hr))
-        goto error;
+	if (FAILED(hr))
+	{
+		goto error;
+	}
 
     GUID subtype;
     hr = IMFMediaType_GetGUID(output_media_type, &MF_MT_SUBTYPE, &subtype);
@@ -416,18 +422,24 @@ static int SetOutputType(decoder_t *p_dec, DWORD stream_id, IMFMediaType **resul
 
         UINT32 bitspersample = 0;
         hr = IMFMediaType_GetUINT32(output_media_type, &MF_MT_AUDIO_BITS_PER_SAMPLE, &bitspersample);
-        if (SUCCEEDED(hr) && bitspersample)
-            p_dec->fmt_out.audio.i_bitspersample = bitspersample;
+		if (SUCCEEDED(hr) && bitspersample)
+		{
+			p_dec->fmt_out.audio.i_bitspersample = bitspersample;
+		}
 
         UINT32 channels = 0;
         hr = IMFMediaType_GetUINT32(output_media_type, &MF_MT_AUDIO_NUM_CHANNELS, &channels);
-        if (SUCCEEDED(hr) && channels)
-            p_dec->fmt_out.audio.i_channels = channels;
+		if (SUCCEEDED(hr) && channels)
+		{
+			p_dec->fmt_out.audio.i_channels = channels;
+		}
 
         UINT32 rate = 0;
         hr = IMFMediaType_GetUINT32(output_media_type, &MF_MT_AUDIO_SAMPLES_PER_SECOND, &rate);
-        if (SUCCEEDED(hr) && rate)
-            p_dec->fmt_out.audio.i_rate = rate;
+		if (SUCCEEDED(hr) && rate)
+		{
+			p_dec->fmt_out.audio.i_rate = rate;
+		}
 
         vlc_fourcc_t fourcc;
         wf_tag_to_fourcc(subtype.Data1, &fourcc, NULL);
@@ -464,9 +476,10 @@ static int AllocateInputSample(decoder_t *p_dec, DWORD stream_id, IMFSample** re
         goto error;
 
     hr = mf->MFCreateSample(&input_sample);
-    if (FAILED(hr))
-        goto error;
-
+	if (FAILED(hr))
+	{
+		goto error;
+	}
     IMFMediaBuffer *input_media_buffer = NULL;
     DWORD allocation_size = __MAX(input_info.cbSize, size);
     hr = mf->MFCreateMemoryBuffer(allocation_size, &input_media_buffer);
@@ -521,9 +534,10 @@ static int AllocateOutputSample(decoder_t *p_dec, DWORD stream_id, IMFSample **r
         goto error;
 
     hr = mf->MFCreateSample(&output_sample);
-    if (FAILED(hr))
-        goto error;
-
+	if (FAILED(hr))
+	{
+		goto error;
+	}
     IMFMediaBuffer *output_media_buffer = NULL;
     DWORD allocation_size = output_info.cbSize;
     DWORD alignment = output_info.cbAlignment;
@@ -555,14 +569,16 @@ static int ProcessInputStream(decoder_t *p_dec, DWORD stream_id, block_t *p_bloc
     HRESULT hr;
     IMFSample *input_sample = NULL;
 
-    if (AllocateInputSample(p_dec, stream_id, &input_sample, p_block->i_buffer))
-        goto error;
-
+	if (AllocateInputSample(p_dec, stream_id, &input_sample, p_block->i_buffer))
+	{
+		goto error;
+	}
     IMFMediaBuffer *input_media_buffer = NULL;
     hr = IMFSample_GetBufferByIndex(input_sample, stream_id, &input_media_buffer);
-    if (FAILED(hr))
-        goto error;
-
+	if (FAILED(hr))
+	{
+		goto error;
+	}
     BYTE *buffer_start;
     hr = IMFMediaBuffer_Lock(input_media_buffer, &buffer_start, NULL, NULL);
     if (FAILED(hr))
@@ -582,8 +598,10 @@ static int ProcessInputStream(decoder_t *p_dec, DWORD stream_id, block_t *p_bloc
         goto error;
 
     hr = IMFMediaBuffer_SetCurrentLength(input_media_buffer, p_block->i_buffer);
-    if (FAILED(hr))
-        goto error;
+	if (FAILED(hr))
+	{
+		goto error;
+	}
 
     LONGLONG ts = p_block->i_pts;
     if (!ts && p_block->i_dts)
@@ -654,9 +672,10 @@ static int ProcessOutputStream(decoder_t *p_dec, DWORD stream_id, void **result)
 
     if (hr == S_OK)
     {
-        if (!output_sample)
-            return VLC_SUCCESS;
-
+		if (!output_sample)
+		{
+			return VLC_SUCCESS;
+		}
         LONGLONG sample_time;
         hr = IMFSample_GetSampleTime(output_sample, &sample_time);
         if (FAILED(hr))
@@ -672,8 +691,10 @@ static int ProcessOutputStream(decoder_t *p_dec, DWORD stream_id, void **result)
         if (p_dec->fmt_in.i_cat == VIDEO_ES)
         {
             picture = decoder_NewPicture(p_dec);
-            if (!picture)
-                return VLC_SUCCESS;
+			if (!picture)
+			{
+				return VLC_SUCCESS;
+			}
 
             UINT32 interlaced = false;
             hr = IMFSample_GetUINT32(output_sample, &MFSampleExtension_Interlaced, &interlaced);
@@ -772,8 +793,10 @@ static void *DecodeSync(decoder_t *p_dec, block_t **pp_block)
 {
     decoder_sys_t *p_sys = p_dec->p_sys;
 
-    if (!pp_block || !*pp_block)
-        return NULL;
+	if (!pp_block || !*pp_block)
+	{
+		return NULL;
+	}
 
     block_t *p_block = *pp_block;
     if (p_block->i_flags & (BLOCK_FLAG_DISCONTINUITY | BLOCK_FLAG_CORRUPTED))
@@ -811,8 +834,10 @@ static HRESULT DequeueMediaEvent(decoder_t *p_dec)
 
     IMFMediaEvent *event = NULL;
     hr = IMFMediaEventGenerator_GetEvent(p_sys->event_generator, MF_EVENT_FLAG_NO_WAIT, &event);
-    if (FAILED(hr))
-        return hr;
+	if (FAILED(hr))
+	{
+		return hr;
+	}
     MediaEventType event_type;
     hr = IMFMediaEvent_GetType(event, &event_type);
     IMFMediaEvent_Release(event);
@@ -834,8 +859,10 @@ static void *DecodeAsync(decoder_t *p_dec, block_t **pp_block)
     decoder_sys_t *p_sys = p_dec->p_sys;
     HRESULT hr;
 
-    if (!pp_block || !*pp_block)
-        return NULL;
+	if (!pp_block || !*pp_block)
+	{
+		return NULL;
+	}
 
     block_t *p_block = *pp_block;
     if (p_block->i_flags & (BLOCK_FLAG_DISCONTINUITY | BLOCK_FLAG_CORRUPTED))
@@ -1053,13 +1080,17 @@ static int FindMFT(decoder_t *p_dec)
         p_sys->major_type = &MFMediaType_Audio;
         p_sys->subtype = FormatToGUID(audio_format_table, p_dec->fmt_in.i_codec);
     }
-    if (!p_sys->subtype)
-        return VLC_EGENERIC;
+	if (!p_sys->subtype)
+	{
+		return VLC_EGENERIC;
+	}
 
     UINT32 flags = MFT_ENUM_FLAG_SORTANDFILTER | MFT_ENUM_FLAG_LOCALMFT
                  | MFT_ENUM_FLAG_SYNCMFT | MFT_ENUM_FLAG_ASYNCMFT
                  | MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_TRANSCODE_ONLY;
-    MFT_REGISTER_TYPE_INFO input_type = { *p_sys->major_type, *p_sys->subtype };
+    MFT_REGISTER_TYPE_INFO input_type /*= { *p_sys->major_type, *p_sys->subtype }*/;
+	input_type.guidMajorType = *p_sys->major_type;
+	input_type.guidSubtype = *p_sys->subtype;
     IMFActivate **activate_objects = NULL;
     UINT32 activate_objects_count = 0;
     hr = mf->MFTEnumEx(category, flags, &input_type, NULL, &activate_objects, &activate_objects_count);

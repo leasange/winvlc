@@ -422,9 +422,11 @@ int EstimateNumBlocksWithMotion( const picture_t* p_prev,
     for( int i_plane = 0 ; i_plane < p_prev->i_planes ; i_plane++ )
     {
         /* Sanity check */
-        if( p_prev->p[i_plane].i_visible_lines !=
-            p_curr->p[i_plane].i_visible_lines )
-            return -1;
+		if (p_prev->p[i_plane].i_visible_lines !=
+			p_curr->p[i_plane].i_visible_lines)
+		{
+			return -1;
+		}
 
         const int i_pitch_prev = p_prev->p[i_plane].i_pitch;
         const int i_pitch_curr = p_curr->p[i_plane].i_pitch;
@@ -484,9 +486,11 @@ static int CalculateInterlaceScoreMMX( const picture_t* p_pic_top,
     for( int i_plane = 0 ; i_plane < p_pic_top->i_planes ; ++i_plane )
     {
         /* Sanity check */
-        if( p_pic_top->p[i_plane].i_visible_lines !=
-            p_pic_bot->p[i_plane].i_visible_lines )
-            return -1;
+		if (p_pic_top->p[i_plane].i_visible_lines !=
+			p_pic_bot->p[i_plane].i_visible_lines)
+		{
+			return -1;
+		}
 
         const int i_lasty = p_pic_top->p[i_plane].i_visible_lines-1;
         const int w = FFMIN( p_pic_top->p[i_plane].i_visible_pitch,
@@ -628,12 +632,16 @@ int CalculateInterlaceScore( const picture_t* p_pic_top,
     assert( p_pic_top != NULL );
     assert( p_pic_bot != NULL );
 
-    if( p_pic_top->i_planes != p_pic_bot->i_planes )
-        return -1;
+	if (p_pic_top->i_planes != p_pic_bot->i_planes)
+	{
+		return -1;
+	}
 
 #ifdef CAN_COMPILE_MMXEXT
-    if (vlc_CPU_MMXEXT())
-        return CalculateInterlaceScoreMMX( p_pic_top, p_pic_bot );
+	if (vlc_CPU_MMXEXT())
+	{
+		return CalculateInterlaceScoreMMX(p_pic_top, p_pic_bot);
+	}
 #endif
 
     int32_t i_score = 0;
@@ -641,10 +649,11 @@ int CalculateInterlaceScore( const picture_t* p_pic_top,
     for( int i_plane = 0 ; i_plane < p_pic_top->i_planes ; ++i_plane )
     {
         /* Sanity check */
-        if( p_pic_top->p[i_plane].i_visible_lines !=
-            p_pic_bot->p[i_plane].i_visible_lines )
-            return -1;
-
+		if (p_pic_top->p[i_plane].i_visible_lines !=
+			p_pic_bot->p[i_plane].i_visible_lines)
+		{
+			return -1;
+		}
         const int i_lasty = p_pic_top->p[i_plane].i_visible_lines-1;
         const int w = FFMIN( p_pic_top->p[i_plane].i_visible_pitch,
                              p_pic_bot->p[i_plane].i_visible_pitch );

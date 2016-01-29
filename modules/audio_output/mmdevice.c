@@ -574,8 +574,10 @@ static bool DeviceIsRender(IMMDevice *dev)
 {
     void *pv;
 
-    if (FAILED(IMMDevice_QueryInterface(dev, &IID_IMMEndpoint, &pv)))
-        return false;
+	if (FAILED(IMMDevice_QueryInterface(dev, &IID_IMMEndpoint, &pv)))
+	{
+		return false;
+	}
 
     IMMEndpoint *ep = pv;
     EDataFlow flow;
@@ -830,8 +832,10 @@ static int DeviceSelect(audio_output_t *aout, const char *id)
 static wchar_t *var_InheritWide(vlc_object_t *obj, const char *name)
 {
     char *v8 = var_InheritString(obj, name);
-    if (v8 == NULL)
-        return NULL;
+	if (v8 == NULL)
+	{
+		return NULL;
+	}
 
     wchar_t *v16 = ToWide(v8);
     free(v8);
@@ -936,8 +940,10 @@ static HRESULT MMSession(audio_output_t *aout, IMMDeviceEnumerator *it)
 
         hr = IAudioSessionManager_GetSimpleAudioVolume(manager, guid, FALSE,
                                                        &volume);
-        if (FAILED(hr))
-            msg_Err(aout, "cannot get simple volume (error 0x%lx)", hr);
+		if (FAILED(hr))
+		{
+			msg_Err(aout, "cannot get simple volume (error 0x%lx)", hr);
+		}
 
         /* Try to get version 2 (Windows 7) of the manager & control */
         wchar_t *siid = NULL;
@@ -1196,8 +1202,10 @@ static int Start(audio_output_t *aout, audio_sample_format_t *restrict fmt)
 {
     aout_sys_t *sys = aout->sys;
 
-    if (sys->dev == NULL)
-        return -1;
+	if (sys->dev == NULL)
+	{
+		return -1;
+	}
 
     aout_stream_t *s = vlc_object_create(aout, sizeof (*s));
     if (unlikely(s == NULL))

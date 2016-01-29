@@ -199,10 +199,11 @@ static void Win32DebugOutputMsg (void* d, int type, const vlc_log_t *p_item,
     VLC_UNUSED(p_item);
 
     const signed char *pverbose = d;
+	va_list dol2;
+
     if (pverbose && (*pverbose < 0 || *pverbose < (type - VLC_MSG_ERR)))
         return;
 
-    va_list dol2;
     va_copy (dol2, dol);
     int msg_len = vsnprintf(NULL, 0, format, dol2);
     va_end (dol2);

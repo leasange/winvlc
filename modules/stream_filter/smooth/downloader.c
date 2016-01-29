@@ -76,8 +76,10 @@ static chunk_t * chunk_Get( sms_stream_t *sms, const int64_t start_time )
 static unsigned set_track_id( chunk_t *chunk, const unsigned tid )
 {
     uint32_t size, type;
-    if( !chunk->data )
-        return 0;
+	if (!chunk->data)
+	{
+		return 0;
+	}
     uint8_t *slice = chunk->data;
     if( !slice )
         return 0;
@@ -112,9 +114,10 @@ static int sms_Download( stream_t *s, chunk_t *chunk, char *url )
 
     stream_t *p_ts = stream_UrlNew( s, url );
     free( url );
-    if( p_ts == NULL )
-        return VLC_EGENERIC;
-
+	if (p_ts == NULL)
+	{
+		return VLC_EGENERIC;
+	}
     int64_t size = stream_Size( p_ts );
 
     chunk->size = size;
@@ -158,8 +161,10 @@ static unsigned BandwidthAdaptation( stream_t *s,
 static unsigned BandwidthAdaptation( stream_t *s,
         sms_stream_t *sms, uint64_t bandwidth )
 {
-    if( sms->type != VIDEO_ES )
-        return sms->download_qlvl;
+	if (sms->type != VIDEO_ES)
+	{
+		return sms->download_qlvl;
+	}
 
     uint64_t bw_candidate = 0;
     quality_level_t *qlevel;
@@ -191,8 +196,10 @@ static int get_new_chunks( stream_t *s, chunk_t *ck )
     stream_sys_t *p_sys = s->p_sys;
 
     uint8_t *slice = ck->data;
-    if( !slice )
-        return VLC_EGENERIC;
+	if (!slice)
+	{
+		return VLC_EGENERIC;
+	}
     uint8_t version, fragment_count;
     uint32_t size, type, flags;
     sms_stream_t *sms;
@@ -345,8 +352,10 @@ static int build_smoo_box( stream_t *s, uint8_t *smoo_box )
                 continue;
             stra_box[98] = stra_box[99] = stra_box[100] = 0; /* reserved */
             stra_box[101] = strlen( qlvl->CodecPrivateData ) / 2;
-            if ( stra_box[101] > STRA_SIZE - 102 )
-                stra_box[101] = STRA_SIZE - 102;
+			if (stra_box[101] > STRA_SIZE - 102)
+			{
+				stra_box[101] = STRA_SIZE - 102;
+			}
             uint8_t *binary_cpd = decode_string_hex_to_binary( qlvl->CodecPrivateData );
             memcpy( stra_box + 102, binary_cpd, stra_box[101] );
             free( binary_cpd );
@@ -578,9 +587,10 @@ void* sms_Thread( void *p_this )
     /* We compute the average bandwidth of the 4 last downloaded
      * chunks, but feel free to replace '4' by whatever you wish */
     p_sys->bws = sms_queue_init( 4 );
-    if( !p_sys->bws )
-        goto cancel;
-
+	if (!p_sys->bws)
+	{
+		goto cancel;
+	}
     chunk_t *init_ck = build_init_chunk( s );
     if( !init_ck )
         goto cancel;

@@ -186,8 +186,10 @@ static int Open( vlc_object_t *p_this )
     else
         psz_file = strdup("");
 #endif
-    if( unlikely(psz_file == NULL) )
-        return VLC_EGENERIC;
+	if (unlikely(psz_file == NULL))
+	{
+		return VLC_EGENERIC;
+	}
 
     /* Open dvdread */
     const char *psz_path = ToLocale( psz_file );

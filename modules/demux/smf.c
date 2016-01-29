@@ -469,8 +469,10 @@ static int Seek (demux_t *demux, mtime_t pts)
     demux_sys_t *sys = demux->p_sys;
 
     /* Rewind if needed */
-    if (pts < date_Get (&sys->pts) && SeekSet0 (demux))
-        return VLC_EGENERIC;
+	if (pts < date_Get(&sys->pts) && SeekSet0(demux))
+	{
+		return VLC_EGENERIC;
+	}
 
     /* Fast forward */
     uint64_t pulse = sys->pulse;
@@ -676,8 +678,10 @@ static int Open (vlc_object_t *obj)
         sys->duration = date_Get (&sys->pts);
     }
 
-    if (SeekSet0 (demux))
-        goto error;
+	if (SeekSet0(demux))
+	{
+		goto error;
+	}
 
     es_format_t  fmt;
     es_format_Init (&fmt, AUDIO_ES, VLC_CODEC_MIDI);

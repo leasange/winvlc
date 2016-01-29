@@ -609,9 +609,10 @@ static int DemuxSubPayload(demux_t *p_demux, asf_track_t *tk,
         uint32_t i_media_object_offset, bool b_keyframe )
 {
     /* FIXME I don't use i_media_object_number, sould I ? */
-    if( tk->p_frame && i_media_object_offset == 0 )
-        SendPacket(p_demux, tk);
-
+	if (tk->p_frame && i_media_object_offset == 0)
+	{
+		SendPacket(p_demux, tk);
+	}
     block_t *p_frag = stream_Block( p_demux->s, i_sub_payload_data_length );
     if( p_frag == NULL ) {
         msg_Warn( p_demux, "cannot read data" );
@@ -654,7 +655,7 @@ static void ParsePayloadExtensions(demux_t *p_demux, asf_track_t *tk,
                                    const struct asf_packet_t *pkt,
                                    uint32_t i_length, bool *b_keyframe )
 {
-    if ( !tk || !tk->p_esp || !tk->p_esp->p_ext ) return;
+	if (!tk || !tk->p_esp || !tk->p_esp->p_ext){ return; }
     const uint8_t *p_data = pkt->p_peek + pkt->i_skip + 8;
     i_length -= 8;
     uint16_t i_payload_extensions_size;
@@ -686,7 +687,7 @@ static void ParsePayloadExtensions(demux_t *p_demux, asf_track_t *tk,
         }
         else if ( guidcmp( &p_ext->i_extension_id, &asf_dvr_sampleextension_videoframe_guid ) )
         {
-            if ( i_payload_extensions_size != sizeof(uint32_t) ) goto sizeerror;
+			if (i_payload_extensions_size != sizeof(uint32_t)) { goto sizeerror; }
 
             uint32_t i_val = GetDWLE( p_data );
             /* Valid keyframe must be a split frame start fragment */
@@ -700,7 +701,7 @@ static void ParsePayloadExtensions(demux_t *p_demux, asf_track_t *tk,
         }
         else if ( guidcmp( &p_ext->i_extension_id, &mfasf_sampleextension_pixelaspectratio_guid ) )
         {
-            if ( i_payload_extensions_size != sizeof(uint16_t) ) goto sizeerror;
+			if (i_payload_extensions_size != sizeof(uint16_t)) { goto sizeerror; }
 
             uint8_t i_ratio_x = *p_data;
             uint8_t i_ratio_y = *(p_data + 1);
@@ -739,23 +740,33 @@ static int DemuxPayload(demux_t *p_demux, struct asf_packet_t *pkt, int i_payloa
 #endif
     demux_sys_t *p_sys = p_demux->p_sys;
 
-    if( ! pkt->left || pkt->i_skip >= pkt->left )
-        return -1;
+	if (!pkt->left || pkt->i_skip >= pkt->left)
+	{
+		return -1;
+	}
 
     bool b_packet_keyframe = pkt->p_peek[pkt->i_skip] >> 7;
     uint8_t i_stream_number = pkt->p_peek[pkt->i_skip++] & 0x7f;
-    if ( i_stream_number >= MAX_ASF_TRACKS )
-        goto skip;
+	if (i_stream_number >= MAX_ASF_TRACKS)
+	{
+		goto skip;
+	}
 
     uint32_t i_media_object_number = 0;
-    if (GetValue2b(&i_media_object_number, pkt->p_peek, &pkt->i_skip, pkt->left - pkt->i_skip, pkt->property >> 4) < 0)
-        return -1;
+	if (GetValue2b(&i_media_object_number, pkt->p_peek, &pkt->i_skip, pkt->left - pkt->i_skip, pkt->property >> 4) < 0)
+	{
+		return -1;
+	}
     uint32_t i_media_object_offset = 0;
-    if (GetValue2b(&i_media_object_offset, pkt->p_peek, &pkt->i_skip, pkt->left - pkt->i_skip, pkt->property >> 2) < 0)
-        return -1;
+	if (GetValue2b(&i_media_object_offset, pkt->p_peek, &pkt->i_skip, pkt->left - pkt->i_skip, pkt->property >> 2) < 0)
+	{
+		return -1;
+	}
     uint32_t i_replicated_data_length = 0;
-    if (GetValue2b(&i_replicated_data_length, pkt->p_peek, &pkt->i_skip, pkt->left - pkt->i_skip, pkt->property) < 0)
-        return -1;
+	if (GetValue2b(&i_replicated_data_length, pkt->p_peek, &pkt->i_skip, pkt->left - pkt->i_skip, pkt->property) < 0)
+	{
+		return -1;
+	}
 
     mtime_t i_base_pts;
     uint8_t i_pts_delta = 0;
@@ -979,8 +990,10 @@ static int DemuxPacket( demux_t *p_demux )
     pkt.length = i_data_packet_min;
     pkt.padding_length = 0;
 
-    if (GetValue2b(&pkt.length, p_peek, &i_skip, i_data_packet_min - i_skip, i_packet_flags >> 5) < 0)
-        goto loop_error_recovery;
+	if (GetValue2b(&pkt.length, p_peek, &i_skip, i_data_packet_min - i_skip, i_packet_flags >> 5) < 0)
+	{
+		goto loop_error_recovery;
+	}
     uint32_t i_packet_sequence;
     if (GetValue2b(&i_packet_sequence, p_peek, &i_skip, i_data_packet_min - i_skip, i_packet_flags >> 1) < 0)
         goto loop_error_recovery;

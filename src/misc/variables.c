@@ -1302,8 +1302,10 @@ static int TriggerCallback( vlc_object_t *p_this, variable_t *p_var,
     assert( p_this );
 
     int i_entries = p_var->i_entries;
-    if( i_entries == 0 )
-        return VLC_SUCCESS;
+	if (i_entries == 0)
+	{
+		return VLC_SUCCESS;
+	}
 
     callback_entry_t *p_entries = p_var->p_entries;
     vlc_object_internals_t *p_priv = vlc_internals( p_this );

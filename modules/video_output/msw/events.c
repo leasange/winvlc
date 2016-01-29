@@ -557,16 +557,20 @@ void EventThreadStop( event_thread_t *p_event )
  ***********************************/
 static void UpdateCursor( event_thread_t *p_event, bool b_show )
 {
-    if( p_event->is_cursor_hidden == !b_show )
-        return;
+	if (p_event->is_cursor_hidden == !b_show)
+	{
+		return;
+	}
     p_event->is_cursor_hidden = !b_show;
 
 #if 1
     HCURSOR cursor = b_show ? p_event->cursor_arrow : p_event->cursor_empty;
     if( p_event->hvideownd )
         SetClassLongPtr( p_event->hvideownd, GCLP_HCURSOR, (LONG_PTR)cursor );
-    if( p_event->hwnd )
-        SetClassLongPtr( p_event->hwnd, GCLP_HCURSOR, (LONG_PTR)cursor );
+	if (p_event->hwnd)
+	{
+		SetClassLongPtr(p_event->hwnd, GCLP_HCURSOR, (LONG_PTR)cursor);
+	}
 #endif
 
     /* FIXME I failed to find a cleaner way to force a redraw of the cursor */
@@ -778,8 +782,14 @@ static int Win32VoutCreateWindow( event_thread_t *p_event )
             i_style |= WS_DISABLED;
     }
 
-    p_event->i_window_style = i_style;
-
+	p_event->i_window_style = i_style;
+	//添加，画在原始窗口
+#if VIDEO_PANEL_USE_ORIGIN
+	p_event->hwnd = p_event->hparent;
+	p_event->hfswnd = NULL;
+	p_event->hvideownd = p_event->hparent;
+	return VLC_SUCCESS;
+#endif
     /* Create the window */
     p_event->hwnd =
         CreateWindowEx( WS_EX_NOPARENTNOTIFY | i_stylex,
@@ -875,7 +885,10 @@ static void Win32VoutCloseWindow( event_thread_t *p_event )
     #ifdef MODULE_NAME_IS_direct3d9
     DestroyWindow( p_event->hvideownd );
     #endif
-    DestroyWindow( p_event->hwnd );
+#if !VIDEO_PANEL_USE_ORIGIN
+	DestroyWindow( p_event->hwnd );
+#endif
+    
     if( p_event->hfswnd )
         DestroyWindow( p_event->hfswnd );
 

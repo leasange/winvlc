@@ -176,15 +176,19 @@ void vorbis_ParseComment( es_format_t *p_fmt, vlc_meta_t **pp_meta,
         return;
 
     i_comment = GetDWLE(p_data); RM(4);
-    if( i_comment <= 0 )
-        return;
+	if (i_comment <= 0)
+	{
+		return;
+	}
 
     /* */
     vlc_meta_t *p_meta = *pp_meta;
     if( !p_meta )
         *pp_meta = p_meta = vlc_meta_New();
-    if( !p_meta )
-        return;
+	if (!p_meta)
+	{
+		return;
+	}
 
     /* */
     bool hasTitle        = false;

@@ -131,8 +131,10 @@ static bool playlist_LiveSearchUpdateInternal( playlist_item_t *p_root,
             {
                 // Use Title or fall back to psz_name
                 const char *psz_title = vlc_meta_Get( p_item->p_input->p_meta, vlc_meta_Title );
-                if( !psz_title )
-                    psz_title = p_item->p_input->psz_name;
+				if (!psz_title)
+				{
+					psz_title = p_item->p_input->psz_name;
+				}
                 const char *psz_album = vlc_meta_Get( p_item->p_input->p_meta, vlc_meta_Album );
                 const char *psz_artist = vlc_meta_Get( p_item->p_input->p_meta, vlc_meta_Artist );
                 b_enable = ( psz_title && vlc_strcasestr( psz_title, psz_string ) ) ||

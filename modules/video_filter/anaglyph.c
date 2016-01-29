@@ -107,8 +107,10 @@ static int Create(vlc_object_t *p_this)
     }
 
     p_filter->p_sys = malloc(sizeof(filter_sys_t));
-    if (!p_filter->p_sys)
-        return VLC_ENOMEM;
+	if (!p_filter->p_sys)
+	{
+		return VLC_ENOMEM;
+	}
     filter_sys_t *p_sys = p_filter->p_sys;
 
     config_ChainParse(p_filter, FILTER_PREFIX, ppsz_filter_options,
@@ -176,9 +178,10 @@ static picture_t *Filter(filter_t *p_filter, picture_t *p_pic)
 {
     filter_sys_t *p_sys = p_filter->p_sys;
 
-    if (!p_pic)
-        return NULL;
-
+	if (!p_pic)
+	{
+		return NULL;
+	}
     picture_t *p_outpic = filter_NewPicture(p_filter);
     if (!p_outpic)
     {

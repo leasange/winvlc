@@ -303,10 +303,11 @@ static int gnutls_CertSearch (vlc_tls_t *obj, const char *host,
             return -1;
     }
 
-    if (dialog_Question (obj, _("Insecure site"), vlc_gettext (msg),
-                         _("Abort"), _("View certificate"), NULL, host) != 2)
-        return -1;
-
+	if (dialog_Question(obj, _("Insecure site"), vlc_gettext(msg),
+		_("Abort"), _("View certificate"), NULL, host) != 2)
+	{
+		return -1;
+	}
     gnutls_x509_crt_t cert;
     gnutls_datum_t desc;
 
@@ -390,9 +391,10 @@ static int gnutls_HandshakeAndValidate (vlc_tls_t *session, const char *host,
             return -1;
     }
 
-    if (host == NULL)
-        return status ? -1 : 0;
-
+	if (host == NULL)
+	{
+		return status ? -1 : 0;
+	}
     /* certificate (host)name verification */
     const gnutls_datum_t *data;
     unsigned count;
@@ -404,9 +406,10 @@ static int gnutls_HandshakeAndValidate (vlc_tls_t *session, const char *host,
     }
     msg_Dbg (session, "%u certificate(s) in the list", count);
 
-    if (status && gnutls_CertSearch (session, host, service, data))
-        return -1;
-
+	if (status && gnutls_CertSearch(session, host, service, data))
+	{
+		return -1;
+	}
     gnutls_x509_crt_t cert;
     val = gnutls_x509_crt_init (&cert);
     if (val)
@@ -438,9 +441,10 @@ static int
 gnutls_SessionPrioritize (vlc_object_t *obj, gnutls_session_t session)
 {
     char *priorities = var_InheritString (obj, "gnutls-priorities");
-    if (unlikely(priorities == NULL))
-        return VLC_ENOMEM;
-
+	if (unlikely(priorities == NULL))
+	{
+		return VLC_ENOMEM;
+	}
     const char *errp;
     int val = gnutls_priority_set_direct (session, priorities, &errp);
     if (val < 0)
@@ -550,9 +554,10 @@ static int gnutls_ClientSessionOpen (vlc_tls_creds_t *crd, vlc_tls_t *session,
                                      int fd, const char *hostname)
 {
     int val = gnutls_SessionOpen (crd, session, GNUTLS_CLIENT, fd);
-    if (val != VLC_SUCCESS)
-        return val;
-
+	if (val != VLC_SUCCESS)
+	{
+		return val;
+	}
     vlc_tls_sys_t *sys = session->sys;
 
     /* minimum DH prime bits */
@@ -649,8 +654,10 @@ static int OpenServer (vlc_tls_creds_t *crd, const char *cert, const char *key)
 {
     int val;
 
-    if (gnutls_Init (VLC_OBJECT(crd)))
-        return VLC_EGENERIC;
+	if (gnutls_Init(VLC_OBJECT(crd)))
+	{
+		return VLC_EGENERIC;
+	}
 
     vlc_tls_creds_sys_t *sys = malloc (sizeof (*sys));
     if (unlikely(sys == NULL))
@@ -765,8 +772,10 @@ static void CloseServer (vlc_tls_creds_t *crd)
  */
 static int OpenClient (vlc_tls_creds_t *crd)
 {
-    if (gnutls_Init (VLC_OBJECT(crd)))
-        return VLC_EGENERIC;
+	if (gnutls_Init(VLC_OBJECT(crd)))
+	{
+		return VLC_EGENERIC;
+	}
 
     vlc_tls_creds_sys_t *sys = malloc (sizeof (*sys));
     if (unlikely(sys == NULL))

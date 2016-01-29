@@ -358,11 +358,12 @@ static int DownloadArt( playlist_fetcher_t *p_fetcher, input_item_t *p_item )
     }
 
     stream_t *p_stream = stream_UrlNew( p_fetcher->object, psz_arturl );
+	uint8_t *p_data = NULL;
+	int i_data = 0;
+
     if( !p_stream )
         goto error;
 
-    uint8_t *p_data = NULL;
-    int i_data = 0;
     for( ;; )
     {
         int i_read = 65536;

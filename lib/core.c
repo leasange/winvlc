@@ -43,8 +43,10 @@ libvlc_instance_t * libvlc_new( int argc, const char *const *argv )
     libvlc_threads_init ();
 
     libvlc_instance_t *p_new = malloc (sizeof (*p_new));
-    if (unlikely(p_new == NULL))
-        return NULL;
+	if (unlikely(p_new == NULL))
+	{
+		return NULL;
+	}
 
 //    const char *my_argv[argc + 2];
 	const char **my_argv = (const char **)malloc(sizeof(char *) * (argc + 2));			// sunqueen modify
@@ -206,8 +208,10 @@ static libvlc_module_description_t *module_description_list_get(
             return NULL;
         }
 
-        if ( p_list == NULL )
-            p_list = p_actual;
+		if (p_list == NULL)
+		{
+			p_list = p_actual;
+		}
 
         const char* name = module_get_object( p_module );
         const char* shortname = module_get_name( p_module, false );

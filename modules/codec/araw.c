@@ -306,9 +306,10 @@ static int DecoderOpen( vlc_object_t *p_this )
 static block_t *DecodeBlock( decoder_t *p_dec, block_t **pp_block )
 {
     decoder_sys_t *p_sys = p_dec->p_sys;
-    if( pp_block == NULL )
-        return NULL;
-
+	if (pp_block == NULL)
+	{
+		return NULL;
+	}
     block_t *p_block = *pp_block;
     if( p_block == NULL )
         return NULL;
@@ -761,9 +762,10 @@ static void F64IEncode( void *outp, const uint8_t *inp, unsigned samples )
 
 static block_t *Encode( encoder_t *enc, block_t *in )
 {
-    if( in == NULL )
-        return NULL;
-
+	if (in == NULL)
+	{
+		return NULL;
+	}
     block_t *out = block_Alloc( in->i_nb_samples
                                 * enc->fmt_out.audio.i_bytes_per_frame );
     if( unlikely(out == NULL) )

@@ -72,17 +72,23 @@ static int Open (vlc_object_t *obj)
     demux_t *demux = (demux_t *)obj;
 
     int64_t size = stream_Size (demux->s);
-    if (size > LONG_MAX /* too big for GME */)
-        return VLC_EGENERIC;
+	if (size > LONG_MAX /* too big for GME */)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* Auto detection */
     const uint8_t *peek;
-    if (stream_Peek (demux->s, &peek, 4) < 4)
-        return VLC_EGENERIC;
+	if (stream_Peek(demux->s, &peek, 4) < 4)
+	{
+		return VLC_EGENERIC;
+	}
 
     const char *type = gme_identify_header (peek);
-    if (!*type)
-        return VLC_EGENERIC;
+	if (!*type)
+	{
+		return VLC_EGENERIC;
+	}
     msg_Dbg (obj, "detected file type %s", type);
 
     block_t *data = NULL;
@@ -215,8 +221,10 @@ static int Demux (demux_t *demux)
 
 
     block_t *block = block_Alloc (2 * 2 * SAMPLES);
-    if (unlikely(block == NULL))
-        return 0;
+	if (unlikely(block == NULL))
+	{
+		return 0;
+	}
 
     gme_err_t ret = gme_play (sys->emu, 2 * SAMPLES, (void *)block->p_buffer);
     if (ret != NULL)

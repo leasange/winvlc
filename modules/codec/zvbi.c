@@ -381,8 +381,10 @@ static subpicture_t *Decode( decoder_t *p_dec, block_t **pp_block )
             p_spu = Subpicture( p_dec, &fmt, true,
                                 p_page.columns, p_page.rows,
                                 i_align, p_block->i_pts );
-            if( !p_spu )
-                goto error;
+			if (!p_spu)
+			{
+				goto error;
+			}
             subpicture_updater_sys_t *p_spu_sys = p_spu->updater.p_sys;
             p_spu_sys->text = strdup("");
 

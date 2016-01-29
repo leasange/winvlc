@@ -122,10 +122,11 @@ void SAP_Destroy (sap_handler_t *p_sap)
 static sap_address_t *AddressCreate (vlc_object_t *obj, const char *group)
 {
     int fd = net_ConnectUDP (obj, group, IPPORT_SAP, 255);
+	sap_address_t *addr;
     if (fd == -1)
         return NULL;
 
-    sap_address_t *addr = malloc (sizeof (*addr));
+    addr = malloc (sizeof (*addr));
     if (addr == NULL)
     {
         net_Close (fd);

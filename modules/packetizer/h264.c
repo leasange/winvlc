@@ -717,10 +717,11 @@ static block_t *OutputPicture( decoder_t *p_dec )
         --p_sys->i_recovery_frames;
     }
 
-    if( !p_sys->b_header && p_sys->i_recovery_frames == -1 &&
-         p_sys->slice.i_frame_type != BLOCK_FLAG_TYPE_I)
-        return NULL;
-
+	if (!p_sys->b_header && p_sys->i_recovery_frames == -1 &&
+		p_sys->slice.i_frame_type != BLOCK_FLAG_TYPE_I)
+	{
+		return NULL;
+	}
     const bool b_sps_pps_i = p_sys->slice.i_frame_type == BLOCK_FLAG_TYPE_I &&
                              p_sys->b_sps &&
                              p_sys->b_pps;

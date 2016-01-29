@@ -224,10 +224,11 @@ static inline bool EsFmtIsTeletext( const es_format_t *p_fmt )
 es_out_t *input_EsOutNew( input_thread_t *p_input, int i_rate )
 {
     es_out_t     *out = malloc( sizeof( *out ) );
+	es_out_sys_t *p_sys;
     if( !out )
         return NULL;
 
-    es_out_sys_t *p_sys = calloc( 1, sizeof( *p_sys ) );
+	p_sys = calloc(1, sizeof(*p_sys));
     if( !p_sys )
     {
         free( out );
@@ -603,16 +604,17 @@ static void EsOutDecodersStopBuffering( es_out_t *out, bool b_forced )
     mtime_t i_system_start;
     mtime_t i_stream_duration;
     mtime_t i_system_duration;
+	mtime_t i_preroll_duration = 0;
+	mtime_t i_buffering_duration;
     if (input_clock_GetState( p_sys->p_pgrm->p_clock,
                                   &i_stream_start, &i_system_start,
                                   &i_stream_duration, &i_system_duration ))
         return;
 
-    mtime_t i_preroll_duration = 0;
     if( p_sys->i_preroll_end >= 0 )
         i_preroll_duration = __MAX( p_sys->i_preroll_end - i_stream_start, 0 );
 
-    const mtime_t i_buffering_duration = p_sys->i_pts_delay +
+    i_buffering_duration = p_sys->i_pts_delay +
                                          i_preroll_duration +
                                          p_sys->i_buffering_extra_stream - p_sys->i_buffering_extra_initial;
 
@@ -834,14 +836,13 @@ static mtime_t EsOutGetBuffering( es_out_t *out )
     mtime_t i_system_start;
     mtime_t i_stream_duration;
     mtime_t i_system_duration;
+	mtime_t i_delay;
     i_ret = input_clock_GetState( p_sys->p_pgrm->p_clock,
                                   &i_stream_start, &i_system_start,
                                   &i_stream_duration, &i_system_duration );
 
     if( i_ret )
         return 0;
-
-    mtime_t i_delay;
 
     if( p_sys->b_buffering && p_sys->i_buffering_extra_initial <= 0 )
     {
@@ -2509,12 +2510,13 @@ static int EsOutControlLocked( es_out_t *out, int i_query, va_list args )
     {
         const int i_id = va_arg( args, int );
         es_out_id_t *p_es = EsOutGetFromID( out, i_id );
+		vlc_object_t    **pp_decoder, **pp_vout, **pp_aout;
         if( !p_es )
             return VLC_EGENERIC;
 
-        vlc_object_t    **pp_decoder = va_arg( args, vlc_object_t ** );
-        vout_thread_t   **pp_vout    = va_arg( args, vout_thread_t ** );
-        audio_output_t **pp_aout    = va_arg( args, audio_output_t ** );
+        pp_decoder = va_arg( args, vlc_object_t ** );
+        pp_vout    = va_arg( args, vout_thread_t ** );
+        pp_aout    = va_arg( args, audio_output_t ** );
         if( p_es->p_dec )
         {
             if( pp_decoder )
@@ -2653,30 +2655,36 @@ static int EsOutControlLocked( es_out_t *out, int i_query, va_list args )
 
     case ES_OUT_GET_PCR_SYSTEM:
     {
+		es_out_pgrm_t *p_pgrm;
         if( p_sys->b_buffering )
             return VLC_EGENERIC;
 
-        es_out_pgrm_t *p_pgrm = p_sys->p_pgrm;
+		p_pgrm = p_sys->p_pgrm;
+		mtime_t *pi_system;
+		mtime_t *pi_delay;
         if( !p_pgrm )
             return VLC_EGENERIC;
 
-        mtime_t *pi_system = va_arg( args, mtime_t *);
-        mtime_t *pi_delay  = va_arg( args, mtime_t *);
+        pi_system = va_arg( args, mtime_t *);
+        pi_delay  = va_arg( args, mtime_t *);
         input_clock_GetSystemOrigin( p_pgrm->p_clock, pi_system, pi_delay );
         return VLC_SUCCESS;
     }
 
     case ES_OUT_MODIFY_PCR_SYSTEM:
     {
+		es_out_pgrm_t *p_pgrm;
+		bool    b_absolute;
+		mtime_t i_system;
         if( p_sys->b_buffering )
             return VLC_EGENERIC;
 
-        es_out_pgrm_t *p_pgrm = p_sys->p_pgrm;
+		p_pgrm = p_sys->p_pgrm;
         if( !p_pgrm )
             return VLC_EGENERIC;
 
-        const bool    b_absolute = va_arg( args, int );
-        const mtime_t i_system   = va_arg( args, mtime_t );
+        b_absolute = va_arg( args, int );
+        i_system   = va_arg( args, mtime_t );
         input_clock_ChangeSystemOrigin( p_pgrm->p_clock, b_absolute, i_system );
         return VLC_SUCCESS;
     }
@@ -2868,11 +2876,11 @@ static void EsOutUpdateInfo( es_out_t *out, es_out_id_t *es, const es_format_t *
     char psz_cat[128];
     snprintf( psz_cat, sizeof(psz_cat),_("Stream %d"), es->i_meta_id );
     info_category_t *p_cat = info_category_New( psz_cat );
+	const char *psz_type;
     if( !p_cat )
         return;
 
     /* Add information */
-    const char *psz_type;
     switch( fmt->i_cat )
     {
     case AUDIO_ES:
@@ -2888,7 +2896,8 @@ static void EsOutUpdateInfo( es_out_t *out, es_out_id_t *es, const es_format_t *
         psz_type = NULL;
         break;
     }
-
+	const char *psz_codec_description;
+	vlc_fourcc_t i_codec_fourcc;
     if( psz_type )
         info_category_AddInfo( p_cat, _("Type"), "%s", psz_type );
 
@@ -2896,9 +2905,9 @@ static void EsOutUpdateInfo( es_out_t *out, es_out_id_t *es, const es_format_t *
         info_category_AddInfo( p_cat, _("Original ID"),
                        "%d", es->i_id );
 
-    const char *psz_codec_description =
+	psz_codec_description =
         vlc_fourcc_GetDescription( p_fmt_es->i_cat, p_fmt_es->i_codec );
-    const vlc_fourcc_t i_codec_fourcc = ( p_fmt_es->i_original_fourcc )?
+	i_codec_fourcc = (p_fmt_es->i_original_fourcc) ?
                                p_fmt_es->i_original_fourcc : p_fmt_es->i_codec;
     if( psz_codec_description && *psz_codec_description )
         info_category_AddInfo( p_cat, _("Codec"), "%s (%.4s)",

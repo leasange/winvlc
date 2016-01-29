@@ -573,9 +573,10 @@ static char *StripTags( char *psz_subtitle )
 static void HtmlNPut( char **ppsz_html, const char *psz_text, int i_max )
 {
     char *psz_html = *ppsz_html;
-    if( psz_html == NULL )
-        return;
-
+	if (psz_html == NULL)
+	{
+		return;
+	}
     const size_t i_offset = strlen(psz_html);
     const size_t i_len = strnlen(psz_text, i_max);
 

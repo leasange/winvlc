@@ -756,9 +756,10 @@ void vout_display_opengl_Delete(vout_display_opengl_t *vgl)
 
 picture_pool_t *vout_display_opengl_GetPool(vout_display_opengl_t *vgl, unsigned requested_count)
 {
-    if (vgl->pool)
-        return vgl->pool;
-
+	if (vgl->pool)
+	{
+		return vgl->pool;
+	}
     /* Allocate our pictures */
     picture_t *picture[VLCGL_PICTURE_MAX] = {NULL, };
     unsigned count;
@@ -768,8 +769,10 @@ picture_pool_t *vout_display_opengl_GetPool(vout_display_opengl_t *vgl, unsigned
         if (!picture[count])
             break;
     }
-    if (count <= 0)
-        return NULL;
+	if (count <= 0)
+	{
+		return NULL;
+	}
 
     /* Wrap the pictures into a pool */
     picture_pool_configuration_t cfg;

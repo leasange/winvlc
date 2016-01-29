@@ -98,8 +98,10 @@ static picture_t *Filter( filter_t *p_filter, picture_t *p_pic )
 {
     picture_t *p_out;
 
-    if( !p_pic )
-        return NULL;
+	if (!p_pic)
+	{
+		return NULL;
+	}
 
     const video_palette_t *p_yuvp = p_filter->fmt_in.video.p_palette;
 

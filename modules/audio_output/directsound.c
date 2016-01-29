@@ -603,9 +603,11 @@ static HRESULT Start( vlc_object_t *obj, aout_stream_sys_t *sys,
      * sound without any video, and so what window handle should we use ???
      * The hack for now is to use the Desktop window handle - it seems to be
      * working */
-    if( IDirectSound_SetCooperativeLevel( sys->p_dsobject, GetDesktopWindow(),
-                                          DSSCL_EXCLUSIVE) )
-        msg_Warn( obj, "cannot set direct sound cooperative level" );
+	if (IDirectSound_SetCooperativeLevel(sys->p_dsobject, GetDesktopWindow(),
+		DSSCL_EXCLUSIVE))
+	{
+		msg_Warn(obj, "cannot set direct sound cooperative level");
+	}
 #endif
 
     const char *const *ppsz_compare = speaker_list;
@@ -814,14 +816,16 @@ static HRESULT StreamStart( aout_stream_t *s,
                             const GUID *sid )
 {
     aout_stream_sys_t *sys = calloc( 1, sizeof( *sys ) );
-    if( unlikely(sys == NULL) )
-        return E_OUTOFMEMORY;
-
+	if (unlikely(sys == NULL))
+	{
+		return E_OUTOFMEMORY;
+	}
     DIRECTX_AUDIO_ACTIVATION_PARAMS params = {
         .cbDirectXAudioActivationParams = sizeof( params ),
-        .guidAudioSession = *sid,
+		//.guidAudioSession = *temp,
         .dwAudioStreamFlags = 0,
     };
+	params.guidAudioSession = *sid;
     PROPVARIANT prop;
 
     PropVariantInit( &prop );

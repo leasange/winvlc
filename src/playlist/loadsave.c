@@ -41,7 +41,7 @@
 int playlist_Export( playlist_t * p_playlist, const char *psz_filename,
                      playlist_item_t *p_export_root, const char *psz_type )
 {
-    if( p_export_root == NULL ) return VLC_EGENERIC;
+	if (p_export_root == NULL) { return VLC_EGENERIC; }
 
     playlist_export_t *p_export =
         vlc_custom_create( p_playlist, sizeof( *p_export ), "playlist export" );
@@ -150,8 +150,10 @@ int playlist_MLLoad( playlist_t *p_playlist )
 
     char *psz_uri = vlc_path2uri( psz_file, "file/xspf-open" );
     free( psz_file );
-    if( psz_uri == NULL )
-        return VLC_ENOMEM;
+	if (psz_uri == NULL)
+	{
+		return VLC_ENOMEM;
+	}
 
     const char *const options[1] = { "meta-file", };
     /* that option has to be cleaned in input_item_subitem_tree_added() */

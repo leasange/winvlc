@@ -208,12 +208,12 @@ int vout_snapshot_SaveImage(char **name, int *sequential,
         filename = str_format(input, cfg->path);
         path_sanitize(filename);
     }
-
+	FILE *file;
     if (!filename)
         goto error;
 
     /* Save the snapshot */
-    FILE *file = vlc_fopen(filename, "wb");
+	file = vlc_fopen(filename, "wb");
     if (!file) {
         msg_Err(p_vout, "Failed to open '%s'", filename);
         free(filename);

@@ -98,8 +98,10 @@ int OpenPacketizer( vlc_object_t *p_this )
 
     /* It is less likely to have a parser than a codec, start by that */
     AVCodecParserContext * p_ctx = av_parser_init( i_avcodec_id );
-    if( !p_ctx )
-        return VLC_EGENERIC;
+	if (!p_ctx)
+	{
+		return VLC_EGENERIC;
+	}
 
     AVCodec * p_codec = avcodec_find_decoder( i_avcodec_id );
     if( unlikely( !p_codec ) )
@@ -173,9 +175,10 @@ static block_t *Packetize ( decoder_t *p_dec, block_t **pp_block )
                                          &p_outdata, &i_outlen, p_indata, i_inlen,
                                          p_block->i_pts, p_block->i_dts, -1);
 
-    if( unlikely( i_outlen <= 0 || !p_outdata ) )
-        goto out;
-
+	if (unlikely(i_outlen <= 0 || !p_outdata))
+	{
+		goto out;
+	}
     block_t * p_ret = block_Alloc( i_outlen );
 
     if( unlikely ( !p_ret ) )

@@ -500,14 +500,16 @@ static int Install( addons_storage_t *p_storage, addon_entry_t *p_entry )
     vlc_object_t *p_this = VLC_OBJECT( p_storage );
     int i_ret = VLC_EGENERIC;
 
-    if ( ! p_entry->psz_source_module )
-        return i_ret;
-
+	if (!p_entry->psz_source_module)
+	{
+		return i_ret;
+	}
     /* Query origin module for download path */
     addons_finder_t *p_finder = vlc_object_create( p_this, sizeof( addons_finder_t ) );
-    if( !p_finder )
-        return VLC_ENOMEM;
-
+	if (!p_finder)
+	{
+		return VLC_ENOMEM;
+	}
     module_t *p_module = module_need( p_finder, "addons finder",
                                       p_entry->psz_source_module, true );
     if( p_module )
@@ -704,12 +706,14 @@ static int LoadCatalog( addons_finder_t *p_finder )
 
     char *psz_catalog_uri = vlc_path2uri( psz_path, "file" );
     free( psz_path );
-    if ( !psz_catalog_uri )
-        return VLC_EGENERIC;
+	if (!psz_catalog_uri)
+	{
+		return VLC_EGENERIC;
+	}
 
     stream_t *p_stream = stream_UrlNew( p_finder, psz_catalog_uri );
     free( psz_catalog_uri );
-    if (! p_stream ) return VLC_EGENERIC;
+	if (!p_stream) { return VLC_EGENERIC; }
 
     xml_reader_t *p_xml_reader = xml_ReaderCreate( p_finder, p_stream );
     if( !p_xml_reader )

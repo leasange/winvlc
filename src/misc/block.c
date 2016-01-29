@@ -131,8 +131,10 @@ block_t *block_Alloc (size_t size)
     /* 2 * BLOCK_PADDING: pre + post padding */
     const size_t alloc = sizeof (block_t) + BLOCK_ALIGN + (2 * BLOCK_PADDING)
                        + size;
-    if (unlikely(alloc <= size))
-        return NULL;
+	if (unlikely(alloc <= size))
+	{
+		return NULL;
+	}
 
     block_t *b = malloc (alloc);
     if (unlikely(b == NULL))
@@ -197,13 +199,13 @@ block_t *block_Realloc( block_t *p_block, ssize_t i_prebody, size_t i_body )
         i_body += i_prebody;
         i_prebody = 0;
     }
-
+	uint8_t *p_start, *p_end;
     /* Trim payload end */
     if( p_block->i_buffer > i_body )
         p_block->i_buffer = i_body;
 
-    uint8_t *p_start = p_block->p_start;
-    uint8_t *p_end = p_start + p_block->i_size;
+    p_start = p_block->p_start;
+    p_end = p_start + p_block->i_size;
 
     /* Second, reallocate the buffer if we lack space. This is done now to
      * minimize the payload size for memory copy. */
@@ -394,8 +396,10 @@ static
 ssize_t pread (int fd, void *buf, size_t count, off_t offset)
 {
     HANDLE handle = (HANDLE)(intptr_t)_get_osfhandle (fd);
-    if (handle == INVALID_HANDLE_VALUE)
-        return -1;
+	if (handle == INVALID_HANDLE_VALUE)
+	{
+		return -1;
+	}
 
     OVERLAPPED olap; olap.Offset = offset; olap.OffsetHigh = (offset >> 32);
     DWORD written;
@@ -494,8 +498,10 @@ block_t *block_File (int fd)
 block_t *block_FilePath (const char *path)
 {
     int fd = vlc_open (path, O_RDONLY);
-    if (fd == -1)
-        return NULL;
+	if (fd == -1)
+	{
+		return NULL;
+	}
 
     block_t *block = block_File (fd);
     close (fd);

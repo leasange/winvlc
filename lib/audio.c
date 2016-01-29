@@ -50,8 +50,10 @@ static audio_output_t *GetAOut( libvlc_media_player_t *mp )
     assert( mp != NULL );
 
     audio_output_t *p_aout = input_resource_HoldAout( mp->input.p_resource );
-    if( p_aout == NULL )
-        libvlc_printerr( "No active audio output" );
+	if (p_aout == NULL)
+	{
+		libvlc_printerr("No active audio output");
+	}
     return p_aout;
 }
 
@@ -69,8 +71,10 @@ libvlc_audio_output_t *
     {
         module_t *module = module_list[i];
 
-        if( !module_provides( module, "audio output" ) )
-            continue;
+		if (!module_provides(module, "audio output"))
+		{
+			continue;
+		}
 
         libvlc_audio_output_t *item = malloc( sizeof( *item ) );
         if( unlikely(item == NULL) )
@@ -143,8 +147,10 @@ libvlc_audio_output_device_t *
 libvlc_audio_output_device_enum( libvlc_media_player_t *mp )
 {
     audio_output_t *aout = GetAOut( mp );
-    if( aout == NULL )
-        return NULL;
+	if (aout == NULL)
+	{
+		return NULL;
+	}
 
     libvlc_audio_output_device_t *list, **pp = &list;
     char **values, **texts;
@@ -182,9 +188,11 @@ libvlc_audio_output_device_list_get( libvlc_instance_t *p_instance,
                                      const char *aout )
 {
     char varname[32];
-    if( (size_t)snprintf( varname, sizeof(varname), "%s-audio-device", aout )
-                                                           >= sizeof(varname) )
-        return NULL;
+	if ((size_t)snprintf(varname, sizeof(varname), "%s-audio-device", aout)
+		>= sizeof(varname))
+	{
+		return NULL;
+	}
 
     libvlc_audio_output_device_t *list = NULL, **pp = &list;
     char **values, **texts;
@@ -384,8 +392,10 @@ libvlc_track_description_t *
 int libvlc_audio_get_track( libvlc_media_player_t *p_mi )
 {
     input_thread_t *p_input_thread = libvlc_get_input_thread( p_mi );
-    if( !p_input_thread )
-        return -1;
+	if (!p_input_thread)
+	{
+		return -1;
+	}
 
     int id = var_GetInteger( p_input_thread, "audio-es" );
     vlc_object_release( p_input_thread );
@@ -428,8 +438,10 @@ end:
 int libvlc_audio_get_channel( libvlc_media_player_t *mp )
 {
     audio_output_t *p_aout = GetAOut( mp );
-    if( !p_aout )
-        return 0;
+	if (!p_aout)
+	{
+		return 0;
+	}
 
     int val = var_GetInteger( p_aout, "stereo-mode" );
     vlc_object_release( p_aout );

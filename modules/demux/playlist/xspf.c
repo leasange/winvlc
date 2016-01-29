@@ -367,8 +367,10 @@ static bool parse_track_node COMPLEX_INTERFACE
         };
 
     input_item_t *p_new_input = input_item_New(NULL, NULL);
-    if (!p_new_input)
-        return false;
+	if (!p_new_input)
+	{
+		return false;
+	}
     input_item_node_t *p_new_node = input_item_node_Create(p_new_input);
 
     /* reset i_track_id */

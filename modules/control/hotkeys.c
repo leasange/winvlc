@@ -1124,8 +1124,10 @@ static int ActionEvent( vlc_object_t *libvlc, char const *psz_var,
 static void PlayBookmark( intf_thread_t *p_intf, int i_num )
 {
     char *psz_bookmark_name;
-    if( asprintf( &psz_bookmark_name, "bookmark%i", i_num ) == -1 )
-        return;
+	if (asprintf(&psz_bookmark_name, "bookmark%i", i_num) == -1)
+	{
+		return;
+	}
 
     playlist_t *p_playlist = pl_Get( p_intf );
     char *psz_bookmark = var_CreateGetString( p_intf, psz_bookmark_name );
@@ -1153,8 +1155,10 @@ static void SetBookmark( intf_thread_t *p_intf, int i_num )
 {
     char *psz_bookmark_name;
     char *psz_uri = NULL;
-    if( asprintf( &psz_bookmark_name, "bookmark%i", i_num ) == -1 )
-        return;
+	if (asprintf(&psz_bookmark_name, "bookmark%i", i_num) == -1)
+	{
+		return;
+	}
 
     playlist_t *p_playlist = pl_Get( p_intf );
     var_Create( p_intf, psz_bookmark_name,

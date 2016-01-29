@@ -46,15 +46,17 @@ int Import_DVB(vlc_object_t *obj)
 {
     demux_t *demux = (demux_t *)obj;
 
-    if (!demux_IsPathExtension(demux, ".conf" ) && !demux->b_force )
-        return VLC_EGENERIC;
-
+	if (!demux_IsPathExtension(demux, ".conf") && !demux->b_force)
+	{
+		return VLC_EGENERIC;
+	}
     /* Check if this really is a channels file */
     const uint8_t *peek;
     int len = stream_Peek(demux->s, &peek, 1023);
-    if (len <= 0)
-        return VLC_EGENERIC;
-
+	if (len <= 0)
+	{
+		return VLC_EGENERIC;
+	}
     const uint8_t *eol = memchr(peek, '\n', len);
     if (eol == NULL)
         return VLC_EGENERIC;

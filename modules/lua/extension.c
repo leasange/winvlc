@@ -564,9 +564,10 @@ static int Control( extensions_manager_t *p_mgr, int i_control, va_list args )
             p_ext = ( extension_t* ) va_arg( args, extension_t* );
             input_thread_t *p_input = va_arg( args, struct input_thread_t * );
 
-            if( !LockExtension( p_ext ) )
-                return VLC_EGENERIC;
-
+			if (!LockExtension(p_ext))
+			{
+				return VLC_EGENERIC;
+			}
             // Change input
             input_thread_t *old = p_ext->p_sys->p_input;
             input_item_t *p_item;
@@ -679,9 +680,10 @@ int lua_ExtensionWidgetClick( extensions_manager_t *p_mgr,
                               extension_t *p_ext,
                               extension_widget_t *p_widget )
 {
-    if( !p_ext->p_sys->L )
-        return VLC_SUCCESS;
-
+	if (!p_ext->p_sys->L)
+	{
+		return VLC_SUCCESS;
+	}
     lua_State *L = GetLuaState( p_mgr, p_ext );
     lua_pushlightuserdata( L, p_widget );
     lua_gettable( L, LUA_REGISTRYINDEX );

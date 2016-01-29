@@ -857,8 +857,10 @@ static int OpenVCDImage( vlc_object_t * p_this, const char *psz_dev,
         }
     }
 
-    if( p_vcddev->i_vcdimage_handle == -1)
-        goto error;
+	if (p_vcddev->i_vcdimage_handle == -1)
+	{
+		goto error;
+	}
 
     /* Try to parse the i_tracks and p_sectors info so we can just forget
      * about the cuefile */
@@ -1187,8 +1189,10 @@ static int CdTextParse( vlc_meta_t ***ppp_tracks, int *pi_tracks,
         }
     }
 
-    if( i_track_last < 0 )
-        return -1;
+	if (i_track_last < 0)
+	{
+		return -1;
+	}
 
     vlc_meta_t **pp_tracks = calloc( i_track_last+1, sizeof(*pp_tracks) );
     if( !pp_tracks )
@@ -1199,15 +1203,19 @@ static int CdTextParse( vlc_meta_t ***ppp_tracks, int *pi_tracks,
         for( int i = 0; i <= i_track_last; i++ )
         {
             /* */
-            if( pppsz_info[i][j] )
-                EnsureUTF8( pppsz_info[i][j] );
+			if (pppsz_info[i][j])
+			{
+				EnsureUTF8(pppsz_info[i][j]);
+			}
 
             /* */
             const char *psz_default = pppsz_info[0][j];
             const char *psz_value = pppsz_info[i][j];
 
-            if( !psz_value && !psz_default )
-                continue;
+			if (!psz_value && !psz_default)
+			{
+				continue;
+			}
             vlc_meta_t *p_track = pp_tracks[i];
             if( !p_track )
             {

@@ -357,7 +357,12 @@ typedef struct {
 
 static spu_area_t spu_area_create(int x, int y, int w, int h, spu_scale_t s)
 {
-    spu_area_t a = { .x = x, .y = y, .width = w, .height = h, .scale = s };
+	spu_area_t a;
+	a.x = x;
+	a.y = y; 
+	a.width = w;
+	a.height = h; 
+	a.scale = s;
     return a;
 }
 static spu_area_t spu_area_scaled(spu_area_t a)
@@ -451,12 +456,13 @@ static void SpuAreaFitInside(spu_area_t *area, const spu_area_t *boundary)
     spu_area_t a = spu_area_scaled(*area);
 
     const int i_error_x = (a.x + a.width) - boundary->width;
+	int i_error_y;
     if (i_error_x > 0)
         a.x -= i_error_x;
     if (a.x < 0)
         a.x = 0;
 
-    const int i_error_y = (a.y + a.height) - boundary->height;
+	i_error_y = (a.y + a.height) - boundary->height;
     if (i_error_y > 0)
         a.y -= i_error_y;
     if (a.y < 0)
@@ -686,7 +692,8 @@ static void SpuRenderRegion(spu_t *spu,
 
     video_format_t region_fmt;
     picture_t *region_picture;
-
+	spu_area_t restrained;
+	spu_area_t display;
     /* Invalidate area by default */
     *dst_area = spu_area_create(0,0, 0,0, scale_size);
     *dst_ptr  = NULL;
@@ -737,13 +744,13 @@ static void SpuRenderRegion(spu_t *spu,
 
     /* we copy the area: for the subtitle overlap support we want
      * to only save the area without margin applied */
-    spu_area_t restrained = *dst_area;
+    restrained = *dst_area;
 
     /* apply margin to subtitles and correct if they go over the picture edge */
     if (subpic->b_subtitle)
         restrained.y -= y_margin;
 
-    spu_area_t display = spu_area_create(0, 0, fmt->i_visible_width,
+    display = spu_area_create(0, 0, fmt->i_visible_width,
                                          fmt->i_visible_height,
                                          spu_scale_unit());
     //fprintf("
@@ -978,6 +985,7 @@ static subpicture_t *SpuRenderSubpictures(spu_t *spu,
     /* Count the number of regions and subtitle regions */
     unsigned int subtitle_region_count = 0;
     unsigned int region_count          = 0;
+	subpicture_t *output;
     for (unsigned i = 0; i < i_subpicture; i++) {
         const subpicture_t *subpic = pp_subpicture[i];
 
@@ -993,7 +1001,7 @@ static subpicture_t *SpuRenderSubpictures(spu_t *spu,
         return NULL;
 
     /* Create the output subpicture */
-    subpicture_t *output = subpicture_New(NULL);
+	output = subpicture_New(NULL);
     if (!output)
         return NULL;
     output->i_original_picture_width  = fmt_dst->i_visible_width;
@@ -1217,11 +1225,12 @@ spu_t *spu_Create(vlc_object_t *object)
     spu_t *spu = vlc_custom_create(object,
                                    sizeof(spu_t) + sizeof(spu_private_t),
                                    "subpicture");
+	spu_private_t *sys;
     if (!spu)
         return NULL;
 
     /* Initialize spu fields */
-    spu_private_t *sys = spu->p = (spu_private_t*)&spu[1];
+	sys = spu->p = (spu_private_t*)&spu[1];
 
     /* Initialize private fields */
     vlc_mutex_init(&sys->lock);

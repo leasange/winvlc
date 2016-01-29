@@ -100,8 +100,10 @@ static ssize_t xiph_header (void **pextra, const uint8_t *buf, size_t len)
           return -1; /* Invalid */
     unsigned hcount = 1 + *buf++;
     len--;
-    if (hcount != 3)
-          return -1; /* Invalid */
+	if (hcount != 3)
+	{
+		return -1; /* Invalid */
+	}
 
     /* Header lengths */
     uint16_t idlen = 0, cmtlen = 0, setuplen = 0;
@@ -147,8 +149,10 @@ void xiph_decode (demux_t *demux, void *data, block_t *block)
 {
     rtp_xiph_t *self = data;
 
-    if (!data || block->i_buffer < 4)
-        goto drop;
+	if (!data || block->i_buffer < 4)
+	{
+		goto drop;
+	}
 
     /* 32-bits RTP header (§2.2) */
     uint32_t ident = GetDWBE (block->p_buffer);
@@ -186,8 +190,10 @@ void xiph_decode (demux_t *demux, void *data, block_t *block)
 
     if (fragtype > 0)
     {   /* Fragment */
-        if (pkts > 0 || block->i_buffer < 2)
-            goto drop;
+		if (pkts > 0 || block->i_buffer < 2)
+		{
+			goto drop;
+		}
 
         size_t fraglen = GetWBE (block->p_buffer);
         if (block->i_buffer < (fraglen + 2))
@@ -224,8 +230,10 @@ void xiph_decode (demux_t *demux, void *data, block_t *block)
     /* RTP payload packets processing */
     while (pkts > 0)
     {
-        if (block->i_buffer < 2)
-            goto drop;
+		if (block->i_buffer < 2)
+		{
+			goto drop;
+		}
 
         size_t len = GetWBE (block->p_buffer);
         block->i_buffer -= 2;

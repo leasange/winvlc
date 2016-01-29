@@ -613,9 +613,10 @@ static int LogoCallback( vlc_object_t *p_this, char const *psz_var,
  */
 static picture_t *LoadImage( vlc_object_t *p_this, const char *psz_filename )
 {
-    if( !psz_filename )
-        return NULL;
-
+	if (!psz_filename)
+	{
+		return NULL;
+	}
     video_format_t fmt_in;
     video_format_Init( &fmt_in, 0 );
 

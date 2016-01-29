@@ -91,8 +91,10 @@ static int CreateResampler( vlc_object_t *p_this )
 static block_t *DoWork( filter_t * p_filter, block_t * p_in_buf )
 {
     /* Check if we really need to run the resampler */
-    if( p_filter->fmt_out.audio.i_rate == p_filter->fmt_in.audio.i_rate )
-        return p_in_buf;
+	if (p_filter->fmt_out.audio.i_rate == p_filter->fmt_in.audio.i_rate)
+	{
+		return p_in_buf;
+	}
 
     block_t *p_out_buf = p_in_buf;
     unsigned int i_out_nb = p_in_buf->i_nb_samples

@@ -471,16 +471,16 @@ ssize_t config_GetPszChoices (vlc_object_t *obj, const char *name,
 
 static int confcmp (const void *a, const void *b)
 {
-    const module_config_t *const *ca = a, *const *cb = b;
+	const module_config_t *const *ca = (const module_config_t *const *)a, *const *cb = (const module_config_t *const *)b;
 
     return strcmp ((*ca)->psz_name, (*cb)->psz_name);
 }
 
 static int confnamecmp (const void *key, const void *elem)
 {
-    const module_config_t *const *conf = elem;
+	const module_config_t *const *conf = (const module_config_t *const *)elem;
 
-    return strcmp (key, (*conf)->psz_name);
+    return strcmp ((const char*)key, (*conf)->psz_name);
 }
 
 static struct
@@ -550,12 +550,12 @@ void config_UnsortConfig (void)
 module_config_t *config_FindConfig (vlc_object_t *p_this, const char *name)
 {
     VLC_UNUSED(p_this);
-
+	module_config_t *const *p;
     if (unlikely(name == NULL))
         return NULL;
 
-    module_config_t *const *p;
-    p = bsearch (name, config.list, config.count, sizeof (*p), confnamecmp);
+
+	p = (module_config_t *const*)bsearch(name, config.list, config.count, sizeof (*p), confnamecmp);
     return p ? *p : NULL;
 }
 

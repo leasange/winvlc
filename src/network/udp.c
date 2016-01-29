@@ -118,12 +118,9 @@ static int net_SetupDgramSocket (vlc_object_t *p_obj, int fd,
      && (sizeof (struct sockaddr_storage) >= ptr->ai_addrlen))
     {
         // This works for IPv4 too - don't worry!
-        struct sockaddr_in6 dumb =
-        {
-            .sin6_family = ptr->ai_addr->sa_family,
-            .sin6_port =  ((struct sockaddr_in *)(ptr->ai_addr))->sin_port
-        };
-
+		struct sockaddr_in6 dumb;
+		dumb.sin6_family = ptr->ai_addr->sa_family;
+		dumb.sin6_port = ((struct sockaddr_in *)(ptr->ai_addr))->sin_port;
         bind (fd, (struct sockaddr *)&dumb, ptr->ai_addrlen);
     }
     else

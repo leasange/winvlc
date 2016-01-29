@@ -559,10 +559,11 @@ static inline int input_AddSubtitleOSD( input_thread_t *p_input, const char *psz
         bool b_check_extension, bool b_osd )
 {
     int i_result = input_Control( p_input, INPUT_ADD_SUBTITLE, psz_url, b_check_extension );
+	vout_thread_t *p_vout;
     if( i_result != VLC_SUCCESS || !b_osd )
         return i_result;
 
-    vout_thread_t *p_vout = input_GetVout( p_input );
+    p_vout = input_GetVout( p_input );
     if( p_vout )
     {
         vout_OSDMessage(p_vout, SPU_DEFAULT_CHANNEL, "%s",

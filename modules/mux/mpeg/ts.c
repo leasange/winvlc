@@ -455,9 +455,10 @@ static csa_t *csaSetup( vlc_object_t *p_this )
     sout_mux_t *p_mux = (sout_mux_t*)p_this;
     sout_mux_sys_t *p_sys = p_mux->p_sys;
     char *csack = var_CreateGetNonEmptyStringCommand( p_mux, SOUT_CFG_PREFIX "csa-ck" );
-    if( !csack )
-        return NULL;
-
+	if (!csack)
+	{
+		return NULL;
+	}
     csa_t *csa = csa_New();
 
     if( csa_SetCW( p_this, csa, csack, true ) )
@@ -1032,9 +1033,10 @@ static int AddStream( sout_mux_t *p_mux, sout_input_t *p_input )
     {
         p_stream->i_extra = 55;
         p_stream->p_extra = malloc( p_stream->i_extra );
-        if (!p_stream->p_extra)
-            goto oom;
-
+		if (!p_stream->p_extra)
+		{
+			goto oom;
+		}
         uint8_t *p = p_stream->p_extra;
         p[0] = 0x10;    /* textFormat, 0x10 for 3GPP TS 26.245 */
         p[1] = 0x00;    /* flags: 1b: associated video info flag
@@ -1663,9 +1665,10 @@ static block_t *Add_ADTS( block_t *p_data, es_format_t *p_fmt )
 
     uint8_t *p_extra = p_fmt->p_extra;
 
-    if( !p_data || p_fmt->i_extra < 2 || !p_extra )
-        return p_data; /* no data to construct the headers */
-
+	if (!p_data || p_fmt->i_extra < 2 || !p_extra)
+	{
+		return p_data; /* no data to construct the headers */
+	}
     size_t frame_length = p_data->i_buffer + ADTS_HEADER_SIZE;
     int i_index = ( (p_extra[0] << 1) | (p_extra[1] >> 7) ) & 0x0f;
     int i_profile = (p_extra[0] >> 3) - 1; /* i_profile < 4 */
@@ -1677,9 +1680,10 @@ static block_t *Add_ADTS( block_t *p_data, es_format_t *p_fmt )
 
     /* keep a copy in case block_Realloc() fails */
     block_t *p_bak_block = block_Duplicate( p_data );
-    if( !p_bak_block ) /* OOM, block_Realloc() is likely to lose our block */
-        return p_data; /* the frame isn't correct but that's the best we have */
-
+	if (!p_bak_block) /* OOM, block_Realloc() is likely to lose our block */
+	{
+		return p_data; /* the frame isn't correct but that's the best we have */
+	}
     block_t *p_new_block = block_Realloc( p_data, ADTS_HEADER_SIZE,
                                             p_data->i_buffer );
     if( !p_new_block )

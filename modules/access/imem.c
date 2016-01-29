@@ -399,8 +399,10 @@ static int OpenDemux(vlc_object_t *object)
     demux_t    *demux = (demux_t *)object;
     imem_sys_t *sys;
 
-    if (OpenCommon(object, &sys, demux->psz_location))
-        return VLC_EGENERIC;
+	if (OpenCommon(object, &sys, demux->psz_location))
+	{
+		return VLC_EGENERIC;
+	}
 
     /* ES format */
     es_format_t fmt;
@@ -410,8 +412,10 @@ static int OpenDemux(vlc_object_t *object)
     fmt.i_group = var_InheritInteger(object, "imem-group");
 
     char *tmp = var_InheritString(object, "imem-codec");
-    if (tmp)
-        fmt.i_codec = vlc_fourcc_GetCodecFromString(UNKNOWN_ES, tmp);
+	if (tmp)
+	{
+		fmt.i_codec = vlc_fourcc_GetCodecFromString(UNKNOWN_ES, tmp);
+	}
     free(tmp);
 
     const int cat = var_InheritInteger(object, "imem-cat");

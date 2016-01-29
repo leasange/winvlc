@@ -121,9 +121,10 @@ subpicture_t *DecodeSubtitle(decoder_t *dec, block_t **block_ptr)
 {
     decoder_sys_t *sys = dec->p_sys;
 
-    if (!block_ptr || !*block_ptr)
-        return NULL;
-
+	if (!block_ptr || !*block_ptr)
+	{
+		return NULL;
+	}
     block_t *block = *block_ptr;
 
     if (block->i_flags & (BLOCK_FLAG_DISCONTINUITY|BLOCK_FLAG_CORRUPTED)) {
@@ -190,8 +191,10 @@ subpicture_t *DecodeSubtitle(decoder_t *dec, block_t **block_ptr)
  */
 static subpicture_region_t *ConvertRegionRGBA(AVSubtitleRect *ffregion)
 {
-    if (ffregion->w <= 0 || ffregion->h <= 0)
-        return NULL;
+	if (ffregion->w <= 0 || ffregion->h <= 0)
+	{
+		return NULL;
+	}
 
     video_format_t fmt;
     memset(&fmt, 0, sizeof(fmt));

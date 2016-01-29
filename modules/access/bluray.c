@@ -681,8 +681,10 @@ static int subpictureUpdaterValidate(subpicture_t *p_subpic,
 /* This should probably be moved to subpictures.c afterward */
 static subpicture_region_t* subpicture_region_Clone(subpicture_region_t *p_region_src)
 {
-    if (!p_region_src)
-        return NULL;
+	if (!p_region_src)
+	{
+		return NULL;
+	}
     subpicture_region_t *p_region_dst = subpicture_region_New(&p_region_src->fmt);
     if (unlikely(!p_region_dst))
         return NULL;
@@ -869,8 +871,10 @@ static void blurayInitOverlay(demux_t *p_demux, int plane, int width, int height
     assert(p_sys->p_overlays[plane] == NULL);
 
     bluray_overlay_t *ov = calloc(1, sizeof(*ov));
-    if (unlikely(ov == NULL))
-        return;
+	if (unlikely(ov == NULL))
+	{
+		return;
+	}
 
     subpicture_updater_sys_t *p_upd_sys = malloc(sizeof(*p_upd_sys));
     if (unlikely(p_upd_sys == NULL)) {
@@ -1433,12 +1437,16 @@ static void streamFlush( demux_sys_t *p_sys )
      * Set PES packet size in the payload so that it will be sent to decoder immediately.
      */
 
-    if (p_sys->b_flushed)
-        return;
+	if (p_sys->b_flushed)
+	{
+		return;
+	}
 
     block_t *p_block = block_Alloc(192);
-    if (!p_block)
-        return;
+	if (!p_block)
+	{
+		return;
+	}
 
     static const uint8_t seq_end_pes[] = {
         0x00, 0x00, 0x01, 0xe0, 0x00, 0x07, 0x80, 0x00, 0x00,  /* PES header */

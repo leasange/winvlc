@@ -419,8 +419,10 @@ set_current_playing_item(libvlc_media_list_player_t * p_mlp, libvlc_media_list_p
         p_mlp->current_playing_item_path = path;
     }
 
-    if (!path)
-        return;
+	if (!path)
+	{
+		return;
+	}
 
     libvlc_media_t * p_md;
     p_md = libvlc_media_list_item_at_path(p_mlp->p_mlist, path);

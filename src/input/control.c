@@ -450,10 +450,11 @@ int input_vaControl( input_thread_t *p_input, int i_query, va_list args )
         case INPUT_GET_AOUT:
         {
             audio_output_t *p_aout = input_resource_HoldAout( p_input->p->p_resource );
+			audio_output_t **pp_aout;
             if( !p_aout )
                 return VLC_EGENERIC;
 
-            audio_output_t **pp_aout = (audio_output_t**)va_arg( args, audio_output_t** );
+			pp_aout = (audio_output_t**)va_arg(args, audio_output_t**);
             *pp_aout = p_aout;
             return VLC_SUCCESS;
         }

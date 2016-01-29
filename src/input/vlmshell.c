@@ -967,10 +967,11 @@ vlm_media_sys_t *vlm_MediaSearch( vlm_t *vlm, const char *psz_name )
  *****************************************************************************/
 static vlm_schedule_sys_t *vlm_ScheduleNew( vlm_t *vlm, const char *psz_name )
 {
+	vlm_schedule_sys_t *p_sched;
     if( !psz_name )
         return NULL;
 
-    vlm_schedule_sys_t *p_sched = malloc( sizeof( vlm_schedule_sys_t ) );
+	p_sched = malloc(sizeof(vlm_schedule_sys_t));
     if( !p_sched )
         return NULL;
 
@@ -1209,9 +1210,10 @@ static int vlm_ScheduleSetup( vlm_schedule_sys_t *schedule, const char *psz_cmd,
  *****************************************************************************/
 vlm_message_t *vlm_MessageSimpleNew( const char *psz_name )
 {
+	vlm_message_t *p_message;
     if( !psz_name ) return NULL;
 
-    vlm_message_t *p_message = malloc( sizeof(*p_message) );
+	p_message = malloc(sizeof(*p_message));
     if( !p_message )
         return NULL;
 

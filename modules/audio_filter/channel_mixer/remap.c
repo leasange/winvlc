@@ -278,8 +278,10 @@ static int OpenFilter( vlc_object_t *p_this )
 
     /* Allocate the memory needed to store the module's structure */
     p_sys = p_filter->p_sys = malloc( sizeof(filter_sys_t) );
-    if( unlikely( p_sys == NULL ) )
-        return VLC_ENOMEM;
+	if (unlikely(p_sys == NULL))
+	{
+		return VLC_ENOMEM;
+	}
 
     /* get number of and layout of input channels */
     uint32_t i_output_physical = 0;

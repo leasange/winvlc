@@ -62,8 +62,10 @@ static inline int xiph_SplitHeaders(unsigned packet_size[], void * packet[], uns
 {
     const uint8_t *current = (const uint8_t *)extra;
     const uint8_t *end = &current[extra_size];
-    if (extra_size < 1)
-        return VLC_EGENERIC;
+	if (extra_size < 1)
+	{
+		return VLC_EGENERIC;
+	}
 
     /* Parse the packet count and their sizes */
     const unsigned count = xiph_CountHeaders( current++, extra_size );
@@ -128,8 +130,10 @@ static inline int xiph_PackHeaders(int *extra_size, void **extra,
     /* */
     *extra_size = header_size + payload_size;
     *extra = malloc(*extra_size);
-    if (*extra == NULL)
-        return VLC_ENOMEM;
+	if (*extra == NULL)
+	{
+		return VLC_ENOMEM;
+	}
 
     /* Write the header */
     uint8_t *current = (uint8_t*)*extra;

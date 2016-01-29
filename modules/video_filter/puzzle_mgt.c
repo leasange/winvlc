@@ -200,16 +200,18 @@ void puzzle_free_ps_puzzle_array( filter_t *p_filter)
 int puzzle_bake_piece( filter_t *p_filter)
 {
     int i_ret = puzzle_allocate_ps_pieces( p_filter);
-    if (i_ret != VLC_SUCCESS)
-        return i_ret;
-
+	if (i_ret != VLC_SUCCESS)
+	{
+		return i_ret;
+	}
     filter_sys_t *p_sys = p_filter->p_sys;
 
     /* generates random pi_order array */
     i_ret = puzzle_shuffle( p_filter );
-    if (i_ret != VLC_SUCCESS)
-        return i_ret;
-
+	if (i_ret != VLC_SUCCESS)
+	{
+		return i_ret;
+	}
     int32_t i = 0;
     for (int32_t row = 0; row < p_sys->s_allocated.i_rows; row++) {
         for (int32_t col = 0; col < p_sys->s_allocated.i_cols; col++) {
@@ -412,8 +414,10 @@ bool puzzle_is_valid( filter_sys_t *p_sys, int32_t *pi_pce_lst )
 {
     const int32_t i_count = p_sys->s_allocated.i_pieces_nbr;
 
-    if( !p_sys->s_current_param.b_blackslot )
-        return true;
+	if (!p_sys->s_current_param.b_blackslot)
+	{
+		return true;
+	}
 
     int32_t d = 0;
     for( int32_t i = 0; i < i_count; i++ ) {
@@ -498,8 +502,10 @@ int puzzle_piece_foreground( filter_t *p_filter, int32_t i_piece) {
     uint32_t i_group_ID = p_sys->ps_pieces[i_piece].i_group_ID;
 
     ps_pieces_tmp = malloc( sizeof( piece_t) * p_sys->s_allocated.i_pieces_nbr );
-    if (!ps_pieces_tmp)
-        return VLC_ENOMEM;
+	if (!ps_pieces_tmp)
+	{
+		return VLC_ENOMEM;
+	}
 
     int32_t j=0;
 
@@ -917,10 +923,12 @@ void puzzle_load( filter_t *p_filter, save_game_t *ps_save_game)
 {
     filter_sys_t *p_sys = p_filter->p_sys;
 
-    if (p_sys->s_current_param.i_cols  != ps_save_game->i_cols
-        || p_sys->s_allocated.i_rows   != ps_save_game->i_rows
-        || p_sys->s_allocated.i_rotate != ps_save_game->i_rotate)
-        return;
+	if (p_sys->s_current_param.i_cols != ps_save_game->i_cols
+		|| p_sys->s_allocated.i_rows != ps_save_game->i_rows
+		|| p_sys->s_allocated.i_rotate != ps_save_game->i_rotate)
+	{
+		return;
+	}
 
     int32_t i_border_width = p_sys->ps_desk_planes[0].i_border_width;
     int32_t i_border_lines = p_sys->ps_desk_planes[0].i_border_lines;

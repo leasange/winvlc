@@ -76,8 +76,10 @@ static int DemuxOnce (demux_t *demux, bool master)
 
     char *str;
     int len = asprintf (&str, "%02u:%02u:%02u:%02u", h, m, s, f);
-    if (len == -1)
-        return -1;
+	if (len == -1)
+	{
+		return -1;
+	}
 
     block_t *block = block_heap_Alloc (str, len + 1);
     if (unlikely(block == NULL))
@@ -170,8 +172,10 @@ static int Open (vlc_object_t *obj)
     demux_t *demux = (demux_t *)obj;
     demux_sys_t *sys = malloc (sizeof (*sys));
 
-    if (unlikely(sys == NULL))
-        return VLC_ENOMEM;
+	if (unlikely(sys == NULL))
+	{
+		return VLC_ENOMEM;
+	}
 
     es_format_t fmt;
     es_format_Init (&fmt, SPU_ES, VLC_CODEC_ITU_T140);

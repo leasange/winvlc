@@ -164,7 +164,31 @@ libvlc_video_take_snapshot( libvlc_media_player_t *p_mi, unsigned num,
     vlc_object_release( p_vout );
     return 0;
 }
-
+int libvlc_video_toggle_record(libvlc_media_player_t *p_mi, const char *psz_filepathname)
+{
+	assert(psz_filepath);
+	input_thread_t *p_input_thread = libvlc_get_input_thread(p_mi);
+	if (p_input_thread == NULL)
+		return -1;
+	var_Create(p_input_thread, "input-record-path", VLC_VAR_STRING);
+	var_SetString(p_input_thread, "input-record-path", psz_filepathname);
+// 	var_Create(p_input_thread, "sout-record-dst-prefix", VLC_VAR_STRING);
+// 	var_SetString(p_input_thread, "sout-record-dst-prefix", psz_filename);
+	var_ToggleBool(p_input_thread, "record");
+	vlc_object_release(p_input_thread);
+	return 0;
+}
+int libvlc_video_is_recording(libvlc_media_player_t *p_mi)
+{
+	input_thread_t *p_input_thread = libvlc_get_input_thread(p_mi);
+	if (p_input_thread == NULL)
+		return 0;
+	if (var_GetBool(p_input_thread, "record"))
+	{
+		return 1;
+	}
+	return 0;
+}
 int libvlc_video_get_size( libvlc_media_player_t *p_mi, unsigned num,
                            unsigned *restrict px, unsigned *restrict py )
 {

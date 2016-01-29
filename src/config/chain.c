@@ -269,8 +269,9 @@ void config_ChainDestroy( config_chain_t *p_cfg )
 void config_ChainParse( vlc_object_t *p_this, const char *psz_prefix,
                         const char *const *ppsz_options, config_chain_t *cfg )
 {
+	size_t plen;
     if( psz_prefix == NULL ) psz_prefix = "";
-    size_t plen = 1 + strlen( psz_prefix );
+	plen = 1 + strlen(psz_prefix);
 
     /* First, var_Create all variables */
     for( size_t i = 0; ppsz_options[i] != NULL; i++ )
