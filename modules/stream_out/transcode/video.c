@@ -548,6 +548,7 @@ static void transcode_video_encoder_init( sout_stream_t *p_stream,
         id->p_encoder->fmt_in.video.i_frame_rate,
         id->p_encoder->fmt_in.video.i_frame_rate_base );
 
+	if (id->p_decoder->fmt_out.video.i_frame_rate == 0){ id->p_decoder->fmt_out.video.i_frame_rate = 25; }
     id->i_input_frame_interval  = id->p_decoder->fmt_out.video.i_frame_rate_base * CLOCK_FREQ / id->p_decoder->fmt_out.video.i_frame_rate;
     msg_Info( p_stream, "input interval %d (base %d)",
                         id->i_input_frame_interval, id->p_decoder->fmt_out.video.i_frame_rate_base );
