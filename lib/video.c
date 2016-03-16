@@ -174,6 +174,30 @@ int libvlc_video_toggle_record(libvlc_media_player_t *p_mi, const char *psz_file
 	var_SetString(p_input_thread, "input-record-path", psz_filepathname);
 // 	var_Create(p_input_thread, "sout-record-dst-prefix", VLC_VAR_STRING);
 // 	var_SetString(p_input_thread, "sout-record-dst-prefix", psz_filename);
+	int len = strlen(psz_filepathname);
+	int index = len - 1;
+	for (int i = len-1; i >=0; i--)
+	{
+		if (*(psz_filepathname + i) == '\\'||*(psz_filepathname + i)=='/')
+		{
+			index = i;
+			break;
+		}
+	}
+	if (index<=0||index==len-1)
+	{
+		return -1;
+	}
+	for (size_t i = 1; i < index; i++)
+	{
+		if (*(psz_filepathname + i) == '\\' || *(psz_filepathname + i) == '/')
+		{
+			char p[256] = {0};
+			memcpy(p, psz_filepathname, i);
+			vlc_mkdir(p, 0700);
+		}
+	}
+
 	var_ToggleBool(p_input_thread, "record");
 	vlc_object_release(p_input_thread);
 	return 0;
