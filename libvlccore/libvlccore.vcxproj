@@ -242,6 +242,9 @@
       <ModuleDefinitionFile>.\libvlccore.def</ModuleDefinitionFile>
       <OutputFile>$(OutDir)vlc/$(TargetName)$(TargetExt)</OutputFile>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)win32\vlc" "$(TargetDir)vlc" /e /c /f /k /y</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
