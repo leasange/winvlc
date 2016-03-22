@@ -41,4 +41,5 @@ public:
 	afx_msg void OnStnClickedStaVideopanel();
 	CStatic m_playerCtrl2;
 	afx_msg void OnBnClickedBtnRecord();
+	afx_msg void OnBnClickedBtnCap();
 };

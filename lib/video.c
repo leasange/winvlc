@@ -143,10 +143,29 @@ libvlc_video_take_snapshot( libvlc_media_player_t *p_mi, unsigned num,
                             unsigned int i_width, unsigned int i_height )
 {
     assert( psz_filepath );
-
     vout_thread_t *p_vout = GetVout (p_mi, num);
     if (p_vout == NULL)
         return -1;
+	int len = strlen(psz_filepath);
+	if (len<=5)
+	{
+		return -1;
+	}
+	static const char* strs[] = { ".jpg",".jpeg",".bmp",".png"};
+	int count = sizeof(strs) / sizeof(strs[0]);
+	const char*p = NULL;
+	for (size_t i = 0; i < count; i++)
+	{
+		if (stricmp(psz_filepath + len - strlen(strs[i]), strs[i]) == 0)
+		{
+			p = strs[i];
+			break;
+		}
+	}
+	if (p==NULL)
+	{
+		return -1;
+	}
 
     /* FIXME: This is not atomic. All parameters should be passed at once
      * (obviously _not_ with var_*()). Also, the libvlc object should not be
@@ -159,7 +178,7 @@ libvlc_video_take_snapshot( libvlc_media_player_t *p_mi, unsigned num,
     var_Create( p_vout, "snapshot-path", VLC_VAR_STRING );
     var_SetString( p_vout, "snapshot-path", psz_filepath );
     var_Create( p_vout, "snapshot-format", VLC_VAR_STRING );
-    var_SetString( p_vout, "snapshot-format", "png" );
+	var_SetString(p_vout, "snapshot-format", p+1);
     var_TriggerCallback( p_vout, "video-snapshot" );
     vlc_object_release( p_vout );
     return 0;
@@ -170,34 +189,37 @@ int libvlc_video_toggle_record(libvlc_media_player_t *p_mi, const char *psz_file
 	input_thread_t *p_input_thread = libvlc_get_input_thread(p_mi);
 	if (p_input_thread == NULL)
 		return -1;
-	var_Create(p_input_thread, "input-record-path", VLC_VAR_STRING);
-	var_SetString(p_input_thread, "input-record-path", psz_filepathname);
-// 	var_Create(p_input_thread, "sout-record-dst-prefix", VLC_VAR_STRING);
-// 	var_SetString(p_input_thread, "sout-record-dst-prefix", psz_filename);
-	int len = strlen(psz_filepathname);
-	int index = len - 1;
-	for (int i = len-1; i >=0; i--)
-	{
-		if (*(psz_filepathname + i) == '\\'||*(psz_filepathname + i)=='/')
+	if (!libvlc_video_is_recording(p_mi)){
+		var_Create(p_input_thread, "input-record-path", VLC_VAR_STRING);
+		var_SetString(p_input_thread, "input-record-path", psz_filepathname);
+		int len = strlen(psz_filepathname);
+		if (len==0)
 		{
-			index = i;
-			break;
+			return -1;
+		}
+		int index = len - 1;
+		for (int i = len - 1; i >= 0; i--)
+		{
+			if (*(psz_filepathname + i) == '\\' || *(psz_filepathname + i) == '/')
+			{
+				index = i;
+				break;
+			}
+		}
+		if (index <= 0 || index == len - 1)
+		{
+			return -1;
+		}
+		for (size_t i = 1; i < index + 1; i++)
+		{
+			if (*(psz_filepathname + i) == '\\' || *(psz_filepathname + i) == '/')
+			{
+				char p[256] = { 0 };
+				memcpy(p, psz_filepathname, i);
+				vlc_mkdir(p, 0700);
+			}
 		}
 	}
-	if (index<=0||index==len-1)
-	{
-		return -1;
-	}
-	for (size_t i = 1; i < index; i++)
-	{
-		if (*(psz_filepathname + i) == '\\' || *(psz_filepathname + i) == '/')
-		{
-			char p[256] = {0};
-			memcpy(p, psz_filepathname, i);
-			vlc_mkdir(p, 0700);
-		}
-	}
-
 	var_ToggleBool(p_input_thread, "record");
 	vlc_object_release(p_input_thread);
 	return 0;

@@ -67,6 +67,7 @@ BEGIN_MESSAGE_MAP(CmfcvlcplayerDlg, CDialogEx)
 	ON_WM_SIZE()
 	ON_STN_CLICKED(IDC_STA_VIDEOPANEL, &CmfcvlcplayerDlg::OnStnClickedStaVideopanel)
 	ON_BN_CLICKED(IDC_BTN_RECORD, &CmfcvlcplayerDlg::OnBnClickedBtnRecord)
+	ON_BN_CLICKED(IDC_BTN_CAP, &CmfcvlcplayerDlg::OnBnClickedBtnCap)
 END_MESSAGE_MAP()
 
 
@@ -217,6 +218,12 @@ void CmfcvlcplayerDlg::OnSize(UINT nType, int cx, int cy)
 		GetClientRect(&rect);
 		GetDlgItem(IDC_BTN_RECORD)->MoveWindow(0, (rect.bottom - rect.top) - 100, 200, 30);
 	}
+	if (GetDlgItem(IDC_BTN_CAP))
+	{
+		RECT rect;
+		GetClientRect(&rect);
+		GetDlgItem(IDC_BTN_CAP)->MoveWindow(250, (rect.bottom - rect.top) - 100, 200, 30);
+	}
 }
 
 
@@ -232,7 +239,7 @@ void CmfcvlcplayerDlg::OnBnClickedBtnRecord()
 	// TODO:  在此添加控件通知处理程序代码
 	if (!libvlc_video_is_recording(player))
 	{
-		libvlc_video_toggle_record(player, "E:\\xxx");
+		libvlc_video_toggle_record(player, "E:\\xxx\\zdd\\gg");
 		GetDlgItem(IDC_BTN_RECORD)->SetWindowTextW(_T("停止录像"));
 	}
 	else
@@ -240,4 +247,12 @@ void CmfcvlcplayerDlg::OnBnClickedBtnRecord()
 		libvlc_video_toggle_record(player, NULL);
 		GetDlgItem(IDC_BTN_RECORD)->SetWindowTextW(_T("开始录像"));
 	}
+}
+
+
+void CmfcvlcplayerDlg::OnBnClickedBtnCap()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	libvlc_video_take_snapshot(player, 0, "E:\\dddddd1.bmp", 0, 0);
+	libvlc_video_take_snapshot(player2, 0, "E:\\dddddd2.jpg", 0, 0);
 }
