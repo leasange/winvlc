@@ -54,6 +54,7 @@ enum {
     VOUT_CONTROL_ZOOM,                  /* pair */
 
     VOUT_CONTROL_ASPECT_RATIO,          /* pair */
+	VOUT_CONTROL_ASPECT_RATIO_FILL,     /* bool */
     VOUT_CONTROL_CROP_BORDER,           /* border */
     VOUT_CONTROL_CROP_RATIO,            /* pair */
     VOUT_CONTROL_CROP_WINDOW,           /* window */

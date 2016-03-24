@@ -523,6 +523,11 @@ void vout_ControlChangeSampleAspectRatio(vout_thread_t *vout,
     vout_control_PushPair(&vout->p->control, VOUT_CONTROL_ASPECT_RATIO,
                           num, den);
 }
+void vout_ControlChangeSampleAspectRatioFill(vout_thread_t *vout, bool is_filled)
+{
+	vout_control_PushBool(&vout->p->control, VOUT_CONTROL_ASPECT_RATIO_FILL,
+		is_filled);
+}
 void vout_ControlChangeCropRatio(vout_thread_t *vout,
                                  unsigned num, unsigned den)
 {
@@ -1549,6 +1554,8 @@ static int ThreadControl(vout_thread_t *vout, vout_control_cmd_t cmd)
     case VOUT_CONTROL_ASPECT_RATIO:
         ThreadChangeAspectRatio(vout, cmd.u.pair.a, cmd.u.pair.b);
         break;
+	case  VOUT_CONTROL_ASPECT_RATIO_FILL:
+		break;
     case VOUT_CONTROL_CROP_RATIO:
         ThreadExecuteCropRatio(vout, cmd.u.pair.a, cmd.u.pair.b);
         break;

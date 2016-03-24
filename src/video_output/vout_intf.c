@@ -53,6 +53,8 @@ static int CropBorderCallback( vlc_object_t *, char const *,
                                vlc_value_t, vlc_value_t, void * );
 static int AspectCallback( vlc_object_t *, char const *,
                            vlc_value_t, vlc_value_t, void * );
+static int AspectFillCallback(vlc_object_t *, char const *,
+	vlc_value_t, vlc_value_t, void *);
 static int AutoScaleCallback( vlc_object_t *, char const *,
                               vlc_value_t, vlc_value_t, void * );
 static int ScaleCallback( vlc_object_t *, char const *,
@@ -246,6 +248,9 @@ void vout_IntfInit( vout_thread_t *p_vout )
     /* Aspect-ratio object var */
     var_Create( p_vout, "aspect-ratio", VLC_VAR_STRING | VLC_VAR_ISCOMMAND |
                 VLC_VAR_HASCHOICE | VLC_VAR_DOINHERIT );
+	//add by lxj
+	var_Create(p_vout, "aspect-ratio-fill", VLC_VAR_BOOL | VLC_VAR_ISCOMMAND |
+		VLC_VAR_HASCHOICE | VLC_VAR_DOINHERIT);
 
     text.psz_string = _("Aspect ratio");
     var_Change( p_vout, "aspect-ratio", VLC_VAR_SETTEXT, &text, NULL );
@@ -269,7 +274,7 @@ void vout_IntfInit( vout_thread_t *p_vout )
     }
 
     var_AddCallback( p_vout, "aspect-ratio", AspectCallback, NULL );
-
+	var_AddCallback(p_vout, "aspect-ratio-fill", AspectFillCallback, NULL);
     /* Add a variable to indicate if the window should be on top of others */
     var_Create( p_vout, "video-on-top", VLC_VAR_BOOL | VLC_VAR_DOINHERIT
                 | VLC_VAR_ISCOMMAND );
@@ -332,6 +337,7 @@ void vout_IntfReinit( vout_thread_t *p_vout )
     var_TriggerCallback( p_vout, "zoom" );
     var_TriggerCallback( p_vout, "crop" );
     var_TriggerCallback( p_vout, "aspect-ratio" );
+	var_TriggerCallback(p_vout, "aspect-ratio-fill");
 
     var_TriggerCallback( p_vout, "video-on-top" );
     var_TriggerCallback( p_vout, "video-wallpaper" );
@@ -601,6 +607,14 @@ static int AspectCallback( vlc_object_t *object, char const *cmd,
     else if (*newval.psz_string == '\0')
         vout_ControlChangeSampleAspectRatio(vout, 0, 0);
     return VLC_SUCCESS;
+}
+
+static int AspectFillCallback(vlc_object_t *object, char const *cmd,
+	vlc_value_t oldval, vlc_value_t newval, void *data)
+{
+	vout_thread_t *vout = (vout_thread_t *)object;
+	vout_ControlChangeSampleAspectRatioFill(vout, newval.b_bool);
+	return VLC_SUCCESS;
 }
 
 static int AutoScaleCallback( vlc_object_t *obj, char const *name,

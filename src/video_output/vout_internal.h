@@ -144,6 +144,7 @@ void vout_ControlChangeWindowState(vout_thread_t *, unsigned state);
 void vout_ControlChangeDisplayFilled(vout_thread_t *, bool is_filled);
 void vout_ControlChangeZoom(vout_thread_t *, int num, int den);
 void vout_ControlChangeSampleAspectRatio(vout_thread_t *, unsigned num, unsigned den);
+void vout_ControlChangeSampleAspectRatioFill(vout_thread_t *vout, bool is_filled);
 void vout_ControlChangeCropRatio(vout_thread_t *, unsigned num, unsigned den);
 void vout_ControlChangeCropWindow(vout_thread_t *, int x, int y, int width, int height);
 void vout_ControlChangeCropBorder(vout_thread_t *, int left, int top, int right, int bottom);

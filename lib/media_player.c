@@ -435,6 +435,10 @@ libvlc_media_player_new( libvlc_instance_t *instance )
     var_Create (mp, "scale", VLC_VAR_FLOAT);
     var_SetFloat (mp, "scale", 1.);
     var_Create (mp, "aspect-ratio", VLC_VAR_STRING);
+
+	var_Create(mp, "aspect-ratio-fill", VLC_VAR_BOOL);//add by lxj
+	var_SetBool(mp, "aspect-ratio-fill", false);
+
     var_Create (mp, "crop", VLC_VAR_STRING);
     var_Create (mp, "deinterlace", VLC_VAR_INTEGER);
     var_Create (mp, "deinterlace-mode", VLC_VAR_STRING);

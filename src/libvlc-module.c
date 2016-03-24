@@ -430,6 +430,9 @@ static const char *const ppsz_pos_descriptions[] =
     "Accepted formats are x:y (4:3, 16:9, etc.) expressing the global image " \
     "aspect, or a float value (1.25, 1.3333, etc.) expressing pixel " \
     "squareness.")
+#define ASPECT_RATIO_FILL_TEXT N_("Source aspect ratio fill")
+#define ASPECT_RATIO_FILL_LONGTEXT N_( \
+	"if true,video fill the video aspect is 1:1 ,if false,the aspect can valid.")
 
 #define AUTOSCALE_TEXT N_("Video Auto Scaling")
 #define AUTOSCALE_LONGTEXT N_( \
@@ -1577,6 +1580,8 @@ vlc_module_begin ()
     add_string( "aspect-ratio", NULL,
                 ASPECT_RATIO_TEXT, ASPECT_RATIO_LONGTEXT, false )
         change_safe ()
+	add_bool("aspect-ratio-fill", false, ASPECT_RATIO_FILL_TEXT, ASPECT_RATIO_FILL_LONGTEXT, false)
+	    change_safe()
     add_bool( "autoscale", true, AUTOSCALE_TEXT, AUTOSCALE_LONGTEXT, false )
         change_safe ()
     add_float( "scale", 1.0, SCALEFACTOR_TEXT, SCALEFACTOR_LONGTEXT, false )

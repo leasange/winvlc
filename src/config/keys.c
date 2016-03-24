@@ -271,6 +271,7 @@ static const struct action actions[] =
 {
     /* *MUST* be sorted (ASCII order) */
     { "aspect-ratio", ACTIONID_ASPECT_RATIO, },
+	{ "aspect-ratio-fill", ACTIONID_ASPECT_RATIO_FILL, },//add  by lxj
     { "audio-track", ACTIONID_AUDIO_TRACK, },
     { "audiodelay-down", ACTIONID_AUDIODELAY_DOWN, },
     { "audiodelay-up", ACTIONID_AUDIODELAY_UP, },

@@ -318,6 +318,11 @@ void libvlc_video_set_scale( libvlc_media_player_t *p_mp, float f_scale )
 
 char *libvlc_video_get_aspect_ratio( libvlc_media_player_t *p_mi )
 {
+	bool isfill=var_GetBool(p_mi, "aspect-ratio-fill");
+	if (isfill)
+	{
+		return "fill";
+	}
     return var_GetNonEmptyString (p_mi, "aspect-ratio");
 }
 
@@ -326,15 +331,17 @@ void libvlc_video_set_aspect_ratio( libvlc_media_player_t *p_mi,
 {
     if (psz_aspect == NULL)
         psz_aspect = "";
-	if (stricmp(psz_aspect,"fullwindow")==0)
+	int isfill = stricmp(psz_aspect, "fill");
+	if (isfill == 0)
 	{
-		bool isfull = var_CreateGetBool(p_mi, "aspect_full");
-		var_SetBool(p_mi, "aspect_full", 1);
+		var_SetBool(p_mi, "aspect-ratio-fill", true);
 		psz_aspect = "1:1";
+		isfill = 1;
 	}
 	else
 	{
-		var_SetBool(p_mi, "aspect_full", 0);
+		var_SetBool(p_mi, "aspect-ratio-fill", false);
+		isfill = 0;
 	}
     var_SetString (p_mi, "aspect-ratio", psz_aspect);
 
@@ -344,6 +351,7 @@ void libvlc_video_set_aspect_ratio( libvlc_media_player_t *p_mi,
     {
         vout_thread_t *p_vout = pp_vouts[i];
         var_SetString (p_vout, "aspect-ratio", psz_aspect);
+		var_SetBool(p_vout, "aspect-ratio-fill", isfill == 0);
         vlc_object_release (p_vout);
     }
     free (pp_vouts);
