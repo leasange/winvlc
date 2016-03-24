@@ -138,6 +138,7 @@ BOOL CmfcvlcplayerDlg::OnInitDialog()
 		player = 0;
 		return -1;
 	}
+	libvlc_video_set_aspect_ratio(player, "3:1");
 	// 播放文件
 	if (libvlc_media_player_play(player2) != 0)      /* play the media_player */
 	{
@@ -239,13 +240,13 @@ void CmfcvlcplayerDlg::OnBnClickedBtnRecord()
 	// TODO:  在此添加控件通知处理程序代码
 	if (!libvlc_video_is_recording(player))
 	{
-		libvlc_video_toggle_record(player, "E:\\xxx\\zdd\\gg");
-		GetDlgItem(IDC_BTN_RECORD)->SetWindowTextW(_T("停止录像"));
+		libvlc_video_toggle_record(player, "E:\\汉子路径\\zdd\\gg","recordname");
+		GetDlgItem(IDC_BTN_RECORD)->SetWindowText(_T("停止录像"));
 	}
 	else
 	{
-		libvlc_video_toggle_record(player, NULL);
-		GetDlgItem(IDC_BTN_RECORD)->SetWindowTextW(_T("开始录像"));
+		libvlc_video_toggle_record(player, NULL,NULL);
+		GetDlgItem(IDC_BTN_RECORD)->SetWindowText(_T("开始录像"));
 	}
 }
 
@@ -253,6 +254,6 @@ void CmfcvlcplayerDlg::OnBnClickedBtnRecord()
 void CmfcvlcplayerDlg::OnBnClickedBtnCap()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	libvlc_video_take_snapshot(player, 0, "E:\\dddddd1.bmp", 0, 0);
+	libvlc_video_take_snapshot(player, 0, "E:\\ddd子名称.bmp", 0, 0);
 	libvlc_video_take_snapshot(player2, 0, "E:\\dddddd2.jpg", 0, 0);
 }

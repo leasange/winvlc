@@ -40,6 +40,7 @@ VLC_API char * vlc_readdir( DIR *dir ) VLC_USED;
 VLC_API int vlc_loaddir( DIR *dir, char ***namelist, int (*select)( const char * ), int (*compar)( const char **, const char ** ) );
 VLC_API int vlc_scandir( const char *dirname, char ***namelist, int (*select)( const char * ), int (*compar)( const char **, const char ** ) );
 VLC_API int vlc_mkdir( const char *filename, mode_t mode );
+VLC_API int vlc_createdir(const char*dir);
 
 VLC_API int vlc_unlink( const char *filename );
 VLC_API int vlc_rename( const char *oldpath, const char *newpath );

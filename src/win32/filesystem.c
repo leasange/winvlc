@@ -48,13 +48,26 @@
 # define __STDC__ 1
 # include <io.h> /* _pipe */
 #endif
-
 static wchar_t *widen_path (const char *path)
 {
     wchar_t *wpath;
 
     errno = 0;
-    wpath = ToWide (path);
+
+	char*pTemp = NULL;
+	if (!IsUTF8(path))
+	{
+		pTemp = FromANSI(path);
+	}
+	const char*pUtf8 = pTemp ? pTemp : path;
+
+	wpath = ToWide(pUtf8);
+
+	if (pTemp)
+	{
+		free(pTemp);
+	}
+
     if (wpath == NULL)
     {
         if (errno == 0)
@@ -84,17 +97,13 @@ int vlc_open (const char *filename, int flags, ...)
         mode = va_arg (ap, int);
     va_end (ap);
 
-    /*
-     * open() cannot open files with non-“ANSI” characters on Windows.
-     * We use _wopen() instead. Same thing for mkdir() and stat().
-     */
-    wchar_t *wpath = widen_path (filename);
+	wchar_t *wpath = widen_path(filename);
     if (wpath == NULL)
-        return -1;
-
+          return -1;
     int fd = _wopen (wpath, flags, mode);
     free (wpath);
     return fd;
+/*#endif*/
 }
 
 int vlc_openat (int dir, const char *filename, int flags, ...)
@@ -106,7 +115,7 @@ int vlc_openat (int dir, const char *filename, int flags, ...)
 
 int vlc_mkdir( const char *dirname, mode_t mode )
 {
-    wchar_t *wpath = widen_path (dirname);
+	wchar_t *wpath = widen_path(dirname);
     if (wpath == NULL)
         return -1;
 
@@ -114,6 +123,28 @@ int vlc_mkdir( const char *dirname, mode_t mode )
     free (wpath);
     (void) mode;
     return ret;
+}
+int vlc_createdir(const char*dir)
+{
+	int len = strlen(dir);
+	if (len == 0)
+	{
+		return -1;
+	}
+	for (size_t i = 1; i < len; i++)
+	{
+		if (*(dir + i) == '\\' || *(dir + i) == '/')
+		{
+			char p[256] = { 0 };
+			memcpy(p, dir, i);
+			vlc_mkdir(p, 0700);
+		}
+		else if (i == len - 1)
+		{
+			vlc_mkdir(dir, 0700);
+		}
+	}
+	return 0;
 }
 
 char *vlc_getcwd (void)

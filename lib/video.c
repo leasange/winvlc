@@ -40,7 +40,7 @@
 #include "media_player_internal.h"
 #include <math.h>
 #include <assert.h>
-
+#include <vlc_charset.h>
 /*
  * Remember to release the returned vout_thread_t.
  */
@@ -176,49 +176,38 @@ libvlc_video_take_snapshot( libvlc_media_player_t *p_mi, unsigned num,
     var_Create( p_vout, "snapshot-height", VLC_VAR_INTEGER );
     var_SetInteger( p_vout, "snapshot-height", i_height );
     var_Create( p_vout, "snapshot-path", VLC_VAR_STRING );
-    var_SetString( p_vout, "snapshot-path", psz_filepath );
+	var_SetString(p_vout, "snapshot-path", psz_filepath);
     var_Create( p_vout, "snapshot-format", VLC_VAR_STRING );
 	var_SetString(p_vout, "snapshot-format", p+1);
     var_TriggerCallback( p_vout, "video-snapshot" );
     vlc_object_release( p_vout );
     return 0;
 }
-int libvlc_video_toggle_record(libvlc_media_player_t *p_mi, const char *psz_filepathname)
+int libvlc_video_toggle_record(libvlc_media_player_t *p_mi, const char *psz_filepath, const char*psz_filename)
 {
 	assert(psz_filepath);
 	input_thread_t *p_input_thread = libvlc_get_input_thread(p_mi);
 	if (p_input_thread == NULL)
 		return -1;
 	if (!libvlc_video_is_recording(p_mi)){
+		vlc_createdir(psz_filepath);
+		char p[256] = { 0 };
+		strcat_s(p,256, psz_filepath);
+		int len = strlen(psz_filepath);
+		if (len > 0)
+		{
+			if (*(psz_filepath + len - 1) != '\\' && *(psz_filepath + len - 1) != '/')
+			{
+#ifdef _WIN32
+				strcat_s(p, 256, "\\");
+#elif
+				strcat_s(p,256, "//");
+#endif
+			}
+		}
+		strcat_s(p, 256, psz_filename);
 		var_Create(p_input_thread, "input-record-path", VLC_VAR_STRING);
-		var_SetString(p_input_thread, "input-record-path", psz_filepathname);
-		int len = strlen(psz_filepathname);
-		if (len==0)
-		{
-			return -1;
-		}
-		int index = len - 1;
-		for (int i = len - 1; i >= 0; i--)
-		{
-			if (*(psz_filepathname + i) == '\\' || *(psz_filepathname + i) == '/')
-			{
-				index = i;
-				break;
-			}
-		}
-		if (index <= 0 || index == len - 1)
-		{
-			return -1;
-		}
-		for (size_t i = 1; i < index + 1; i++)
-		{
-			if (*(psz_filepathname + i) == '\\' || *(psz_filepathname + i) == '/')
-			{
-				char p[256] = { 0 };
-				memcpy(p, psz_filepathname, i);
-				vlc_mkdir(p, 0700);
-			}
-		}
+		var_SetString(p_input_thread, "input-record-path", p);
 	}
 	var_ToggleBool(p_input_thread, "record");
 	vlc_object_release(p_input_thread);
@@ -337,6 +326,16 @@ void libvlc_video_set_aspect_ratio( libvlc_media_player_t *p_mi,
 {
     if (psz_aspect == NULL)
         psz_aspect = "";
+	if (stricmp(psz_aspect,"fullwindow")==0)
+	{
+		bool isfull = var_CreateGetBool(p_mi, "aspect_full");
+		var_SetBool(p_mi, "aspect_full", 1);
+		psz_aspect = "1:1";
+	}
+	else
+	{
+		var_SetBool(p_mi, "aspect_full", 0);
+	}
     var_SetString (p_mi, "aspect-ratio", psz_aspect);
 
     size_t n;
@@ -344,7 +343,6 @@ void libvlc_video_set_aspect_ratio( libvlc_media_player_t *p_mi,
     for (size_t i = 0; i < n; i++)
     {
         vout_thread_t *p_vout = pp_vouts[i];
-
         var_SetString (p_vout, "aspect-ratio", psz_aspect);
         vlc_object_release (p_vout);
     }

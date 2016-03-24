@@ -382,10 +382,14 @@ void UpdateRects(vout_display_t *vd,
 
 #endif
 #if VIDEO_PANEL_USE_ORIGIN==1
-	rect_dest.left += place.x;
-	rect_dest.right += place.x;
-	rect_dest.top+=place.y;
-	rect_dest.bottom += place.y;
+// 	rect_dest.left += place.x;
+// 	rect_dest.right += place.x;
+// 	rect_dest.top+=place.y;
+// 	rect_dest.bottom += place.y;
+	rect_dest.left =0;
+	rect_dest.right = rect.right - rect.left;
+	rect_dest.top=0;
+	rect_dest.bottom = rect.bottom - rect.top;
 	if (is_resized)
 	{
 		HDC dc = GetDC(sys->hvideownd);
