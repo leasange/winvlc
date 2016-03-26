@@ -1312,6 +1312,10 @@ static void ThreadChangeAspectRatio(vout_thread_t *vout,
     vout_SetDisplayAspect(vout->p->display.vd, num, den);
 }
 
+static void ThreadChangeAspectRatioFill(vout_thread_t*vout, bool is_fill)
+{
+	vout_SetDisplayAspectFill(vout->p->display.vd, is_fill);
+}
 
 static void ThreadExecuteCropWindow(vout_thread_t *vout,
                                     unsigned x, unsigned y,
@@ -1555,6 +1559,7 @@ static int ThreadControl(vout_thread_t *vout, vout_control_cmd_t cmd)
         ThreadChangeAspectRatio(vout, cmd.u.pair.a, cmd.u.pair.b);
         break;
 	case  VOUT_CONTROL_ASPECT_RATIO_FILL:
+		ThreadChangeAspectRatioFill(vout, cmd.u.boolean);
 		break;
     case VOUT_CONTROL_CROP_RATIO:
         ThreadExecuteCropRatio(vout, cmd.u.pair.a, cmd.u.pair.b);

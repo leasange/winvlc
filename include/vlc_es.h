@@ -210,8 +210,6 @@ struct video_format_t
     unsigned int i_sar_num;                   /**< sample/pixel aspect ratio */
     unsigned int i_sar_den;
 
-	bool b_isfill;//ÊÇ·ñÌî³ä´°¿Ú
-
     unsigned int i_frame_rate;                     /**< frame rate numerator */
     unsigned int i_frame_rate_base;              /**< frame rate denominator */
 

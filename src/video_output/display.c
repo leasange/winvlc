@@ -1265,6 +1265,14 @@ void vout_SetDisplayAspect(vout_display_t *vd, unsigned dar_num, unsigned dar_de
         osys->sar.den = sar_den;
     }
 }
+void vout_SetDisplayAspectFill(vout_display_t *vd, bool is_filled)
+{
+	vout_display_owner_sys_t *osys = vd->owner.sys;
+// 	osys->ch_display_filled = is_filled;
+// 	osys->source.b_isfill = is_filled;
+	osys->cfg.is_display_filled = is_filled;
+	
+}
 void vout_SetDisplayCrop(vout_display_t *vd,
                          unsigned crop_num, unsigned crop_den,
                          unsigned left, unsigned top, int right, int bottom)

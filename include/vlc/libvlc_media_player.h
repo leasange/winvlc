@@ -1038,7 +1038,7 @@ LIBVLC_API void libvlc_video_set_scale( libvlc_media_player_t *p_mi, float f_fac
  * Get current video aspect ratio.
  *
  * \param p_mi the media player
- * \return the video aspect ratio or NULL if unspecified
+ * \return the video aspect ratio or NULL if unspecified,or "fill"
  * (the result must be released with free() or libvlc_free()).
  */
 LIBVLC_API char *libvlc_video_get_aspect_ratio( libvlc_media_player_t *p_mi );
@@ -1047,7 +1047,7 @@ LIBVLC_API char *libvlc_video_get_aspect_ratio( libvlc_media_player_t *p_mi );
  * Set new video aspect ratio.
  *
  * \param p_mi the media player
- * \param psz_aspect new video aspect-ratio or NULL to reset to default
+ * \param psz_aspect new video aspect-ratio or NULL to reset to default,"fill" to fill the window
  * \note Invalid aspect ratios are ignored.
  */
 LIBVLC_API void libvlc_video_set_aspect_ratio( libvlc_media_player_t *p_mi, const char *psz_aspect );

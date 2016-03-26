@@ -95,6 +95,20 @@ int CommonInit(vout_display_t *vd)
     sys->hvideownd     = hwnd.hvideownd;
     sys->hfswnd        = hwnd.hfswnd;
 
+	HDC dc = GetDC(sys->hvideownd);
+	if (dc)//ÖØ»æ±³¾°
+	{
+		RECT rect;
+		GetClientRect(sys->hvideownd, &rect);
+		HBRUSH brush = CreateSolidBrush(RGB(0, 0, 0));
+		RECT nrect = { 0 };
+		nrect.right = rect.right - rect.left;
+		nrect.bottom = rect.bottom - rect.top;
+		FillRect(dc, &nrect, brush);
+		ReleaseDC(sys->hvideownd, dc);
+		DeleteObject(brush);
+	}
+
     if (vd->cfg->is_fullscreen) {
         if (CommonControlSetFullscreen(vd, true))
             vout_display_SendEventFullscreen(vd, false);
@@ -322,16 +336,6 @@ void UpdateRects(vout_display_t *vd,
 
     /* Retrieve the window size */
 	GetClientRect(sys->hwnd, &rect);
-	/*
-#if VIDEO_PANEL_USE_ORIGIN==1
-	int w = rect.right - rect.left;
-	int h = rect.bottom - rect.top;
-	rect.left = 0;
-	rect.top = 0;
-	rect.right=w;
-	rect.bottom = h;
-#endif
-	*/
     /* Retrieve the window position */
     point.x = point.y = 0;
 	ClientToScreen(sys->hwnd, &point);
@@ -382,31 +386,65 @@ void UpdateRects(vout_display_t *vd,
 
 #endif
 #if VIDEO_PANEL_USE_ORIGIN==1
-// 	rect_dest.left += place.x;
-// 	rect_dest.right += place.x;
-// 	rect_dest.top+=place.y;
-// 	rect_dest.bottom += place.y;
-	rect_dest.left =0;
-	rect_dest.right = rect.right - rect.left;
-	rect_dest.top=0;
-	rect_dest.bottom = rect.bottom - rect.top;
-	if (is_resized)
+	if (place_cfg.is_display_filled)
 	{
-		HDC dc = GetDC(sys->hvideownd);
-		if (dc)//ÖØ»æ±³¾°
+		rect_dest.left = 0;
+		rect_dest.right = rect.right - rect.left;
+		rect_dest.top = 0;
+		rect_dest.bottom = rect.bottom - rect.top;
+	}
+	else
+	{
+		RECT rect1, rect2;
+		int w = rect.right - rect.left;
+		int h = rect.bottom - rect.top;
+		float ra = place.width / (float)place.height;
+		float rb = w / (float)h;
+		if (ra>rb)
 		{
-			HBRUSH brush = CreateSolidBrush(RGB(0, 0, 0));
-			RECT wndrect;
-			int w = rect.right - rect.left;
-			int h = rect.bottom - rect.top;
-			wndrect.left = 0;
-			wndrect.top = 0;
-			wndrect.right = w;
-			wndrect.bottom = h;
-			FillRect(dc, &wndrect, brush);
-			ReleaseDC(sys->hvideownd, dc);
-			DeleteObject(brush);
+			rect_dest.left = 0;
+			rect_dest.right = w;
+			float dh = w / ra;
+			rect_dest.top = (h - dh) / 2;
+			rect_dest.bottom = rect_dest.top + dh;
+			rect1.left = 0;
+			rect1.top = 0;
+			rect1.right = w;
+			rect1.bottom = rect_dest.top+2;
+			rect2.left = 0;
+			rect2.top = rect_dest.bottom-2;
+			rect2.right = w;
+			rect2.bottom = h;
 		}
+		else
+		{
+			rect_dest.top = 0;
+			rect_dest.bottom = h;
+			float dw = ra*h;
+			rect_dest.left = (w - dw)/2;
+			rect_dest.right = rect_dest.left + dw;
+			rect1.left = 0;
+			rect1.top = 0;
+			rect1.right = rect_dest.left+2;
+			rect1.bottom = h;
+			rect2.left = rect_dest.right-2;
+			rect2.top = 0;
+			rect2.right = w;
+			rect2.bottom = h;
+		}
+		if (is_resized&&!place_cfg.is_display_filled)
+		{
+			HDC dc = GetDC(sys->hvideownd);
+			if (dc)//ÖØ»æ±³¾°
+			{
+				HBRUSH brush = CreateSolidBrush(RGB(0, 0, 0));
+				FillRect(dc, &rect1, brush);
+				FillRect(dc, &rect2, brush);
+				ReleaseDC(sys->hvideownd, dc);
+				DeleteObject(brush);
+			}
+		}
+
 	}
 #endif
 

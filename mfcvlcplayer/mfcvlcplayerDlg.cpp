@@ -138,15 +138,17 @@ BOOL CmfcvlcplayerDlg::OnInitDialog()
 		player = 0;
 		return -1;
 	}
-	libvlc_video_set_aspect_ratio(player, "3:1");
-	// 播放文件
-	if (libvlc_media_player_play(player2) != 0)      /* play the media_player */
-	{
-		//log_debug_format("播放失败：%s", tempUrl.c_str());
-		libvlc_media_player_release(player2);   /* Free the media_player */
-		player = 0;
-		return -1;
-	}
+	libvlc_video_set_aspect_ratio(player, "fill");
+	
+// 	// 播放文件
+// 	if (libvlc_media_player_play(player2) != 0)      /* play the media_player */
+// 	{
+// 		//log_debug_format("播放失败：%s", tempUrl.c_str());
+// 		libvlc_media_player_release(player2);   /* Free the media_player */
+// 		player = 0;
+// 		return -1;
+// 	}
+// 	libvlc_video_set_aspect_ratio(player2, "fill");
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

@@ -249,8 +249,9 @@ void vout_IntfInit( vout_thread_t *p_vout )
     var_Create( p_vout, "aspect-ratio", VLC_VAR_STRING | VLC_VAR_ISCOMMAND |
                 VLC_VAR_HASCHOICE | VLC_VAR_DOINHERIT );
 	//add by lxj
-	var_Create(p_vout, "aspect-ratio-fill", VLC_VAR_BOOL | VLC_VAR_ISCOMMAND |
-		VLC_VAR_HASCHOICE | VLC_VAR_DOINHERIT);
+	var_Create(p_vout, "aspect-ratio-fill", VLC_VAR_BOOL | VLC_VAR_ISCOMMAND  | VLC_VAR_DOINHERIT);
+	text.psz_string = _("Aspect ratio fill");
+	var_Change(p_vout, "aspect-ratio-fill", VLC_VAR_SETTEXT, &text, NULL);
 
     text.psz_string = _("Aspect ratio");
     var_Change( p_vout, "aspect-ratio", VLC_VAR_SETTEXT, &text, NULL );
@@ -613,6 +614,7 @@ static int AspectFillCallback(vlc_object_t *object, char const *cmd,
 	vlc_value_t oldval, vlc_value_t newval, void *data)
 {
 	vout_thread_t *vout = (vout_thread_t *)object;
+	(void)cmd; (void)oldval; (void)data;
 	vout_ControlChangeSampleAspectRatioFill(vout, newval.b_bool);
 	return VLC_SUCCESS;
 }
