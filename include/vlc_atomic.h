@@ -316,25 +316,30 @@ typedef         uintmax_t atomic_uintmax_t;
     atomic_flag_clear(object)
 
 # elif defined (_MSC_VER)
-
 # include <windows.h>
-
 /*** Use the Interlocked API. ***/
-
 /* Define macros in order to dispatch to the correct function depending on the type.
    Several ranges are need because some operations are not implemented for all types. */
+
 #  define atomic_type_dispatch_32_64(operation, object, ...) \
     (sizeof(*object) == 4 ? operation((LONG *)object, __VA_ARGS__) : \
     sizeof(*object) == 8 ? operation##64((LONGLONG *)object, __VA_ARGS__) : \
     (abort(), 0))
-
+#if (_WIN32_WINNT >= 0x602)
+// 不兼容WindowsXP的平台工具集
 #  define atomic_type_dispatch_16_64(operation, object, ...) \
     (sizeof(*object) == 2 ? operation##16((short *)object, __VA_ARGS__) : \
     atomic_type_dispatch_32_64(operation, object, __VA_ARGS__))
+#else
+// 兼容WindowsXP的平台工具集
+#  define atomic_type_dispatch_16_64(operation, object, ...) \
+	(sizeof(*object) == 2 ? operation((LONG *)object, __VA_ARGS__) : \
+	atomic_type_dispatch_32_64(operation, object, __VA_ARGS__))
+#endif
 
 #  define atomic_type_dispatch_8_64(operation, object, ...) \
-    (sizeof(*object) == 1 ? operation##8((char *)object, __VA_ARGS__) : \
-    atomic_type_dispatch_16_64(operation, object, __VA_ARGS__))
+	(sizeof(*object) == 1 ? operation##8((char *)object, __VA_ARGS__) : \
+	atomic_type_dispatch_16_64(operation, object, __VA_ARGS__))
 
 #  define atomic_store(object,desired) \
     atomic_type_dispatch_16_64(InterlockedExchange, object, desired)

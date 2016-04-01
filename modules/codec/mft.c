@@ -186,10 +186,11 @@ static const pair_format_guid audio_format_table[] =
     { VLC_CODEC_DTS,  &MFAudioFormat_DTS       },
     { VLC_CODEC_MP4A, &MFAudioFormat_AAC       },
     { VLC_CODEC_WMA2, &MFAudioFormat_WMAudioV8 },
+#if (_WIN32_WINNT >= 0x602)
     { VLC_CODEC_A52,  &MFAudioFormat_Dolby_AC3 },
+#endif
     { 0, NULL }
 };
-
 static const GUID *FormatToGUID(const pair_format_guid table[], vlc_fourcc_t fourcc)
 {
     for (int i = 0; table[i].fourcc; ++i)
