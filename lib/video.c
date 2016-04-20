@@ -335,7 +335,7 @@ void libvlc_video_set_aspect_ratio( libvlc_media_player_t *p_mi,
 	if (isfill == 0)
 	{
 		var_SetBool(p_mi, "aspect-ratio-fill", true);
-		psz_aspect = "1:1";
+		psz_aspect = "";
 		isfill = 1;
 	}
 	else
